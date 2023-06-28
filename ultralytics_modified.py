@@ -69,7 +69,7 @@ class camera_detect:
        
        #################################################################
        
-       self.robot = moveitcommander.RobotCommander()
+       self.robot = moveit_commander.RobotCommander()
        self.scene = moveit_commander.PlanningSceneInterface()
        self.group_name = "manipulator_left"
        self.move_group = moveit_commander.MoveGroupCommander(self.group_name)
@@ -116,8 +116,8 @@ class camera_detect:
        self.set_deltas()
        self.move_conditions_x()
        self.move_conditions_y()
-       self.move_group.set_pose_target(target_pose)
-       self.move_grooup.set_max_velocity_scaling_factor(0.01)
+       self.move_group.set_pose_target(self.target_pose)
+       self.move_group.set_max_velocity_scaling_factor(0.01)
        plan = self.move_group.go(wait=True)
        if plan:
            rospy.loginfo("Motion planning and execution succeeded!")
@@ -250,6 +250,7 @@ def main():
 
        while not rospy.is_shutdown():
            tester.calc()
+           tester.move_arms()
        #tester.detect()
        #tester.detect_depth()
 
