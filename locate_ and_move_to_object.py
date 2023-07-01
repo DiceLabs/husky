@@ -19,7 +19,7 @@ class converter:
 	def __init__(self):
 		self.a_3D_point = None
 
-
+	"""THIS IS WHAT TRANSFORMS THE 3D POINT FROM ONE FRAME TO ANOTHER"""
 	def transform(self,coord, mat44):
 		print("MAT44: ",mat44)
 		print("POINT ", coord)
@@ -31,9 +31,15 @@ class converter:
 
 	def move_it(self):
 		listener = tf.TransformListener()
+		
 		"""Get transform matrix to convert Point in 3D space to from camera_realsense_link_gazebo to base_link"""
 		listener.waitForTransform('map', 'camera_realsense_link_gazebo', rospy.Time(0), rospy.Duration(10.0))
+
+		"""This part of class method/function obstains the translation of and rotation matrices (at a point in time) relating the 
+  		camera_depth optical frame and the map frame"""
 		(trans, rot) = listener.lookupTransform('map', 'camera_realsense_link_gazebo', rospy.Time(0))
+
+		"""This comnines both translation and roatation matrices to obtain the Transforamtion matrix"""
 		TF_c_b = np.dot(tf.transformations.translation_matrix(trans), tf.transformations.quaternion_matrix(rot))
 
 		"""Get transform matrix to convert Point in 3D space to from base_link to map"""
