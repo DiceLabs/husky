@@ -127,7 +127,8 @@ class camera_detect:
                                 x_cam = x_ndc * (z_depth) / 1.0
                                 y_cam = y_ndc * (z_depth) / 1.0
                                 #rad = math.atan2(x_cam, z_depth) #math.radians(math.degrees(math.atan2(x_cam, z_depth) + 360) % 360)
-
+                                #PAY ATTENTION TO THE Z_DEPTH, THESE POSITION VALUES ARE IN METERS. IF Z_DEPTH VALUE DOES NOT LOOK CORRECT THEN IT'S 
+                                # A RESULT OF INACCURATE READINGS.
                                 print("CLASS_NAME: ", str(self.class_names[class_index]), " ,3D POINT in depth_camera_optical_frame: ",[x_cam ,y_cam,z_depth],"\n")
                                 #print("RADS: ",  rad)
                                 self.the_points.data= [x_cam ,y_cam,z_depth]
