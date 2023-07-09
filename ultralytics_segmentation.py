@@ -94,11 +94,12 @@ class camera_detect:
                     try:
                         for i in range(len(self.boxes)):
                             class_index = int(self.boxes[i][5])
+                            #REMEMBER TO CHNAGE FROM PERSON TO ANY OTHER THING YOU WANT TO RECORD DEPTH VALUE OF
                             if str(self.class_names[class_index]) == "fire hydrant":  # or str(self.class_names[class_index]) == "person":
                                 # convert to opencv depth image
                                 depth_image = self.bridge.imgmsg_to_cv2(self.depth_img,
                                                                         desired_encoding='passthrough')  # '16UC1')
-                                # print([self.cv_image.shape[0],self.cv_image.shape[1],depth_image.shape[0],depth_image.shape[1]])
+                              
 
                                 # Apply scaling factor parameters that relate pixel locations of color image and depth image
                                 scale_factor_col = depth_image.shape[1] / self.cv_image.shape[1]
@@ -126,11 +127,11 @@ class camera_detect:
                                 #Scale the normalized device coordinates to obtain the 3D coordinates in camera coordinate space
                                 x_cam = x_ndc * (z_depth) / 1.0
                                 y_cam = y_ndc * (z_depth) / 1.0
-                                #rad = math.atan2(x_cam, z_depth) #math.radians(math.degrees(math.atan2(x_cam, z_depth) + 360) % 360)
+                                
                                 #PAY ATTENTION TO THE Z_DEPTH, THESE POSITION VALUES ARE IN METERS. IF Z_DEPTH VALUE DOES NOT LOOK CORRECT THEN IT'S 
                                 # A RESULT OF INACCURATE READINGS.
-                                print("CLASS_NAME: ", str(self.class_names[class_index]), " ,3D POINT in depth_camera_optical_frame: ",[x_cam ,y_cam,z_depth],"\n")
-                                #print("RADS: ",  rad)
+                                print("CLASS_NAME: ", str(self.class_names[class_index]), " ,3D POINT in camera_depth_optical_frame: ",[x_cam ,y_cam,z_depth],"\n")
+                                
                                 self.the_points.data= [x_cam ,y_cam,z_depth]
                                 self.pub1.publish(self.the_points)
 
