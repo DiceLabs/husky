@@ -87,57 +87,38 @@ class camera_detect:
                 self.cv_image = self.bridge.imgmsg_to_cv2(self.image, desired_encoding='passthrough')    #'rgb8')
                 self.result = self.model(self.cv_image, verbose=True)[0]
                 self.boxes = self.result.boxes.data.cpu().numpy()
+                self.class_names = self.result.names
                 #print(self.result.cpu().masks.xy)
 
                 if len(self.boxes) > 0:
-                    #convert to opencv depth image
-                    depth_image = self.bridge.imgmsg_to_cv2(self.depth_img, desired_encoding='passthrough') #'16UC1')
-                    #print([self.cv_image.shape[0],self.cv_image.shape[1],depth_image.shape[0],depth_image.shape[1]])
-
-                    #Apply scaling factor parameters that relate pixel locations of color image and depth image
-                    scale_factor_col = depth_image.shape[1] / self.cv_image.shape[1]
-                    scale_factor_row = depth_image.shape[0] / self.cv_image.shape[0]
-                    self.class_names = self.result.names
-
                     try:
                         for i in range(len(self.boxes)):
                             class_index = int(self.boxes[i][5])
+                            if str(self.class_names[class_index]) == "fire hydrant":  # or str(self.class_names[class_index]) == "person":
+                                # convert to opencv depth image
+                                depth_image = self.bridge.imgmsg_to_cv2(self.depth_img,
+                                                                        desired_encoding='passthrough')  # '16UC1')
+                                # print([self.cv_image.shape[0],self.cv_image.shape[1],depth_image.shape[0],depth_image.shape[1]])
 
-                            #self.boxes[i][0] and [1] represent lower left corner of bounding box, 
-                            #self.boxes[i][2] and [3] represent upper right corner of bounding box
-                            self.info = self.result[i].cpu().masks.xy[0]
+                                # Apply scaling factor parameters that relate pixel locations of color image and depth image
+                                scale_factor_col = depth_image.shape[1] / self.cv_image.shape[1]
+                                scale_factor_row = depth_image.shape[0] / self.cv_image.shape[0]
+                                self.info = self.result[i].cpu().masks.xy[0]
 
-                            #Get center of bounding box
-                            #self.Center_x = self.info[0]+(self.info[2]-self.info[0])/ 2
-                            #self.Center_y = self.info[1]+(self.info[3] - self.info[1])/ 2
-                            self.Center_x,self.Center_y = np.mean(np.array(self.info),axis=0)
-                            delta_x = (int(self.Center_x) - (self.cv_image.shape[1] // 2))  # self.bottle_center_x
-                            delta_y = (int(self.Center_y) - (self.cv_image.shape[0] // 2))
+                                #Get center of bounding box
+                                self.Center_x,self.Center_y = np.mean(np.array(self.info),axis=0)
+                                delta_x = (int(self.Center_x) - (self.cv_image.shape[1] // 2))  # self.bottle_center_x
+                                delta_y = (int(self.Center_y) - (self.cv_image.shape[0] // 2))
 
-
-                            col = int(self.Center_x * scale_factor_col)
-                            row = int(self.Center_y  * scale_factor_row)
-
-                            if str(self.class_names[class_index]) == "fire hydrant": #or str(self.class_names[class_index]) == "person":
+                                col = int(self.Center_x * scale_factor_col)
+                                row = int(self.Center_y  * scale_factor_row)
 
                                 #Get Z_depth in meters of pixel in depth image
-                                z_depth = (depth_image[row][col]) #/1000)
+                                z_depth = (depth_image[row][col]/1000)
                                 self.deltas.data = [delta_x, delta_y, z_depth]
                                 self.pub2.publish(self.deltas)
                                 #z_depth*=0.30
-                                #Obtain the distortion coefficients from the distortion matrix/D matrix:
-                                #distortion_coeffs = np.array(self.camera_intrinsics.D)
 
-                                #Apply distortion correction to the image coordinates (row, column) using the distortion coefficients.
-                                 #This step will remove the distortion effects and provide undistorted image coordinates:
-                                #undistorted_coords = cv2.undistortPoints(np.array([(col, row)], dtype=np.float32),self.camera_matrix, distortion_coeffs)
-                                #undistorted_x = undistorted_coords[0, 0, 0]
-                                #undistorted_y = undistorted_coords[0, 0, 1]
-
-                                #Convert the undistorted image coordinates to normalized device coordinates (NDC) by 
-                                #subtracting the principal point and dividing by the focal length
-                                #x_ndc = (undistorted_x - self.camera_intrinsics.K[2]) / self.camera_intrinsics.K[0]
-                                #y_ndc = (undistorted_y - self.camera_intrinsics.K[5]) / self.camera_intrinsics.K[4]
 
                                 x_ndc = (col - self.camera_intrinsics.K[2]) / self.camera_intrinsics.K[0]
                                 y_ndc = (row - self.camera_intrinsics.K[5]) / self.camera_intrinsics.K[4]
@@ -150,7 +131,7 @@ class camera_detect:
                                 print("CLASS_NAME: ", str(self.class_names[class_index]), " ,3D POINT in depth_camera_optical_frame: ",[x_cam ,y_cam,z_depth],"\n")
                                 #print("RADS: ",  rad)
                                 self.the_points.data= [x_cam ,y_cam,z_depth]
-                                self.pub1.publish(self.the_points) 
+                                self.pub1.publish(self.the_points)
 
                     except IndexError:
                         pass
