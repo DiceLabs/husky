@@ -94,8 +94,8 @@ class camera_detect:
                     try:
                         for i in range(len(self.boxes)):
                             class_index = int(self.boxes[i][5])
-                            #REMEMBER TO CHNAGE FROM PERSON TO ANY OTHER THING YOU WANT TO RECORD DEPTH VALUE OF
-                            if str(self.class_names[class_index]) == "fire hydrant":  # or str(self.class_names[class_index]) == "person":
+                            #REMEMBER TO CHNAGE FROM "fire hydrant" TO ANYTHING YOU WANT TO RECORD DEPTH VALUE OF
+                            if str(self.class_names[class_index]) == "fire hydrant":  
                                 # convert to opencv depth image
                                 depth_image = self.bridge.imgmsg_to_cv2(self.depth_img,
                                                                         desired_encoding='passthrough')  # '16UC1')
