@@ -78,7 +78,18 @@ class robot_arm:
             xyz_point = self.transform(msg.data, TF_c_b)
             print("GRIPPER POINT: ",xyz_point)
             self.target_pose.position.x, self.target_pose.position.y, self.target_pose.position.z = xyz_point
+
+            #ALLEVIATES THE LIMITS OF GOAL ORIENTATION
             self.move_group.set_goal_orientation_tolerance(2*np.pi)
+
+
+            # Set a new planning timeout (in seconds)
+            new_timeout = 10.0  # Adjust the timeout value as needed
+
+            # Update the planning timeout
+            self.move_group.set_planning_time(new_timeout)
+            
+            #SET TARGET POSE
             self.move_group.set_pose_target(self.target_pose)
             self.move_group.set_max_velocity_scaling_factor(0.1)
             plan = self.move_group.go(wait=True)
@@ -87,6 +98,7 @@ class robot_arm:
             else:
                 rospy.logerr("Motion planning and execution failed!")
 
+            #CLOSE AND OPEN GRIPPER
             self.pub1.publish(self.gripper)
 
             rospy.sleep(1)  # Delay to allow the message to be published
