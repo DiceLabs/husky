@@ -27,7 +27,7 @@ def profileit(name):
 class camera_detect:
     def __init__(self):
         self.bridge = CvBridge()
-        self.model = YOLO('yolov8s-seg.pt')
+        self.model = YOLO('yolov8l-seg.pt')
         self.cv_image = None
         self.result = None
         self.class_names = None
