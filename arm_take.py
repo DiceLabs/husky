@@ -109,7 +109,7 @@ class robot_arm:
 
             rospy.sleep(1)  # Delay to allow the message to be published
 
-            # Exit the script after sending the message
+            # Exit the script after sending the message, comment out this line for continuous goal setting
             rospy.signal_shutdown('Message sent')
 
 
