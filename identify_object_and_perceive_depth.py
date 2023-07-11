@@ -151,7 +151,7 @@ class camera_detect:
                                 #print(row_indices)
 
                                 #Get Z_depth in meters of pixel in depth image
-                                z_depth = np.nanmean(depth_image[row_indices,column_indices])*0.80#depth_image[row][col]#/1000
+                                z_depth = np.nanmean(depth_image[row_indices,column_indices])/1000   #depth_image[row][col]#/1000
                                 #print("NAN: ",np.argwhere(np.isnan(depth_image[row_indices,column_indices])))
                                 #print(z_depth)
                                 #self.deltas.data = [delta_col, delta_row, z_depth]
