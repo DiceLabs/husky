@@ -9,9 +9,9 @@ from std_msgs.msg import Header, Float64MultiArray
 import cv2
 from sensor_msgs.msg import CameraInfo
 import cProfile
-import math
 
-print("HELL")
+#Helps calculate centroids of polygons created by instance segmentation
+from shapely.geometry import Polygon
 
 def profileit(name):
     def inner(func):
@@ -27,7 +27,7 @@ def profileit(name):
 class camera_detect:
     def __init__(self):
         self.bridge = CvBridge()
-        self.model = YOLO('yolov8l-seg.pt')
+        self.model = YOLO('/home/philip/YOLO_models_in_pt_config/yolov8l-seg.pt')
         self.cv_image = None
         self.result = None
         self.class_names = None
@@ -88,14 +88,13 @@ class camera_detect:
                 self.result = self.model(self.cv_image, verbose=True)[0]
                 self.boxes = self.result.boxes.data.cpu().numpy()
                 self.class_names = self.result.names
-                #print(self.result.cpu().masks.xy)
+                
 
                 if len(self.boxes) > 0:
                     try:
                         for i in range(len(self.boxes)):
                             class_index = int(self.boxes[i][5])
-                            #REMEMBER TO CHNAGE FROM "fire hydrant" TO ANYTHING YOU WANT TO RECORD DEPTH VALUE OF
-                            if str(self.class_names[class_index]) == "fire hydrant":  
+                            if str(self.class_names[class_index]) == "fire hydrant":  # or str(self.class_names[class_index]) == "person":
                                 # convert to opencv depth image
                                 depth_image = self.bridge.imgmsg_to_cv2(self.depth_img,
                                                                         desired_encoding='passthrough')  # '16UC1')
@@ -105,9 +104,12 @@ class camera_detect:
                                 scale_factor_col = depth_image.shape[1] / self.cv_image.shape[1]
                                 scale_factor_row = depth_image.shape[0] / self.cv_image.shape[0]
                                 self.info = self.result[i].cpu().masks.xy[0]
-
+                                #print(self.info)
                                 #Get center of bounding box
-                                self.Center_x,self.Center_y = np.mean(np.array(self.info),axis=0)
+                                #self.Center_x,self.Center_y = np.mean(np.array(self.info),axis=0)
+                                instance_segment = Polygon(np.array(self.info))
+                                self.Center_x = instance_segment.centroid.x
+                                self.Center_y = instance_segment.centroid.y
                                 delta_x = (int(self.Center_x) - (self.cv_image.shape[1] // 2))  # self.bottle_center_x
                                 delta_y = (int(self.Center_y) - (self.cv_image.shape[0] // 2))
 
@@ -115,7 +117,7 @@ class camera_detect:
                                 row = int(self.Center_y  * scale_factor_row)
 
                                 #Get Z_depth in meters of pixel in depth image
-                                z_depth = (depth_image[row][col]/1000)
+                                z_depth = depth_image[row][col]/1000
                                 self.deltas.data = [delta_x, delta_y, z_depth]
                                 self.pub2.publish(self.deltas)
                                 #z_depth*=0.30
@@ -127,11 +129,10 @@ class camera_detect:
                                 #Scale the normalized device coordinates to obtain the 3D coordinates in camera coordinate space
                                 x_cam = x_ndc * (z_depth) / 1.0
                                 y_cam = y_ndc * (z_depth) / 1.0
-                                
-                                #PAY ATTENTION TO THE Z_DEPTH, THESE POSITION VALUES ARE IN METERS. IF Z_DEPTH VALUE DOES NOT LOOK CORRECT THEN IT'S 
-                                # A RESULT OF INACCURATE READINGS.
-                                print("CLASS_NAME: ", str(self.class_names[class_index]), " ,3D POINT in camera_depth_optical_frame: ",[x_cam ,y_cam,z_depth],"\n")
-                                
+
+
+                                print("CLASS_NAME: ", str(self.class_names[class_index]), " ,3D POINT in depth_camera_optical_frame: ",[x_cam ,y_cam,z_depth],"\n")
+                               
                                 self.the_points.data= [x_cam ,y_cam,z_depth]
                                 self.pub1.publish(self.the_points)
 
