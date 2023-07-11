@@ -13,13 +13,14 @@ from tf.transformations import quaternion_from_euler
 import math
 
 # Initialize ROS node
-rospy.init_node('camt_to_map', anonymous=True)
+rospy.init_node('cam_to_map', anonymous=True)
 
 class converter:
 	def __init__(self):
 		self.a_3D_point = None
+		self.rot=None
 
-	"""THIS IS WHAT TRANSFORMS THE 3D POINT FROM ONE FRAME TO ANOTHER"""
+
 	def transform(self,coord, mat44):
 		print("MAT44: ",mat44)
 		print("POINT ", coord)
@@ -31,23 +32,67 @@ class converter:
 
 	def move_it(self):
 		listener = tf.TransformListener()
-		
 		"""Get transform matrix to convert Point in 3D space to from camera_realsense_link_gazebo to base_link"""
 		listener.waitForTransform('map', 'camera_realsense_link_gazebo', rospy.Time(0), rospy.Duration(10.0))
-
-		"""This part of class method/function obstains the translation of and rotation matrices (at a point in time) relating the 
-  		camera_depth optical frame and the map frame"""
 		(trans, rot) = listener.lookupTransform('map', 'camera_realsense_link_gazebo', rospy.Time(0))
-
-		"""This comnines both translation and roatation matrices to obtain the Transforamtion matrix"""
 		TF_c_b = np.dot(tf.transformations.translation_matrix(trans), tf.transformations.quaternion_matrix(rot))
 
-		"""Get transform matrix to convert Point in 3D space to from base_link to map"""
-		listener.waitForTransform('map', 'base_link', rospy.Time(0), rospy.Duration(10.0))
-		(trans, rot) = listener.lookupTransform('map', 'base_link', rospy.Time(0))
-		TF_b_m = np.dot(tf.transformations.translation_matrix(trans), tf.transformations.quaternion_matrix(rot))
-		point = self.transform(self.a_3D_point ,TF_c_b)#self.transform((self.transform(self.a_3D_point ,TF_c_b)#) , TF_b_m)
-		print("POINT_IN_MAP_FRAME: ", point)
+		#_, _, yaw = tf.transformations.euler_from_matrix(TF_c_b, axes='sxyz')
+		##self.a_3D_point[3] + yaw
+
+		point = self.transform(self.a_3D_point ,TF_c_b)
+		#self.rot = point[0]-trans[0],point[1]-trans[1]
+
+		print("PRE: ",self.rot)
+		x = point[0]
+		y = point[1]
+		# Determine the quadrant
+		quadrant = None
+		if x > 0 and y > 0:
+			quadrant = "Quadrant I"
+		elif x < 0 and y > 0:
+			quadrant = "Quadrant II"
+		elif x < 0 and y < 0:
+			quadrant = "Quadrant III"
+		elif x > 0 and y < 0:
+			quadrant = "Quadrant IV"
+		elif x == 0 and y != 0:
+			quadrant = "On the y-axis"
+		elif x != 0 and y == 0:
+			quadrant = "On the x-axis"
+		else:
+			quadrant = "At the origin"
+
+		# Relate quadrants to the map frame axes
+		if quadrant == "Quadrant I":
+			print(quadrant)
+			self.rot = math.atan2(abs(point[1]), abs(point[0]));
+		elif quadrant == "Quadrant II":
+			print(quadrant)
+			self.rot = (math.pi/2) + math.atan2(abs(point[0]), abs(point[1]))
+		elif quadrant == "Quadrant III":
+			print(quadrant)
+			self.rot = -(math.pi/2) - math.atan2(abs(point[0]), abs(point[1]))
+		elif quadrant == "Quadrant IV":
+			print(quadrant)
+			self.rot =  -((math.pi/2)-math.atan2(abs(point[0]), abs(point[1])))
+		elif quadrant == "On the x-axis" :
+			if x > 0:
+				self.rot = 0.0
+
+			if x < 0:
+				self.rot = math.pi
+		elif quadrant == "On the y-axis":
+			if y > 0:
+				self.rot = math.pi/2
+
+			if y < 0:
+				self.rot = -math.pi/2
+		else:
+			self.rot = 0.0
+
+		print("POINT: ",point)
+		print("angle: ", self.rot)
 		self.move_to_target_position(point)
 
 	def callback(self,msg):
@@ -55,14 +100,14 @@ class converter:
 		self.move_it()
 
 	def move_to_target_position(self,target_position):
-		angle = self.a_3D_point[3]
-		if angle > math.pi:
-			angle -= 2 * math.pi
-		elif angle < -math.pi:
-			angle += 2 * math.pi
+		#angle = self.rot #self.a_3D_point[3] * -1
+		#if angle > math.pi:
+		#	angle -= 2 * math.pi
+		#elif angle < -math.pi:
+		#	angle += 2 * math.pi
 
-		yaw = angle  # yaw value in the range of -pi to pi
-		quaternion = quaternion_from_euler(0.0, 0.0, yaw)
+		#yaw = angle # yaw value in the range of -pi to pi
+		quaternion = quaternion_from_euler(0.0, 0.0, self.rot)
 		# Create action client for move_base
 		move_base_client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
 		move_base_client.wait_for_server()
@@ -91,7 +136,7 @@ class converter:
 			rospy.loginfo('Failed to reach the goal.')
 def main():
 	test  = converter()
-	rospy.Subscriber("/the_points", Float64MultiArray, test.callback, queue_size=100)
+	rospy.Subscriber("/the_points", Float64MultiArray, test.callback, queue_size=1)
 
 	rospy.spin()
 
