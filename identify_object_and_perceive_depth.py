@@ -140,8 +140,8 @@ class camera_detect:
                                 # Get the positions (row, column) where the mask is 255 (inside the polygon)
                                 scaled_positions = np.array(np.argwhere(mask == 255)) #* np.array([scale_factor_row,scale_factor_col]))
                                 #print(scaled_positions)
-                                row_indices =  scaled_positions[:, 0]  * int(scale_factor_row)
-                                column_indices = scaled_positions[:, 1]  * int(scale_factor_col)
+                                row_indices =  (scaled_positions[:, 0] * scale_factor_row).round().astype(int)
+                                column_indices = (scaled_positions[:, 1] * scale_factor_col).round().astype(int)
                                 depth_image = np.array(depth_image)
                                 #depths = depth_image[row_indices, column_indices]
                                 #for element in depths:
