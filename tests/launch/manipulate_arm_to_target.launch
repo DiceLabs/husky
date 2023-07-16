@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node name="move_arm_to_target_position" pkg="tests" type="move_arm_to_target_position.py"  output="screen">
+    <rosparam file="$(find tests)/config/arm_manipulation.yaml" />   
+     <param name="camera_depth_optical_frame"
+     value='secondary_camera_realsense_depth_optical_frame'/>
+     <param name="base_frame" value='base_link'/>
+     <param name="command_publish_topic" value='/right_gripper/command_robotiq_action/goal'/>
+     <param name="group_name" value="manipulator_right"/>
+ </node>
+
+</launch>
