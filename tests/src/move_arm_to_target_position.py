@@ -123,29 +123,28 @@ class robot_arm:
         else:
             self.pitch = 0.0
 
-    def find_roll(self, y, z):
-        if y > 0 and z < 0:
-            self.roll = -math.atan2(abs(z), abs(y));
-        elif y < 0 and z < 0:
-            self.roll = -(math.pi / 2) - math.atan2(abs(y), abs(z))
-        elif y < 0 and z > 0:
-            self.roll = (math.pi / 2) + math.atan2(abs(y), abs(z))
-        elif y > 0 and z > 0:
-            self.roll = math.atan2(abs(z), abs(y))
-
-        elif y != 0 and z == 0:
-            if y > 0:
-                self.roll = 0.0
-            if y < 0:
-                self.roll = math.pi
-        elif y == 0 and z != 0:
+    def find_roll(self, z, y):
+        if z > 0 and y > 0:
+            self.yaw = math.atan2(abs(y), abs(z));
+        elif z < 0 and y > 0:
+            self.yaw = (math.pi / 2) + math.atan2(abs(z), abs(y))
+        elif z < 0 and y < 0:
+            self.yaw = -(math.pi / 2) - math.atan2(abs(z), abs(y))
+        elif z > 0 and y < 0:
+            self.yaw = -math.atan2(abs(y), abs(z))
+        elif z != 0 and y == 0:
             if z > 0:
-                self.roll = math.pi / 2
-
+                self.yaw = 0.0
             if z < 0:
-                self.roll = -math.pi / 2
+                self.yaw = math.pi
+        elif z == 0 and y != 0:
+            if y > 0:
+                self.yaw = math.pi / 2
+
+            if y < 0:
+                self.yaw = -math.pi / 2
         else:
-            self.roll = 0.0
+            self.yaw = 0.0
 
     def move_it(self,msg):
         if msg.data[2]>=1.0:
