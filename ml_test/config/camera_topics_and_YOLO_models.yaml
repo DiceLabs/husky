@@ -1,0 +1,8 @@
+YOLO_model: '/home/philip/YOLO_models_in_pt_config/yolov8l-seg.pt'
+camera_color_image_topic: "/realsense_secondary/color/image_raw"
+camera_depth_image_topic: "/realsense_secondary/depth/image_rect_raw"
+camera_depth_info_topic: "/realsense_secondary/depth/camera_info"
+arm_manipulate: 0
+robot_navigate: 1
+object: "fire hydrant"
+

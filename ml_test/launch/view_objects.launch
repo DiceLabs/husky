@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+<node pkg="ml_test" type="view_with_YOLO.py" name="view_objects" output="screen">
+ <rosparam file="$(find ml_test)/config/camera_topics_and_YOLO_models.yaml" />   
+     <param name="YOLO_model" value="/home/philip/YOLO_models_in_pt_config/yolov8l-seg.pt"/>
+     <param name="camera_color_image_topic" value="/realsense/color/image_raw"/>
+ </node>
+    
+</launch> 

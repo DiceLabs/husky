@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+ <node pkg="ml_test" type="robot_navigation_to_object.py" name="robot_navigation_to_object" output="screen">
+  <rosparam file="$(find ml_test)/config/robot_navigation_to_object.yaml" />   
+     <param name="camera_depth_optical_frame"
+     value='camera_realsense_link_gazebo'/>
+     <param name="map_frame" value='map'/>
+ </node>
+ 
+ </launch> 

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+<node pkg="ml_test" type="identify_object_and_perceive_depth.py" name="perceive_objects" output="screen">
+ <rosparam file="$(find ml_test)/config/camera_topics_and_YOLO_models.yaml" />   
+     <param name="YOLO_model" value="/home/philip/YOLO_models_in_pt_config/yolov8l-seg.pt"/>
+     <param name="camera_color_image_topic" value="/realsense/color/image_raw"/>
+     <param name="camera_depth_image_topic" value="/realsense/depth/image_rect_raw" />
+     <param name="camera_depth_info_topic" value="/realsense/depth/camera_info" />
+     <param name="arm_manipulate" value="0" />
+     <param name="robot_navigate" value="1" />
+     <param name="object" value="person" />
+ </node>
+    
+</launch> 
