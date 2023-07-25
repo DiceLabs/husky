@@ -1,0 +1,5 @@
+<launch>
+  <node name="gps_publisher" pkg="ml_test" type="gps_publisher.py" output="screen"/>
+  <node name="cartesian_listener" pkg="ml_test" type="cartesian_listener.py" output="screen"/>
+</launch>
+

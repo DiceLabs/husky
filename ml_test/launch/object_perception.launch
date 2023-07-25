@@ -1,15 +1,27 @@
 <?xml version="1.0"?>
 <launch>
-
-<node pkg="ml_test" type="identify_object_and_perceive_depth.py" name="perceive_objects" output="screen">
- <rosparam file="$(find ml_test)/config/camera_topics_and_YOLO_models.yaml" />   
-     <param name="YOLO_model" value="/home/philip/YOLO_models_in_pt_config/yolov8l-seg.pt"/>
-     <param name="camera_color_image_topic" value="/realsense/color/image_raw"/>
-     <param name="camera_depth_image_topic" value="/realsense/depth/image_rect_raw" />
-     <param name="camera_depth_info_topic" value="/realsense/depth/camera_info" />
-     <param name="arm_manipulate" value="0" />
-     <param name="robot_navigate" value="1" />
-     <param name="object" value="person" />
- </node>
+  <!-- declare arg to be passed in -->
+  <arg name="YOLO_model" default="/home/philip/YOLO_models_in_pt_config/yolov8l-seg.pt"/>
+  <arg name="camera_color_image_topic" default="/realsense/color/image_raw"/>
+  <arg name="camera_depth_image_topic" default="/realsense/depth/image_rect_raw" />
+  <arg name="camera_depth_info_topic" default="/realsense/depth/camera_info" />
+  <arg name="arm_manipulate" default="0" />
+  <arg name="robot_navigate" default="1" />
+  <arg name="object" default="person" />
+  <arg name="instance" default="1" />
+  
+  
+  <node pkg="ml_test" type="identify_object_and_perceive_depth.py" name="perceive_objects_$(arg instance)" output="screen">
+  <rosparam file="$(find ml_test)/config/camera_topics_and_YOLO_models.yaml" />   
+     <param name="YOLO_model" value="$(arg YOLO_model)"/>
+     <param name="camera_color_image_topic" value="$(arg camera_color_image_topic)"/>
+     <param name="camera_depth_image_topic" value="$(arg camera_depth_image_topic)" />
+     <param name="camera_depth_info_topic" value="$(arg camera_depth_info_topic)"/>
+     <param name="arm_manipulate" value="$(arg arm_manipulate)" />
+     <param name="robot_navigate" value="$(arg robot_navigate)" />
+     <param name="object" value="$(arg object)"/>
+     <param name="instance" value="$(arg instance)"/>
+     
+  </node>
     
 </launch> 

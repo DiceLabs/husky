@@ -18,7 +18,8 @@ rospy.init_node("perceive_objects", anonymous=True)
 class camera_detect:
     def __init__(self):
         self.bridge = CvBridge()
-        self.yolo_model = rospy.get_param("/perceive_objects/YOLO_model")
+        self.instance = rospy.get_param("~instance")
+        self.yolo_model = rospy.get_param("~YOLO_model")
         self.model = YOLO(self.yolo_model)
         self.cv_image = None
         self.result = None
@@ -36,9 +37,9 @@ class camera_detect:
         self.camera_intrinsics=None
         self.depth_img=None
         self.camera_matrix = None
-        self.arm_manipulate = rospy.get_param("/perceive_objects/arm_manipulate")
-        self.robot_navigate = rospy.get_param("/perceive_objects/robot_navigate")
-        self.object = rospy.get_param("/perceive_objects/object")
+        self.arm_manipulate = rospy.get_param("~arm_manipulate")
+        self.robot_navigate = rospy.get_param("~robot_navigate")
+        self.object = rospy.get_param("~object")
         self.the_points = Float64MultiArray()
 
         self.deltas = Float64MultiArray()
@@ -158,9 +159,9 @@ class camera_detect:
 
 def main():
         tester = camera_detect()
-        camera_depth_info_topic = rospy.get_param("/perceive_objects/camera_depth_info_topic")
-        camera_color_image_topic = rospy.get_param("/perceive_objects/camera_color_image_topic")
-        camera_depth_image_topic = rospy.get_param("/perceive_objects/camera_depth_image_topic")
+        camera_depth_info_topic = rospy.get_param("~camera_depth_info_topic")
+        camera_color_image_topic = rospy.get_param("~camera_color_image_topic")
+        camera_depth_image_topic = rospy.get_param("~camera_depth_image_topic")
         #realsense_secondary
         rospy.Subscriber( camera_depth_info_topic, CameraInfo, tester.callback0, queue_size=100)
         rospy.Subscriber(camera_color_image_topic, Image, tester.callback1, queue_size=1, buff_size=2_000_000)
