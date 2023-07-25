@@ -21,7 +21,7 @@ class robot_arm:
     def __init__(self):
         self.robot = moveit_commander.RobotCommander()
         self.scene = moveit_commander.PlanningSceneInterface()
-        self.group_name = rospy.get_param("/move_arm_to_target_position/group_name")
+        self.group_name = rospy.get_param("~group_name")
         self.move_group = moveit_commander.MoveGroupCommander(self.group_name)
         self.current_pose = self.move_group.get_current_pose().pose
         self.current_quaternion = [self.current_pose.orientation.x, self.current_pose.orientation.y,
@@ -39,7 +39,7 @@ class robot_arm:
         self.target_pose.orientation.z = None
         self.target_pose.orientation.w = None
 
-        self.command_publish_topic = rospy.get_param("/move_arm_to_target_position/command_publish_topic")
+        self.command_publish_topic = rospy.get_param("~command_publish_topic")
         self.pub1 = rospy.Publisher(self.command_publish_topic, CommandRobotiqGripperActionGoal,
                               queue_size=10)
 
@@ -65,8 +65,8 @@ class robot_arm:
         self.pitch = None
         self.yaw = None
 
-        self.camera_frame = self.command_publish_topic = rospy.get_param("/move_arm_to_target_position/camera_depth_optical_frame")
-        self.base_frame = self.command_publish_topic = rospy.get_param("/move_arm_to_target_position/base_frame")
+        self.camera_frame = self.command_publish_topic = rospy.get_param("~camera_depth_optical_frame")
+        self.base_frame = self.command_publish_topic = rospy.get_param("~base_frame")
     def transform(self, coord, mat44):
         print("MAT44: ", mat44)
         print("POINT ", coord)
@@ -123,7 +123,7 @@ class robot_arm:
         else:
             self.pitch = 0.0
 
-      def find_roll(self, y, z):
+    def find_roll(self, y, z):
         if y > 0 and z < 0:
             self.roll = -math.atan2(abs(z), abs(y));
         elif y < 0 and z < 0:
