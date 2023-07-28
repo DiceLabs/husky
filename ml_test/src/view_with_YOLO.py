@@ -11,8 +11,8 @@ import cv2
 rospy.init_node("view_objects", anonymous=True)
 
 
-camera_color_image_topic = rospy.get_param("/view_objects/camera_color_image_topic")
-YOLO_model = rospy.get_param("/view_objects/YOLO_model")
+camera_color_image_topic = rospy.get_param("~camera_color_image_topic")
+YOLO_model = rospy.get_param("~YOLO_model")
 model = YOLO(YOLO_model)
 bridge = CvBridge()
 
