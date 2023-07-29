@@ -29,7 +29,7 @@ def main():
     bag = rosbag.Bag(bag_file, "w")
     
     # Subscribe to the color image topic
-    rospy.Subscriber("/scan", LaserSCan, scan_callback)
+    rospy.Subscriber("/scan", LaserScan, scan_callback)
     
     # Start recording the bag
     rospy.loginfo("Recording bag...")
