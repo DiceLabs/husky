@@ -50,7 +50,7 @@ sudo apt update
 ```
 sudo apt install ros-noetic-desktop-full
 ```
-###### For installing additional packages
+###### For installing additional packages (format)
 ```
 sudo apt install ros-noetic-PACKAGE
 ```
