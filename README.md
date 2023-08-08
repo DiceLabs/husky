@@ -91,7 +91,7 @@ mkdir src && cd src
 ```
 scp -r administrator@cpr-a200-0876:~/catkin_ws/src/* .
 ```
-If you run into an error where cpr-a200-0876 can't be found follow the instructions in [Network problems section](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#potential-network-connection-problems--fixes-optional)
+If you run into an error where cpr-a200-0876 can't be found follow the instructions in [network problems section](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#potential-network-connection-problems--fixes-optional)
 
 Install dependencies for these packages that have just been transferred over to device
 
