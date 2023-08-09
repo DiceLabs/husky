@@ -143,11 +143,11 @@ Below the line that contatins 127.0.1.1 and other devices that are used in the l
 ## UR arms
 ###### UNDERSTAND
 The robots UI monitor on the back can only operate one arm at a time
-###### Power on arms
+##### Power on arms
 On the robot there are two buttons under the robots UI on the right side of the panel labeled left and right. These are the power buttons. Press and release one of the buttons, then wait until you hear a fan start up, after the fan has started up, you will press and release the other button and it too will have a fan startup. It does not matter what order you press the buttons in. The bootup process will take approx. 2 minutes.
 <PICTURES>
 
-###### Working with UI and controller to activate the arms
+##### Working with UI and controller to activate the arms
 Once the arms have started up the UI on the back of the robot will be on and most likely have a Robot Emergency Stop warning. This is simply stating the last time the robot was in use it was E-stopped. You can just ignore this and click **Not now**
 
 Then you will click the red button on the bottom left side of the UI 
@@ -186,7 +186,33 @@ The UI should look like this with all the process bubbles shown green for a succ
 ##### Switching UI from one arm to the other
 On the back panel where the left and right power buttons for the arms were, on the bottom left of that panel there is a button
 
+##### Repeat process There are two main methods the user can E-stop the robot. **Pressing the red button on the back of the robot** or **pressing the top right black button on the controller**.
 
+## Establishing wireless connection in lab
+Connect to **SDSU_Dice_Labs**
+
+
+## Installing ROS
+**Acknowledge** this is for working in **Ubuntu 20.04** environment
+
+These steps can be found on [Ros Noetic Installation](http://wiki.ros.org/noetic/Installation/Ubuntu)
+
+Open a terminal
+
+
+###### Setup your sources.list
+Setup your computer to accept software from packages.ros.org.
+```
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+```
+
+###### Set up your keys
+```
+sudo apt install curl # if you haven't already installed curl
+Use Control + Shift + m to toggle the tab key moving focus. Alternatively, use esc then tab to move to the next interactive element on the page.
+Attach files by dragging & dropping, selecting or pasting them.
+for other arm
+Follow back through the steps provided in [Working with UI and controller to activate the arms](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#working-with-ui-and-controller-to-activate-the-arms)
 
 
 
