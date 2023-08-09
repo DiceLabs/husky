@@ -193,32 +193,8 @@ The UI should look like this with all the process bubbles shown green for a succ
 ##### Switching UI from one arm to the other
 On the back panel where the left and right power buttons for the arms were, on the bottom left of that panel there is a button
 
-##### Repeat process There are two main methods the user can E-stop the robot. **Pressing the red button on the back of the robot** or **pressing the top right black button on the controller**.
+##### Repeat process
 
-## Establishing wireless connection in lab
-Connect to **SDSU_Dice_Labs**
-
-
-## Installing ROS
-**Acknowledge** this is for working in **Ubuntu 20.04** environment
-
-These steps can be found on [Ros Noetic Installation](http://wiki.ros.org/noetic/Installation/Ubuntu)
-
-Open a terminal
-
-
-###### Setup your sources.list
-Setup your computer to accept software from packages.ros.org.
-```
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-```
-
-###### Set up your keys
-```
-sudo apt install curl # if you haven't already installed curl
-Use Control + Shift + m to toggle the tab key moving focus. Alternatively, use esc then tab to move to the next interactive element on the page.
-Attach files by dragging & dropping, selecting or pasting them.
-for other arm
 Follow back through the steps provided in [Working with UI and controller to activate the arms](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#working-with-ui-and-controller-to-activate-the-arms)
 
 
