@@ -210,7 +210,7 @@ then RVIZ
 
 ## RVIZ
 
-**After following [UR ARM]() instruction** the robot model is fully ready for the startup of the visualization tool **RVIZ**
+**After following [UR ARM](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#ur-arms) instruction** the robot model is fully ready for the startup of the visualization tool **RVIZ**
 
 
 
