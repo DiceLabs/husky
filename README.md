@@ -124,18 +124,25 @@ alias husky_src='source ~/catkin_ws/devel/setup.bash'
 
 ### Potential network connection problems & fixes (optional)
 The computer or network equipment may be having trouble connecting hostnames to the corresponding ip's
+
 ```
 sudo nano /etc/hosts
 ```
+
 Below the line that contatins 127.0.1.1, add this line
+
 ```
 146.244.98.51   cpr-a200-0876
 ```
+
 It may be required that you add the connection of ip to hostname of your own device into the robot. If that is the case then you will need to get onto a device that already has an established connection to the robot, SSH into the robot and add your configuration into the robots hosts. This is done below while in a terminal that is with the robots os.
+
 ```
 sudo nano /etc/hosts
 ```
+
 Below the line that contatins 127.0.1.1 and other devices that are used in the lab, add a line contataining
+
 ```
 <your_devices_ip_while_on_SDSU_Dice_Labs_wifi>   <your_devices_hostname>
 ```
