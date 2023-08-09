@@ -210,7 +210,7 @@ then RVIZ
 
 ## RVIZ
 
-**after following []()** the robot model is fully ready for the startup of the visualization tool **RVIZ**
+**After following [UR ARM]() instruction** the robot model is fully ready for the startup of the visualization tool **RVIZ**
 
 
 
