@@ -198,8 +198,19 @@ On the back panel where the left and right power buttons for the arms were, on t
 Follow back through the steps provided in [Working with UI and controller to activate the arms](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#working-with-ui-and-controller-to-activate-the-arms)
 
 
+SSH into robot dual bringup launch
 
+grippers open/close
 
+hit play button 
+
+launch moveit
+
+then RVIZ
+
+## RVIZ
+
+**after following []()** the robot model is fully ready for the startup of the visualization tool **RVIZ**
 
 
 
