@@ -83,7 +83,7 @@ source ~/husky_ws/devel/setup.bash
 ```
 
 
-## Useful Bash Aliases/Hotkey(commands)
+### Useful Bash Aliases/Hotkey(commands)
 When the process of running common terminal commands gets too repetitive it may be much easier to simplify an entire command to one word or phrase that you can remember. This can be done in the .bashrc script with the following two methods:
 
 **Mehtod 1:**
@@ -111,7 +111,7 @@ source ~/.bashrc
 ```
 This will apply all changes made into bashrc
 
-### Useful aliases
+#### Useful aliases
 ```
 alias husky='ssh administrator@146.244.98.51'
 alias husky_export='export ROS_MASTER_URI=http://cpr-a200-0876:11311'
@@ -119,7 +119,7 @@ alias husky_src='source ~/catkin_ws/devel/setup.bash'
 ```
 
 
-## Potential network connection problems & fixes (optional)
+### Potential network connection problems & fixes (optional)
 The computer or network equipment may be having trouble connecting hostnames to the corresponding ips
 ```
 sudo nano /etc/hosts
