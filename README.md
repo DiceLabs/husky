@@ -1,11 +1,14 @@
 # Start-up Guide
 
+## E-STOP
+There are two main methods the user can E-stop the robot. **Pressing the red button on the back of the robot** or **pressing the top right black button on the controller**.
+
 ## Establishing wireless connection in lab
 Connect to **SDSU_Dice_Labs**
 
 
 ## Installing ROS
-Remember this is for working in Ubuntu 20.04
+**Acknowledge** this is for working in **Ubuntu 20.04** environment
 
 These steps can be found on [Ros Noetic Installation](http://wiki.ros.org/noetic/Installation/Ubuntu)
 
@@ -120,7 +123,7 @@ alias husky_src='source ~/catkin_ws/devel/setup.bash'
 
 
 ### Potential network connection problems & fixes (optional)
-The computer or network equipment may be having trouble connecting hostnames to the corresponding ips
+The computer or network equipment may be having trouble connecting hostnames to the corresponding ip's
 ```
 sudo nano /etc/hosts
 ```
@@ -136,6 +139,58 @@ Below the line that contatins 127.0.1.1 and other devices that are used in the l
 ```
 <your_devices_ip_while_on_SDSU_Dice_Labs_wifi>   <your_devices_hostname>
 ```
+
+## UR arms
+###### UNDERSTAND
+The robots UI monitor on the back can only operate one arm at a time
+###### Power on arms
+On the robot there are two buttons under the robots UI on the right side of the panel labeled left and right. These are the power buttons. Press and release one of the buttons, then wait until you hear a fan start up, after the fan has started up, you will press and release the other button and it too will have a fan startup. It does not matter what order you press the buttons in. The bootup process will take approx. 2 minutes.
+<PICTURES>
+
+###### Working with UI and controller to activate the arms
+Once the arms have started up the UI on the back of the robot will be on and most likely have a Robot Emergency Stop warning. This is simply stating the last time the robot was in use it was E-stopped. You can just ignore this and click **Not now**
+
+Then you will click the red button on the bottom left side of the UI 
+<picture_UI>
+
+The UI should now look like this
+<picture_arm_startup_before_go>
+
+The Robot Emergency Stop in the red frame indicates that the robot is currently E-stopped. In order to activate and use the arms E-stop must be turned off. There are multiple methods the robot could be in an E-stopped state. The red button on the back panel of the robot could be pressed. To deactivate that buttons E-stop, simply twist the button in a clockwise manner until it stops. This will turn off that buttons e-stop, however the robot may still be e-stopped. The robot could also be E-stopped via the controller. In order to release E-stop on the controller you need to press the buton on the controller labeld **GO** if the label has fallen off it is the top left black button. This will cancel out E-stop.
+
+<controller_picture>
+
+
+Once the robot is no longer in an E-stopped state, the UI should look like this:
+<picture_of_ui_before_on>
+
+**Click ON**
+
+Half way through the bootup process of the arm this will come up:
+
+<picture_pos_verfiy>
+
+Take a look at the robot arm and verify that it is in the correct orientation as depicted in the visual model, then proceed to check the box on the left had side stating **I confirm that this shows the real robot pose**
+
+Then **press Robot Position Verified** found on the bottom right side of UI
+
+The UI should now look like this
+<Picture_of_UI_halfway_done>
+
+**Press Start**
+
+The UI should look like this with all the process bubbles shown green for a successfull boot up
+
+**You need to do this process for both arms**
+
+##### Switching UI from one arm to the other
+On the back panel where the left and right power buttons for the arms were, on the bottom left of that panel there is a button
+
+
+
+
+
+
 
 
 
