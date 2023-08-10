@@ -1,7 +1,16 @@
 # Start-up Guide
 
+## Turning on the robot
+In order for the button to be pressed and have the robot power on the robots key must be plugged in:
+<picture_of_key>
+
+## Turning off the robot
+Ensure the robot is [E-stopped](), then press & release the power button
+
 ## E-STOP
-There are two main methods the user can E-stop the robot. **Pressing the red button on the back of the robot** or **pressing the top right black button on the controller**.
+There are two main methods the user can E-stop the robot:
+
+**Pressing the red button on the back of the robot** or **pressing the top right black button on the controller**
 
 ## Establishing wireless connection in lab
 Connect to **SDSU_Dice_Labs**
@@ -148,14 +157,36 @@ Below the line that contatins 127.0.1.1 and other devices that are used in the l
 ```
 
 ## UR arms
-###### UNDERSTAND
-The robots UI monitor on the back can only operate one arm at a time
+
+### UI monitor
+The robots UI monitor on the back can only operate one arm at a time. To switch for one arm to the other you need to locate the panel under the UI monitor that looks like this and click the **select** button:
+
+<UI_panel>
+
+Power buttons: 
+
+Light indicators:
+
+###### Switching UI from one arm to the other
+Select button:
+
+
+#### UI Tabs
+RUN Tab: Location where programs created on the UI are stored and ran
+
+Program Tab: Where one can use the UI to prgram tasks for the robotic arms to complete
+
+Installation Tab: Where the general settings and configurations of the UI and robotic arms are set and stored
+
+Move Tab: Where one can manually controll the arms movement by either pressing the arrow controls or physically move the robot by hand by pressing the **freedrive** button, then while **holding down** the other **freedrive press & hold** button one can manually push the arm into a desired configuration
+
+
 ##### Power on arms
 On the robot there are two buttons under the robots UI on the right side of the panel labeled left and right. These are the power buttons. Press and release one of the buttons, then wait until you hear a fan start up, after the fan has started up, you will press and release the other button and it too will have a fan startup. It does not matter what order you press the buttons in. The bootup process will take approx. 2 minutes.
 <PICTURES>
 
 ##### Working with UI and controller to activate the arms
-Once the arms have started up the UI on the back of the robot will be on and most likely have a Robot Emergency Stop warning. This is simply stating the last time the robot was in use it was E-stopped. You can just ignore this and click **Not now**
+Once the arms have powered on the UI on the back of the robot will be on and most likely have a Robot Emergency Stop warning. This is simply stating the last time the robot was in use it was E-stopped. You can just ignore this and click **Not now**
 
 Then you will click the red button on the bottom left side of the UI 
 <picture_UI>
@@ -163,7 +194,7 @@ Then you will click the red button on the bottom left side of the UI
 The UI should now look like this
 <picture_arm_startup_before_go>
 
-The Robot Emergency Stop in the red frame indicates that the robot is currently E-stopped. In order to activate and use the arms E-stop must be turned off. There are multiple methods the robot could be in an E-stopped state. The red button on the back panel of the robot could be pressed. To deactivate that buttons E-stop, simply twist the button in a clockwise manner until it stops. This will turn off that buttons e-stop, however the robot may still be e-stopped. The robot could also be E-stopped via the controller. In order to release E-stop on the controller you need to press the buton on the controller labeld **GO** if the label has fallen off it is the top left black button. This will cancel out E-stop.
+The Robot Emergency Stop in the red frame indicates that the robot is currently E-stopped. In order to activate and use the arms E-stop must be turned off. There are multiple methods the robot could be in an E-stopped state. The red button on the back panel of the robot could be pressed. To deactivate that button's E-stop, simply twist the button in a clockwise manner until it stops. This will turn off that buttons e-stop, however the robot may still be e-stopped. The robot could also be E-stopped via the controller. In order to release E-stop on the controller you need to press the buton on the controller labeld **GO** if the label has fallen off it is the top left black button. This will cancel out E-stop.
 
 <controller_picture>
 
@@ -190,23 +221,38 @@ The UI should look like this with all the process bubbles shown green for a succ
 
 **You need to do this process for both arms**
 
-##### Switching UI from one arm to the other
-On the back panel where the left and right power buttons for the arms were, on the bottom left of that panel there is a button
-
-##### Repeat process
-
 Follow back through the steps provided in [Working with UI and controller to activate the arms](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#working-with-ui-and-controller-to-activate-the-arms)
 
 
-SSH into robot dual bringup launch
+#### Operating the UR arms
+Because the UR arms may be ready for operation at a different time than the computer, the drivers are'nt set to launch with startup. In order to launch the drivers you must **SSH into the robots computer** and run this command:
 
-grippers open/close
+```
+roslaunch husky_ur_bringup husky_dual_ur_bringup.launch
+```
 
-hit play button 
+To know that the driver launched properly you must wait a few seconds, then the grippers of the robot will close and open and these for important lines of termianl printout will be returned:
 
-launch moveit
+```
+[INFO] [1691691183.451738]: Gripper on port /tmp/ttyRightTool Activated
+[INFO] [1691691183.526879]: Robotiq server started
+[INFO] [1691691184.385674]: Gripper on port /tmp/ttyLeftTool Activated
+[INFO] [1691691184.467960]: Robotiq server started
+```
 
-then RVIZ
+
+After all the proper signs of a correct driver launch have occured you will then proceed to go to the UI on the robot and **for both arms** click the play button as shown below and then press **Robot Program**
+After you have clicked play program on both arms the run tabs as explained in [UI Tabs]() should look like this
+
+
+
+After the play robot program has been started on both arms you can now launch the moveit driver that will allow you to control the arms' movements using this command:
+
+```
+roslaunch sds04_husky_moveit_config husky_dual_ur_robotiq_2f_85_moveit_planning_execution.launch
+```
+
+You can now visualize your robot in RVIZ
 
 ## RVIZ
 
