@@ -25,7 +25,7 @@ It will prompt you to put in a **password** which is:
 clearpath
 ```
 
-If you run into any problem go to [network fixes]()
+If you run into any problem go to [network fixes](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#potential-network-connection-problems--fixes-optional)
 
 ## Installing ROS
 **Acknowledge** this is for working in **Ubuntu 20.04** environment
@@ -121,7 +121,7 @@ sudo nano ~/.bashrc
 ```
 Then add aliases in the script with this format
 ```
-alias <word_or_phrase_you_want_hotkey_o_be>='<command>'
+alias <word_or_phrase_you_want_hotkey_to_be>='<command>'
 ```
 **Example:**
 ```
@@ -142,7 +142,7 @@ alias husky_src='source ~/catkin_ws/devel/setup.bash'
 ```
 
 
-### Potential network connection problems & fixes (optional)
+## Potential network connection problems & fixes (optional)
 The computer or network equipment may be having trouble connecting hostnames to the corresponding ip's
 
 ```
@@ -190,6 +190,10 @@ Program Tab: Where one can use the UI to prgram tasks for the robotic arms to co
 Installation Tab: Where the general settings and configurations of the UI and robotic arms are set and stored
 
 Move Tab: Where one can manually controll the arms movement by either pressing the arrow controls or physically move the robot by hand by pressing the **freedrive** button, then while **holding down** the other **freedrive press & hold** button one can manually push the arm into a desired configuration
+
+I/O Tab: Configure input and output voltage to the system (most likely never need to touch)
+
+Log Tab: See logged info of robotic arms (warnings, e-stops, failures) as will as load print outs on the arm
 
 
 ##### Power on arms
