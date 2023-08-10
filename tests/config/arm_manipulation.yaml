@@ -1,0 +1,4 @@
+camera_depth_optical_frame: 'secondary_camera_realsense_depth_optical_frame'
+base_frame: 'base_link'
+command_publish_topic: '/right_gripper/command_robotiq_action/goal'
+group_name: "manipulator_right"
