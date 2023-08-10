@@ -274,15 +274,9 @@ You can now visualize your robot in RVIZ
 **After following [UR ARM](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#ur-arms) instruction** the robot model is fully ready for the startup of the visualization tool **RVIZ**
 
 
-
-
-
-
-
-
-
-
-
+<br>
+<br>
+<br>
 
 
 
