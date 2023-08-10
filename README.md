@@ -15,6 +15,17 @@ There are two main methods the user can E-stop the robot:
 ## Establishing wireless connection in lab
 Connect to **SDSU_Dice_Labs**
 
+Once you have connected into the network try to SSH in to the robot:
+```
+ssh administrator@146.244.98.51
+```
+It may ask you some configuration questions simply say **yes** to these
+It will prompt you to put in a **password** which is:
+```
+clearpath
+```
+
+If you run into any problem go to [network fixes]()
 
 ## Installing ROS
 **Acknowledge** this is for working in **Ubuntu 20.04** environment
