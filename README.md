@@ -180,16 +180,16 @@ Below the line that contatins 127.0.1.1 and other devices that are used in the l
 ## UR arms
 
 ### UI monitor
-The robots UI monitor on the back can only operate one arm at a time. To switch for one arm to the other you need to locate the panel under the UI monitor that looks like this and click the **select** button:
+The robots UI monitor on the back can only operate one arm at a time. To switch from one arm to the other you need to locate the panel under the UI monitor that looks like this and click the **select** button:
 
 <UI_panel>
 
-Power buttons: 
+Power buttons: Found on the right side of the panel labeled left and right press each to turn on both arms
 
-Light indicators:
+Light indicators: On the left side there are light indicators also labeled left and right, the red light indicates which arm the UI monitor is currently operating, ignore the green light as it is just excess glow from another indicator light that is unrelated
 
 ###### Switching UI from one arm to the other
-Select button:
+Select button: The **select** button located under the indicator lights switch the UI monitors operation from one arm to the other.
 
 
 #### UI Tabs
@@ -208,12 +208,11 @@ Log Tab: See logged info of robotic arms (warnings, e-stops, failures) as will a
 
 ##### Power on arms
 On the robot there are two buttons under the robots UI on the right side of the panel labeled left and right. These are the power buttons. Press and release one of the buttons, then wait until you hear a fan start up, after the fan has started up, you will press and release the other button and it too will have a fan startup. It does not matter what order you press the buttons in. The bootup process will take approx. 2 minutes.
-<PICTURES>
 
 ##### Working with UI and controller to activate the arms
 Once the arms have powered on the UI on the back of the robot will be on and most likely have a Robot Emergency Stop warning. This is simply stating the last time the robot was in use it was E-stopped. You can just ignore this and click **Not now**
 
-Then you will click the red button on the bottom left side of the UI 
+Then you will click the red button on the bottom left corner of the UI 
 <picture_UI>
 
 The UI should now look like this
