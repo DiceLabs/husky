@@ -277,12 +277,7 @@ After all the proper signs of a correct driver launch have occured you will then
 
 
 
-
-
-
-
-
-After the play robot program has been started on both arms you can now launch the moveit driver that will allow you to control the arms' movements;
+After the play robot program has been started on both arms you can now launch the moveit driver that will allow you to control the arms' movements
 
 ```
 roslaunch sds04_husky_moveit_config husky_dual_ur_robotiq_2f_85_moveit_planning_execution.launch
