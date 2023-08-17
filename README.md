@@ -2,6 +2,7 @@
 
 ## Turning on the robot
 In order for the button to be pressed and have the robot power on the robots key must be plugged in:
+
 <img src="Husky_images/key.jpg" width="200" height="200">
 
 ## Turning off the robot
