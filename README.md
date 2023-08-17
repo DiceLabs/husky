@@ -247,15 +247,13 @@ The UI should now look like this
 
 **Press Start**
 
-The UI should look like this with all the process bubbles shown green for a successfull boot up
+The UI should look like this with all the process bubbles shown green for a successfull boot up then **click the blue button labeled Exit** near the bottom left hand side
 
-**You need to do this process for both arms**
-
-Follow back through the steps provided in [Working with UI and controller to activate the arms](https://github.com/DiceLabs/Husky/blob/Clearpath_husky_with_dual_arm_custom_packages/README.md#working-with-ui-and-controller-to-activate-the-arms)
+**You need to do this process for both arms** by simply **click select on the back panel** to switch to the other arm and follow back through the steps provided in [Working with UI and controller to activate the arms](https://github.com/DiceLabs/Husky/blob/Clearpath_husky_with_dual_arm_custom_packages/README.md#working-with-ui-and-controller-to-activate-the-arms) to turn on the other arm on
 
 
-#### Operating the UR arms
-Because the UR arms may be ready for operation at a different time than the computer, the drivers are'nt set to launch with startup. In order to launch the drivers you must **SSH into the robots computer** and run this command:
+## Operating the UR arms
+Because the UR arms may be ready for operation at a different time than the computer, the drivers aren't set to launch with startup. In order to launch the drivers you must **SSH into the robots computer** and run this command:
 
 ```
 roslaunch husky_ur_bringup husky_dual_ur_bringup.launch
@@ -271,12 +269,20 @@ To know that the driver launched properly you must wait a few seconds, then the 
 ```
 
 
-After all the proper signs of a correct driver launch have occured you will then proceed to go to the UI on the robot and **for both arms** click the play button as shown below and then press **Robot Program**
-After you have clicked play program on both arms the run tabs as explained in [UI Tabs]() should look like this
+After all the proper signs of a correct driver launch have occured you will then proceed to go to the UI monitor and make sure you are on the UI tab labled **Run** on the robot and **for both arms** click the play button in the bottom right hand side of the screen and then press **Robot Program**
 
 
 
-After the play robot program has been started on both arms you can now launch the moveit driver that will allow you to control the arms' movements using this command:
+
+
+
+
+
+
+
+
+
+After the play robot program has been started on both arms you can now launch the moveit driver that will allow you to control the arms' movements;
 
 ```
 roslaunch sds04_husky_moveit_config husky_dual_ur_robotiq_2f_85_moveit_planning_execution.launch
@@ -295,13 +301,3 @@ roslaunch husky_viz view_robot.launch
 ```
 
 **Note**: Make sure the workspace is sourced, the robot master URI is exported in workspace, and robots arms are initialized and communicating with workspace.
-
-
-
-
-<br>
-<br>
-<br>
-
-
-
