@@ -25,7 +25,7 @@ It will prompt you to put in a **password** which is:
 clearpath
 ```
 
-If you run into any problem go to [network fixes](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#potential-network-connection-problems--fixes-optional)
+If you run into any problem go to [network fixes](https://github.com/DiceLabs/Husky/blob/Clearpath_husky_with_dual_arm_custom_packages/README.md#potential-network-connection-problems--fixes-optional)
 
 ## Installing ROS
 **Acknowledge** this is for working in **Ubuntu 20.04** environment
