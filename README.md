@@ -68,11 +68,20 @@ apt search ros-noetic
 ```
 source /opt/ros/noetic/setup.bash
 ```
+
 **If you want every terminal defaulted to sourcing this Ros version**
 ```
 echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
+
+**If you are going to be communicating with the ros workspace on the robot (which is almost always) you need to export the robots ros master URI**
+```
+export ROS_MASTER_URI=http://cpr-a200-0876:11311
+```
+this is command that is worth [creating an alias]() for
+
+
 ###### Dependencies for building packages
 ```
 sudo apt install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential
@@ -272,6 +281,16 @@ You can now visualize your robot in RVIZ
 ## RVIZ
 
 **After following [UR ARM](https://github.com/DiceLabs/Husky/blob/Clearpath_husky_with_dual_arm_custom_packages/README.md#ur-arms) instruction** the robot model is fully ready for the startup of the visualization tool **RVIZ**
+
+### Launching RVIZ
+The command to launch Rviz with the live robots model
+```
+roslaunch husky_viz view_robot.launch
+```
+
+**Note**: Make sure the workspace is sourced, the robot master URI is exported in workspace, and robots arms are initialized and communicating with workspace.
+
+
 
 
 <br>
