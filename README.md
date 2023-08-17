@@ -236,7 +236,7 @@ The UI should look like this with all the process bubbles shown green for a succ
 
 **You need to do this process for both arms**
 
-Follow back through the steps provided in [Working with UI and controller to activate the arms](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#working-with-ui-and-controller-to-activate-the-arms)
+Follow back through the steps provided in [Working with UI and controller to activate the arms](https://github.com/DiceLabs/Husky/blob/Clearpath_husky_with_dual_arm_custom_packages/README.md#working-with-ui-and-controller-to-activate-the-arms)
 
 
 #### Operating the UR arms
