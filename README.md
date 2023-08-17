@@ -2,7 +2,7 @@
 
 ## Turning on the robot
 In order for the button to be pressed and have the robot power on the robots key must be plugged in:
-![](Huksy_images/key.jpg)
+![](Husky_images/key.jpg)
 
 ## Turning off the robot
 Ensure the robot is [E-stopped](https://github.com/DiceLabs/Husky/blob/Clearpath_husky_with_dual_arm_custom_packages/README.md#e-stop), then press & release the power button
