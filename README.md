@@ -183,7 +183,7 @@ Below the line that contatins 127.0.1.1 and other devices that are used in the l
 ### UI monitor
 The robots UI monitor on the back can only operate one arm at a time. To switch from one arm to the other you need to locate the panel under the UI monitor that looks like this and click the **select** button:
 
-<UI_panel>
+<img src="Husky_images/ui_panel.jpg" width="300" height="300">
 
 Power buttons: Found on the right side of the panel labeled left and right press each to turn on both arms
 
