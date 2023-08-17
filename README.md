@@ -79,7 +79,7 @@ source ~/.bashrc
 ```
 export ROS_MASTER_URI=http://cpr-a200-0876:11311
 ```
-this is command that is worth [creating an alias]() for
+this is command that is worth [creating an alias](https://github.com/DiceLabs/Husky/blob/Clearpath_husky_with_dual_arm_custom_packages/README.md#useful-bash-aliaseshotkeycommands) for
 
 
 ###### Dependencies for building packages
@@ -154,6 +154,7 @@ alias husky_src='source ~/catkin_ws/devel/setup.bash'
 ## Potential network connection problems & fixes (optional)
 The computer or network equipment may be having trouble connecting hostnames to the corresponding ip's
 
+On your personal device
 ```
 sudo nano /etc/hosts
 ```
