@@ -272,7 +272,7 @@ To know that the driver launched properly you must wait a few seconds, then the 
 After all the proper signs of a correct driver launch have occured you will then proceed to go to the UI monitor and make sure you are on the UI tab labled **Run** on the robot and **for both arms** click the play button in the bottom right hand side of the screen and then press **Robot Program**
 
 
-
+<img src="Husky_images/play_button.jpg" width="300" height="300">
 
 
 
