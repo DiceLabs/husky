@@ -5,7 +5,7 @@ In order for the button to be pressed and have the robot power on the robots key
 <picture_of_key>
 
 ## Turning off the robot
-Ensure the robot is [E-stopped](https://github.com/DiceLabs/Husky/blob/developed_ROS_packages/README.md#e-stop), then press & release the power button
+Ensure the robot is [E-stopped](https://github.com/DiceLabs/Husky/blob/Clearpath_husky_with_dual_arm_custom_packages/README.md#e-stop), then press & release the power button
 
 ## E-STOP
 There are two main methods the user can E-stop the robot:
