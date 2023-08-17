@@ -228,20 +228,22 @@ The **ROBOT EMERGENCY STOP** in the red frame indicates that the robot is curren
 
 
 Once the robot is no longer in an E-stopped state, the UI should look like this:
-<picture_of_ui_before_on>
+
+<img src="Husky_images/ui_initarm.jpg" width="300" height="300">
 
 **Click ON**
 
 Half way through the bootup process of the arm this will come up:
 
-<picture_pos_verfiy>
+<img src="Husky_images/verify_arm.jpg" width="300" height="300">
 
 Take a look at the robot arm and verify that it is in the correct orientation as depicted in the visual model, then proceed to check the box on the left had side stating **I confirm that this shows the real robot pose**
 
 Then **press Robot Position Verified** found on the bottom right side of UI
 
 The UI should now look like this
-<Picture_of_UI_halfway_done>
+
+<img src="Husky_images/Start_arm.jpg" width="300" height="300">
 
 **Press Start**
 
