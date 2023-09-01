@@ -46,7 +46,7 @@ class robot_arm:
 
         self.command_publish_topic = rospy.get_param("~command_publish_topic")
         self.pub1 = rospy.Publisher(self.command_publish_topic, CommandRobotiqGripperActionGoal,
-                              queue_size=10)
+                              queue_size=1)
 
         self.gripper = CommandRobotiqGripperActionGoal()
         self.gripper.header = Header()
@@ -76,7 +76,9 @@ class robot_arm:
         self.base_frame = rospy.get_param("~base_frame")
         # Set the end-effector link
         self.end_effector_link = self.move_group.get_end_effector_link()
-        self.current_joint_angles = self.move_group.get_current_joint_values()
+        self.current_joint_angles = [-0.011624638234273732, -0.9906475108912964, -1.8491756916046143, 4.867856013565817, -0.055028740559713185, -2.880932871495382]
+#self.move_group.get_current_joint_values()
+        print(self.current_joint_angles )
 
     def log_callback(self,log_msg):
         self.roslog = log_msg
@@ -214,27 +216,26 @@ class robot_arm:
                 0.01,  # Step size (distance between waypoints in Cartesian space)
                 0.0,  # Jump threshold (0 means no jump allowed between waypoints)
                 avoid_collisions=True)  # Collision avoidance during the path planning
-
+            cartesian_path = self.move_group.retime_trajectory(moveit_commander.RobotCommander().get_current_state(),
+                                           cartesian_path,0.1)
 
             #current_cart = cartesian_path
             # If the path planning is successful, execute the Cartesian path
             if cartesian_path:
                 # move_group.set_goal_orientation_tolerance(2*np.pi)
                 self.move_group.execute(cartesian_path, wait=True)
+                #print("LOG: ",self.roslog.msg )
                 # global roslog
-                if self.roslog.msg == 'Execution completed: ABORTED':
-                    rospy.logerr("Motion planning and execution failed!")
-                    self.move_group.go(self.current_joint_angles, wait=True)
-                    (cartesian_path, fraction) = self.move_group.compute_cartesian_path(
-                        [self.current_pose],  # List of waypoints
-                        0.01,  # Step size (distance between waypoints in Cartesian space)
-                        0.0,  # Jump threshold (0 means no jump allowed between waypoints)
-                        avoid_collisions=True)  # Collision avoidance during the path planning
+                if not self.roslog.msg == 'Execution completed: SUCCEEDED':
+                    print("LOG: ",self.roslog.msg )
+                    self.move_group.set_joint_value_target(self.current_joint_angles)
+                    self.move_group.go()
+                    rospy.sleep(5)
 
-                    self.move_group.execute(cartesian_path, wait=True)
 
                 else:
                     rospy.loginfo("Motion planning and execution succeeded!")
+                    print("LOG: ", self.roslog.msg)
                     self.pub1.publish(self.gripper)
 
                     rospy.sleep(5)  # Delay to allow the message to be published
@@ -244,9 +245,9 @@ class robot_arm:
                     self.pub1.publish(self.gripper)
 
                     rospy.sleep(5)  # Delay to allow the message to be published
-                    self.current_joint_angles = self.move_group.get_current_joint_values()
+                    #self.current_joint_angles = self.move_group.get_current_joint_values()
                     #current_cart = cartesian_path
-                    self.current_pose =  self.move_group.get_current_pose().pose
+                    #self.current_pose =  self.move_group.get_current_pose().pose
 
             else:
                 rospy.logerr("Cartesian path planning failed!")
