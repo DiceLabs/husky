@@ -29,8 +29,12 @@ class GripperNode():
         self.right_pub = rospy.Publisher(RIGHT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
     
 class MessageFiller():
-    def create_msg():
+    def create_msg(self, position):
         msg = CommandRobotiqGripperActionGoal()
+        self.fill_header(msg)
+        self.fill_goal_id(msg)
+        self.fill_goal(msg, position)
+        return msg
 
     def fill_header(msg):
         msg.header = Header()
@@ -51,11 +55,13 @@ class MessageFiller():
         msg.goal.speed = DEFAULT_SPEED	
         msg.goal.force = DEFAULT_FORCE
 
-def close_gripper():
-    pass
+def close_gripper(message_filler, publisher):
+    msg = message_filler.create_msg(POS_MIN)
+    publisher.pub(msg)
 
-def open_gripper():
-    pass
+def open_gripper(message_filler, publisher):
+    msg = message_filler.create_msg(POS_MAX)
+    publisher.pub(msg)
 
 def init_node():
     rospy.init_node('gripper_node')
