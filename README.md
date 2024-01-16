@@ -226,7 +226,7 @@ The **ROBOT EMERGENCY STOP** in the red frame indicates that the robot is curren
 <img src="Husky_images/Ebutton.jpg" width="300" height="300">
 <img src="Husky_images/controller.jpg" width="300" height="300">
 
-
+ 
 Once the robot is no longer in an E-stopped state, the UI should look like this:
 
 <img src="Husky_images/ui_initarm.jpg" width="300" height="300">
