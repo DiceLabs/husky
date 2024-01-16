@@ -253,7 +253,7 @@ The UI should look like this with all the process bubbles shown green for a succ
 
 
 ## Operating the UR arms
-Because the UR arms may be ready for operation at a different time than the computer, the drivers aren't set to launch with startup. In order to launch the drivers you must **SSH into the robots computer** and run this command:
+Because the UR arms may be ready for operation at a different time than the computer, the ROS drivers aren't set to launch with startup. In order to launch the drivers you must **SSH into the robots computer** and run this command:
 
 ```
 roslaunch husky_ur_bringup husky_dual_ur_bringup.launch
@@ -268,16 +268,22 @@ To know that the driver launched properly you must wait a few seconds, then the 
 [INFO] [1691691184.467960]: Robotiq server started
 ```
 
+For the arms, the ROS driver has to be run for each arm using these commands
 
-After all the proper signs of a correct driver launch have occured you will then proceed to go to the UI monitor and make sure you are on the UI tab labled **Run** on the robot and **for both arms** click the play button in the bottom right hand side of the screen and then press **Robot Program**
+```
+roslaunch ur_robot_driver ur5e_bringup.launch robot_ip:=192.168.131.40
+roslaunch ur_robot_driver ur5e_bringup.launch robot_ip:=192.168.131.41
+```
 
+Here the .40 address is for the left arm and the .41 address is for the right arm.
+
+When you run the driver, it will set up some ROS action servers. These action servers will have callbacks registered when you send a message to the appropriate topic. For the callbacks to actually be authorized to give the appropriate command to the physical arms, the "External Control" program will also have to be running from the PolyScope. 
+
+To do this make sure you are on the UI tab labled **Run** on the robot and **for both arms** click the play button in the bottom right hand side of the screen and then press **Robot Program**
 
 <img src="Husky_images/play_button.jpg" width="300" height="300">
 
-
-
-
-After the play robot program has been started on both arms you can now launch the moveit driver that will allow you to control the arms' movements
+After the play robot program has been started on both arms, the way to make the arms move is to publish any message to the ROS action servers mentioned above. This can be accomplished in a variety of ways. Of course it can be done purely in code, for example by following a format similar to the script provided by Universal Robots for testing movement [found here](https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/blob/master/ur_robot_driver/scripts/test_move). Some more user-friendly ways are using a ROS graphical interface through moveit and RVIZ. To do so launch the moveit driver that will allow you to control the arms' movements
 
 ```
 roslaunch sds04_husky_moveit_config husky_dual_ur_robotiq_2f_85_moveit_planning_execution.launch
@@ -296,3 +302,5 @@ roslaunch husky_viz view_robot.launch
 ```
 
 **Note**: Make sure the workspace is sourced, the robot master URI is exported in workspace, and robots arms are initialized and communicating with workspace.
+
+
