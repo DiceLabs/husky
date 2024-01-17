@@ -1,8 +1,18 @@
 #!/usr/bin/env python
 
+""" 
+    @Zix
+    Gripper API
+    This node will listen for key presses which are matched with desired commands of the grippers.
+    Uses the ASDF keys for closing and opening of left and right grippers by publishing the correct message to the 
+    Gripper action server in real time.
+"""
+
 import rospy
 from robotiq_2f_gripper_msgs.msg import CommandRobotiqGripperActionGoal
 from std_msgs.msg import Header
+from pynput import keyboard
+from pynput.keyboard import Key
 
 LEFT_GRIPPER_TOPIC = '/left_gripper/command_robotiq_action/goal'
 RIGHT_GRIPPER_TOPIC = '/right_gripper/command_robotiq_action/goal'
@@ -27,7 +37,15 @@ class GripperNode():
     def __init__(self):
         self.left_pub = rospy.Publisher(LEFT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
         self.right_pub = rospy.Publisher(RIGHT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
-    
+
+def close_gripper(message_filler, publisher):
+    msg = message_filler.create_msg(POS_MIN)
+    publisher.pub(msg)
+
+def open_gripper(message_filler, publisher):
+    msg = message_filler.create_msg(POS_MAX)
+    publisher.pub(msg)
+        
 class MessageFiller():
     def create_msg(self, position):
         msg = CommandRobotiqGripperActionGoal()
@@ -55,16 +73,22 @@ class MessageFiller():
         msg.goal.speed = DEFAULT_SPEED	
         msg.goal.force = DEFAULT_FORCE
 
-def close_gripper(message_filler, publisher):
-    msg = message_filler.create_msg(POS_MIN)
-    publisher.pub(msg)
-
-def open_gripper(message_filler, publisher):
-    msg = message_filler.create_msg(POS_MAX)
-    publisher.pub(msg)
+def on_key_press(key, gripper_node):
+    try:
+        if key == Key.A:
+            gripper_node.close_gripper(gripper_node.left_pub)
+        elif key == Key.S:
+            gripper_node.open_gripper(gripper_node.left_pub)
+        elif key == Key.D:
+            gripper_node.close_gripper(gripper_node.right_pub)
+        elif key == Key.F:
+            gripper_node.open_gripper(gripper_node.right_pub)
+    except AttributeError:
+        pass
 
 def init_node():
     rospy.init_node('gripper_node')
+    gripper_node = GripperNode()
     rospy.loginfo("GRIPPER NODE TURNED ON")
     rospy.loginfo("########################################################################################")
     rospy.loginfo("########################################################################################")
@@ -76,6 +100,8 @@ def init_node():
     rospy.loginfo("3. Open Right Gripper")
     rospy.loginfo("4. Close Right Gripper")
     rospy.loginfo("########################################################################################")
+    listener = keyboard.Listener(on_press=lambda key: on_key_press(key, gripper_node))
+    listener.start()
 
 def spin_ros():
     try:
