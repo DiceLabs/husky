@@ -10,8 +10,6 @@
 import rospy
 from robotiq_2f_gripper_msgs.msg import CommandRobotiqGripperActionGoal
 from std_msgs.msg import Header
-from pynput import keyboard
-from pynput.keyboard import Key
 
 LEFT_GRIPPER_TOPIC = '/left_gripper/command_robotiq_action/goal'
 RIGHT_GRIPPER_TOPIC = '/right_gripper/command_robotiq_action/goal'
