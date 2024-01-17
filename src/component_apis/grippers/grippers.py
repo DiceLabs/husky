@@ -6,6 +6,7 @@
     This node will listen for key presses which are matched with desired commands of the grippers.
     Uses the ASDF keys for closing and opening of left and right grippers by publishing the correct message to the 
     Gripper action server in real time.
+    Must be run from environment with correct ROS msgs set up, the husky will have this environment on its on-board computer
 """
 
 import rospy
@@ -33,61 +34,60 @@ POS_MID = POS_RANGE / 2
 EMPTY_ID = ''
 DEFAULT_SEQ_NUM = 0
 
+def create_msg(position):
+    msg = CommandRobotiqGripperActionGoal()
+    fill_header(msg)
+    fill_goal_id(msg)
+    fill_goal(msg, position)
+    return msg
+
+def fill_header(msg):
+    msg.header = Header()
+    msg.header.seq = DEFAULT_SEQ_NUM
+    msg.header.stamp = rospy.Time(0)
+    msg.header.frame_id = EMPTY_ID
+
+def fill_goal_id(msg):
+    msg.goal_id = CommandRobotiqGripperActionGoal().goal_id
+    msg.goal_id.stamp = rospy.Time(0)
+    msg.goal_id.id = EMPTY_ID
+
+def fill_goal(msg, position):
+    msg.goal.emergency_release = False
+    msg.goal.emergency_release_dir = 0
+    msg.goal.stop = False
+    msg.goal.position = position	
+    msg.goal.speed = DEFAULT_SPEED	
+    msg.goal.force = DEFAULT_FORCE
+
+def close_gripper(publisher):
+    msg = create_msg(POS_MIN)
+    publisher.publish(msg)
+
+def open_gripper(publisher):
+    msg = create_msg(POS_MAX)
+    publisher.publish(msg)
+
 class GripperNode():
     def __init__(self):
         self.left_pub = rospy.Publisher(LEFT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
         self.right_pub = rospy.Publisher(RIGHT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
 
-def close_gripper(message_filler, publisher):
-    msg = message_filler.create_msg(POS_MIN)
-    publisher.pub(msg)
-
-def open_gripper(message_filler, publisher):
-    msg = message_filler.create_msg(POS_MAX)
-    publisher.pub(msg)
-        
-class MessageFiller():
-    def create_msg(self, position):
-        msg = CommandRobotiqGripperActionGoal()
-        self.fill_header(msg)
-        self.fill_goal_id(msg)
-        self.fill_goal(msg, position)
-        return msg
-
-    def fill_header(msg):
-        msg.header = Header()
-        msg.header.seq = DEFAULT_SEQ_NUM
-        msg.header.stamp = rospy.Time(0)
-        msg.header.frame_id = EMPTY_ID
-
-    def fill_goal_id(msg):
-        msg.goal_id = CommandRobotiqGripperActionGoal().goal_id
-        msg.goal_id.stamp = rospy.Time(0)
-        msg.goal_id.id = EMPTY_ID
-
-    def fill_goal(msg, position):
-        msg.goal.emergency_release = False
-        msg.goal.emergency_release_dir = 0
-        msg.goal.stop = False
-        msg.goal.position = position	
-        msg.goal.speed = DEFAULT_SPEED	
-        msg.goal.force = DEFAULT_FORCE
-
 def on_key_press(key, gripper_node):
     try:
-        if key == Key.A:
-            gripper_node.close_gripper(gripper_node.left_pub)
-        elif key == Key.S:
-            gripper_node.open_gripper(gripper_node.left_pub)
-        elif key == Key.D:
-            gripper_node.close_gripper(gripper_node.right_pub)
-        elif key == Key.F:
-            gripper_node.open_gripper(gripper_node.right_pub)
+        if key.char == 'a':
+            close_gripper(gripper_node.left_pub)
+        elif key.char == 's':
+            open_gripper(gripper_node.left_pub)
+        elif key.char == 'd':
+            close_gripper(gripper_node.right_pub)
+        elif key.char == 'f':
+            open_gripper(gripper_node.right_pub)
     except AttributeError:
         pass
 
 def init_node():
-    rospy.init_node('gripper_node')
+    rospy.init_node('GripperNode')
     gripper_node = GripperNode()
     rospy.loginfo("GRIPPER NODE TURNED ON")
     rospy.loginfo("########################################################################################")
@@ -100,8 +100,10 @@ def init_node():
     rospy.loginfo("3. Open Right Gripper")
     rospy.loginfo("4. Close Right Gripper")
     rospy.loginfo("########################################################################################")
-    listener = keyboard.Listener(on_press=lambda key: on_key_press(key, gripper_node))
-    listener.start()
+    with keyboard.Listener(
+        on_press=lambda key: on_key_press(key, gripper_node)
+    ) as listener:
+        listener.join()
 
 def spin_ros():
     try:
