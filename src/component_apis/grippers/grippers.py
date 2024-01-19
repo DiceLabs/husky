@@ -11,11 +11,22 @@ import rospy
 from robotiq_2f_gripper_msgs.msg import CommandRobotiqGripperActionGoal
 from std_msgs.msg import Header
 
+#############################
+"""
+    These are the topic names of the action 
+    servers to publish to to move the grippers
+"""
 LEFT_GRIPPER_TOPIC = '/left_gripper/command_robotiq_action/goal'
 RIGHT_GRIPPER_TOPIC = '/right_gripper/command_robotiq_action/goal'
+#############################
 
-""" Define movement constants """
-DEFAULT_FORCE = 5.0	# Reasonable amount of force
+#############################
+"""
+    Here we'll define some constants related
+    to the movement of the grippers to help
+    fill our messages later
+"""
+DEFAULT_FORCE = 5.0	  # This is a reasonable amount of force
 
 SPEED_MIN = 0.01
 SPEED_MAX = 0.1
@@ -25,13 +36,27 @@ POS_MIN = 0.00
 POS_MAX = 0.085
 POS_RANGE = POS_MAX - POS_MIN
 POS_MID = POS_RANGE / 2
-""" Define movement constants """
 
 EMPTY_ID = ''
 DEFAULT_SEQ_NUM = 0
+############################
 
-""" namespace MessageFilling() """
-def create_msg(position):
+############################
+"""
+    The only data we need on instantiation of the Gripper node are the publishers linked to our topics from above
+"""
+class GripperNode():
+    def __init__(self):
+        self.left_pub = rospy.Publisher(LEFT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
+        self.right_pub = rospy.Publisher(RIGHT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
+############################
+        
+############################
+""" 
+    This is a series of functions related to the population of the CommandRobotiqGripperActionGoal()
+    message that needs to be published to the action server for the grippers to move
+"""
+def create_grip_msg(position):
     msg = CommandRobotiqGripperActionGoal()
     fill_header(msg)
     fill_goal_id(msg)
@@ -53,24 +78,28 @@ def fill_goal(msg, position):
     msg.goal.emergency_release = False
     msg.goal.emergency_release_dir = 0
     msg.goal.stop = False
-    msg.goal.position = position	
+    msg.goal.position = position	    # Here is where we can specify a desired position for the grippers
     msg.goal.speed = DEFAULT_SPEED	
     msg.goal.force = DEFAULT_FORCE
-""" namespace MessageFilling() """
-
-class GripperNode():
-    def __init__(self):
-        self.left_pub = rospy.Publisher(LEFT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
-        self.right_pub = rospy.Publisher(RIGHT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
+############################
+ 
+############################
+"""
+    Now we have the very simple ROS interface that allows us
+    to send our desired states to the grippers with some endpoints
+"""
+def publish_grip_message(publisher, position):
+    msg = create_grip_msg(position)
+    print(msg, publisher)
+    publisher.publish(msg)
 
 def close_gripper(publisher):
-    msg = create_msg(POS_MIN)
-    print(msg, publisher)
-    publisher.publish(msg)
+    publish_grip_message(publisher, POS_MIN)
 
 def open_gripper(publisher):
-    msg = create_msg(POS_MAX)
-    print(msg, publisher)
-    publisher.publish(msg)
+    publish_grip_message(publisher, POS_MAX)
 
-
+def half_grab(publisher):
+    publish_grip_message(publisher,POS_MID)
+    
+############################

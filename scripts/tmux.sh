@@ -6,3 +6,6 @@ tmux setw -g mouse on               # This is so you can click between panes
 tmux split-window -d -p 10\; split-window -h\; split-window -d\; split-window -d;
 
 tmux attach-session -t robot
+
+
+

@@ -1,0 +1,18 @@
+""" 
+rostopic pub -1 /move_base_simple/goal geometry_msgs/PoseStamped "header:
+  seq: 1
+  stamp: now
+  frame_id: 'base_link'
+pose:
+  position:
+    x: 2.0
+    y: 0.0
+    z: 0.0
+  orientation:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0" 
+"""
+
+ros2 launch husky_gazebo husky_playpen.launch.py
