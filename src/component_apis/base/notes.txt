@@ -15,4 +15,4 @@ pose:
     w: 1.0" 
 """
 
-ros2 launch husky_gazebo husky_playpen.launch.py
+roslaunch husky_gazebo husky_playpen.launch
