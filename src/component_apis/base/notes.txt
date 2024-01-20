@@ -16,3 +16,7 @@ pose:
 """
 
 roslaunch husky_gazebo husky_playpen.launch
+
+"""  
+  scp -r dicelabs administrator@146.244.98.51:/home/administrator/catkin_ws/temp
+"""
