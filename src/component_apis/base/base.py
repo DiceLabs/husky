@@ -1,38 +1,34 @@
 #!/usr/bin/env python3
 
 import rospy
-from move_base_msgs.msg import MoveBaseGoal
+from geometry_msgs.msg import Twist
 from geometry_msgs.msg import PoseStamped
-from geometry_msgs.msg import Point
-from geometry_msgs.msg import Quaternion
 from std_msgs.msg import Header
 
-HUSKY_BASE_TOPIC = '/move_base_simple/goal'
+HUSKY_BASE_TOPIC = '/cmd_vel'
 FRAME_ID = 'base_link'
 DEFAULT_SEQ_NUM = 0
 
 class BaseNode():
     def __init__(self):
-        self.base_pub = rospy.Publisher(HUSKY_BASE_TOPIC, MoveBaseGoal, queue_size=10)
+        self.base_pub = rospy.Publisher(HUSKY_BASE_TOPIC, Twist, queue_size=10)
 
-class Position():
+class LinearVelocity():
     def __init__(self, x, y, z):
         self.x = x
         self.y = y
         self.z = z
 
-class Orientation():
+class AngularVelocity():
     def __init__(self, x, y, z, w):
         self.x = x 
         self.y = y
         self.z = z
-        self.w = w
 
-def create_base_msg(position, orientation):
-    msg = MoveBaseGoal()
-    fill_header(msg)
-    fill_position(msg, position)
-    fill_orientation(msg, orientation)
+def create_base_msg(lin_vel, ang_vel):
+    msg = Twist()
+    fill_lin_vel(msg, lin_vel)
+    fill_ang_vel(msg, ang_vel)
     return msg
 
 def fill_header(msg):
@@ -41,20 +37,15 @@ def fill_header(msg):
     msg.target_pose.header.stamp = rospy.Time(0)
     msg.target_pose.header.frame_id = FRAME_ID
 
-def fill_position(msg, position):
-    point = Point()
-    point.x = position.x
-    point.y = position.y
-    point.z = position.z
-    msg.target_pose.pose.position = point
+def fill_lin_vel(msg, lin_vel):
+    msg.linear.x = lin_vel.x
+    msg.linear.y = lin_vel.y
+    msg.linear.z = lin_vel.z
 
-def fill_orientation(msg, orientation):
-    quaternion = Quaternion()
-    quaternion.x = orientation.x
-    quaternion.y = orientation.y
-    quaternion.z = orientation.z
-    quaternion.w = orientation.w
-    msg.target_pose.pose.orientation = quaternion
+def fill_ang_vel(msg, ang_vel):
+    msg.angular.x = ang_vel.x
+    msg.angular.y = ang_vel.y
+    msg.angular.z = ang_vel.z
 
 def publish_base_message(publisher, position, orientation):
     msg = create_base_msg(position, orientation)
@@ -62,12 +53,12 @@ def publish_base_message(publisher, position, orientation):
     publisher.publish(msg)
 
 def TURN(publisher):
-    position = Position(0, 0, 0)
-    orientation = Orientation(0.1, 0, 0, 0)
-    publish_base_message(publisher, position, orientation)
+    lin_vel = LinearVelocity(0, 0, 0)
+    ang_vel = AngularVelocity(0, 0, 0.1)
+    publish_base_message(publisher, lin_vel, ang_vel)
 
 def FORWARD(publisher):
-    position = Position(0.1, 0, 0)
-    orientation = Orientation(0, 0, 0, 0)
-    publish_base_message(publisher, position, orientation)
+    lin_vel = LinearVelocity(0.1, 0, 0)
+    ang_vel = AngularVelocity(0, 0, 0, 0)
+    publish_base_message(publisher, lin_vel, ang_vel)
 
