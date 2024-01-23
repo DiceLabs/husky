@@ -62,7 +62,7 @@ def TURN(publisher):
     ang_vel = AngularVelocity(0, 0, 0.1)
     publish_base_message(publisher, lin_vel, ang_vel)
 
-def FORWARD(publisher):
+def MOVE(publisher):
     lin_vel = LinearVelocity(0.1, 0, 0)
     ang_vel = AngularVelocity(0, 0, 0)
     publish_base_message(publisher, lin_vel, ang_vel)

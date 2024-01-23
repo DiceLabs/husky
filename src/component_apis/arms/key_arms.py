@@ -1,6 +1,6 @@
 import rospy
 from pynput import keyboard
-from component_apis.base.base import MOVE, TURN, STOP, BaseNode
+from component_apis.arms.arms import robot_arm
 
 """ 
     @Zix
@@ -9,34 +9,41 @@ from component_apis.base.base import MOVE, TURN, STOP, BaseNode
     base action server in real time. 
 """
 
-def on_key_press(key, base_node):
+def on_key_press(key, arm_node: robot_arm):
     key_actions = {
-        'm': MOVE,
-        's': STOP,
-        't': TURN,
+        'u': arm_node.move_up,
+        'd': arm_node.move_down,
+        'f': arm_node.move_forward,
+        'b': arm_node.move_backward,
+        'l': arm_node.move_left,
+        'r': arm_node.move_right,
     }
     action = key_actions.get(key.char)
     if action is not None:
-        action(base_node.base_pub)
+        action()
 
 def print_welcome():
-    rospy.loginfo("BASE NODE TURNED ON")
+    rospy.loginfo("ARM NODE TURNED ON")
     rospy.loginfo("########################################################################################")
     rospy.loginfo("########################################################################################")
     rospy.loginfo("########################################################################################")
     rospy.loginfo("Welcome to the base node! This node will give you control of the robot bases")
     rospy.loginfo("You can use the keyboard input to give common commands to the bases")
-    rospy.loginfo("'m': MOVE,")
-    rospy.loginfo("'s': STOP,")
-    rospy.loginfo("'t': TURN,")
+    rospy.loginfo("'u': move_up,")
+    rospy.loginfo("'d': move_down,")
+    rospy.loginfo("'f': move_forward,")
+    rospy.loginfo("'b': move_backward,")
+    rospy.loginfo("'l': move_left,")
+    rospy.loginfo("'r': move_right,")
     rospy.loginfo("########################################################################################")
 
 def init_node():
-    rospy.init_node('BaseNode')
-    base_node = BaseNode()
+    rospy.init_node('ArmNode')
+    arm_node = robot_arm()
+    arm_node.set_initial_arm_params()
     print_welcome()
     with keyboard.Listener(
-        on_press=lambda key: on_key_press(key, base_node)
+        on_press=lambda key: on_key_press(key, arm_node)
     ) as listener:
         listener.join()
 
