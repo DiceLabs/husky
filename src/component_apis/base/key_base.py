@@ -1,6 +1,6 @@
 import rospy
 from pynput import keyboard
-from base import FORWARD, TURN, BaseNode
+from component_apis.base.base import FORWARD, TURN, STOP, BaseNode
 
 """ 
     @Zix
@@ -14,9 +14,9 @@ def on_key_press(key, base_node):
         if key.char == 'a':
             FORWARD(base_node.base_pub)
         elif key.char == 's':
-            FORWARD(base_node.base_pub)
+            STOP(base_node.base_pub)
         elif key.char == 'd':
-            FORWARD(base_node.base_pub)
+            TURN(base_node.base_pub)
         elif key.char == 'f':
             FORWARD(base_node.base_pub)
     except AttributeError:

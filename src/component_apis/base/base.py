@@ -2,7 +2,6 @@
 
 import rospy
 from geometry_msgs.msg import Twist
-from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import Header
 
 HUSKY_BASE_TOPIC = '/cmd_vel'
@@ -52,6 +51,12 @@ def publish_base_message(publisher, position, orientation):
     print(msg, publisher)
     publisher.publish(msg)
 
+""" 
+    From Clearpath Documentation 
+    Set the linear.x value to drive the 
+    robot forwards or backwards, and the angular.z value to rotate left or right.
+"""
+
 def TURN(publisher):
     lin_vel = LinearVelocity(0, 0, 0)
     ang_vel = AngularVelocity(0, 0, 0.1)
@@ -59,6 +64,10 @@ def TURN(publisher):
 
 def FORWARD(publisher):
     lin_vel = LinearVelocity(0.1, 0, 0)
-    ang_vel = AngularVelocity(0, 0, 0, 0)
+    ang_vel = AngularVelocity(0, 0, 0)
     publish_base_message(publisher, lin_vel, ang_vel)
 
+def STOP(publisher):
+    lin_vel = LinearVelocity(0, 0, 0)
+    ang_vel = AngularVelocity(0, 0, 0)
+    publish_base_message(publisher, lin_vel, ang_vel)
