@@ -1,23 +1,16 @@
 #!/usr/bin/python3
 
 import rospy
-import numpy as np
-import sys
 import moveit_commander
-from math import pi
-from std_msgs.msg import Header
-from std_msgs.msg import Float64MultiArray
-from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import Pose
-from rospy.numpy_msg import numpy_msg
-from tf.transformations import quaternion_from_euler, euler_from_quaternion
+from tf.transformations import euler_from_quaternion
 
 class robot_arm:
     def __init__(self):
         self.robot = moveit_commander.RobotCommander()
         self.scene = moveit_commander.PlanningSceneInterface()
-        self.move_group = moveit_commander.MoveGroupCommander(self.group_name)
         self.group_name = "manipulator_left"
+        self.move_group = moveit_commander.MoveGroupCommander(self.group_name)
         self.current_pose = self.move_group.get_current_pose().pose
         self.current_quaternion = [self.current_pose.orientation.x, self.current_pose.orientation.y,
                                    self.current_pose.orientation.z, self.current_pose.orientation.w]

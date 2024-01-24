@@ -2,6 +2,7 @@
 
 import rospy
 from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Vector3
 from std_msgs.msg import Header
 
 HUSKY_BASE_TOPIC = '/cmd_vel'
@@ -19,7 +20,7 @@ class LinearVelocity():
         self.z = z
 
 class AngularVelocity():
-    def __init__(self, x, y, z, w):
+    def __init__(self, x, y, z):
         self.x = x 
         self.y = y
         self.z = z
@@ -37,14 +38,18 @@ def fill_header(msg):
     msg.target_pose.header.frame_id = FRAME_ID
 
 def fill_lin_vel(msg, lin_vel):
-    msg.linear.x = lin_vel.x
-    msg.linear.y = lin_vel.y
-    msg.linear.z = lin_vel.z
+    vector = Vector3()
+    vector.x = lin_vel.x
+    vector.y = lin_vel.y
+    vector.z = lin_vel.z
+    msg.linear = vector
 
 def fill_ang_vel(msg, ang_vel):
-    msg.angular.x = ang_vel.x
-    msg.angular.y = ang_vel.y
-    msg.angular.z = ang_vel.z
+    vector = Vector3()
+    vector.x = ang_vel.x
+    vector.y = ang_vel.y
+    vector.z = ang_vel.z
+    msg.angular = vector
 
 def publish_base_message(publisher, position, orientation):
     msg = create_base_msg(position, orientation)

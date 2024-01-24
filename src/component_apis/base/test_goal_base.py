@@ -1,5 +1,5 @@
 # Import necessary modules
-from component_apis.base.goal_base import create_base_msg
+from goal_base import create_base_msg
 from geometry_msgs.msg import Point
 from geometry_msgs.msg import Quaternion
 from move_base_msgs.msg import MoveBaseGoal

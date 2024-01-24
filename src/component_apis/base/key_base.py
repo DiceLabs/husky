@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
+
 import rospy
 from pynput import keyboard
-from component_apis.base.base import MOVE, TURN, STOP, BaseNode
+from base import MOVE, TURN, STOP, BaseNode
 
 """ 
     @Zix

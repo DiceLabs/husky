@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
+
 import rospy
 from pynput import keyboard
-from component_apis.arms.arms import robot_arm
+from arms import robot_arm
 
 """ 
     @Zix

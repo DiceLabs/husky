@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import rospy
 from pynput import keyboard
 from grippers import open_gripper, close_gripper, GripperNode
