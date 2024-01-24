@@ -11,7 +11,7 @@ scripts = [ARMS_SCRIPT, BASE_SCRIPT, GRIPPERS_SCRIPT]
 
 processes = []
 for script in scripts:
-    process = subprocess.Popen([INVOKE_PY_INTERPRETER, script])
+    process = subprocess.Popen([script])
     processes.append(process)
 
 for process in processes:

@@ -13,13 +13,13 @@ from grippers import open_gripper, close_gripper, GripperNode
 
 def on_key_press(key, gripper_node):
     try:
-        if key.char == 'a':
+        if key.char == 'c':
             close_gripper(gripper_node.left_pub)
-        elif key.char == 's':
+        elif key.char == 'o':
             open_gripper(gripper_node.left_pub)
-        elif key.char == 'd':
+        elif key.char == 'e':
             close_gripper(gripper_node.right_pub)
-        elif key.char == 'f':
+        elif key.char == 'n':
             open_gripper(gripper_node.right_pub)
     except AttributeError:
         pass

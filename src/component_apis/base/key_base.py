@@ -17,9 +17,12 @@ def on_key_press(key, base_node):
         's': STOP,
         't': TURN,
     }
-    action = key_actions.get(key.char)
-    if action is not None:
-        action(base_node.base_pub)
+    try:
+        action = key_actions.get(key.char)
+        if action is not None:
+            action(base_node.base_pub)
+    except AttributeError:
+        pass
 
 def print_welcome():
     rospy.loginfo("BASE NODE TURNED ON")

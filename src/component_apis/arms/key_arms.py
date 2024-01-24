@@ -20,9 +20,13 @@ def on_key_press(key, arm_node: robot_arm):
         'l': arm_node.move_left,
         'r': arm_node.move_right,
     }
-    action = key_actions.get(key.char)
-    if action is not None:
-        action()
+    try:
+        action = key_actions.get(key.char)
+        if action is not None:
+            action()
+    except rospy.ROSInterruptException:
+        pass
+
 
 def print_welcome():
     rospy.loginfo("ARM NODE TURNED ON")

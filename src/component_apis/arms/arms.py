@@ -50,20 +50,26 @@ class robot_arm:
 
     def move_up(self):
         self.target_pose.position.z = (self.current_pose.position.z + 0.02)
+        print(self.target_pose.position.z)
 
     def move_down(self):
         self.target_pose.position.z = (self.current_pose.position.z - 0.02)
+        print(self.target_pose.position.z)
 
     def move_left(self):
         self.target_pose.position.y = (self.current_pose.position.y - 0.02)
+        print(self.target_pose.position.y)
 
     def move_right(self):
         self.target_pose.position.y = (self.current_pose.position.y + 0.02)
+        print(self.target_pose.position.y)
 
     def move_forward(self):
         self.target_pose.position.x = (self.current_pose.position.x + 0.02)
+        print(self.target_pose.position.x)
 
     def move_backward(self):
         self.target_pose.position.x = (self.current_pose.position.x - 0.02)
+        print(self.target_pose.position.x)
 
 
