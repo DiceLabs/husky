@@ -2,7 +2,7 @@
 
 import rospy
 from pynput import keyboard
-from base import MOVE, TURN, STOP, BaseNode
+from base import MOVE, REVERSE, CLOCKWISE, COUNTERCLOCKISE, STOP, BaseNode
 
 """ 
     @Zix
@@ -13,9 +13,11 @@ from base import MOVE, TURN, STOP, BaseNode
 
 def on_key_press(key, base_node):
     key_actions = {
-        'm': MOVE,
+        'k': CLOCKWISE ,
+        't': COUNTERCLOCKISE,
         's': STOP,
-        't': TURN,
+        'm': MOVE,
+        'r': REVERSE
     }
     try:
         action = key_actions.get(key.char)
