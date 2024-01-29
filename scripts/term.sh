@@ -25,16 +25,16 @@ create_terminal()
 {
     local name=$1
     local command=$2
-    gnome-terminal --tab --title="$name" -- bash -c "$command; clear; bash"
+    gnome-terminal --tab --title="$name" -- bash -c "$command; bash"
 }
 ###########################################################################################
 
 main()
 {
     IP_ADDRESS="146.244.98.51"
-    SSH_HUSKY="sshpass -p clearpath ssh -X administrator@$IP_ADDRESS; clear;"
-    HUSKY_DRIVER="$SSH_HUKSY; roslaunch husky_ur_bringup husky_dual_ur_bringup.launch"
-    MOVE_IT_DRIVER="$SSH_HUKSY; roslaunch sds04_husky_moveit_config husky_dual_ur_robotiq_2f_85_moveit_planning_execution.launch"
+    SSH_HUSKY="sshpass -p clearpath ssh -X administrator@$IP_ADDRESS"
+    HUSKY_DRIVER="$SSH_HUKSY roslaunch husky_ur_bringup husky_dual_ur_bringup.launch"
+    MOVE_IT_DRIVER="$SSH_HUKSY roslaunch sds04_husky_moveit_config husky_dual_ur_robotiq_2f_85_moveit_planning_execution.launch;bash"
     SSHPASS="sshpass"
 
     install_package $SSHPASS
@@ -42,10 +42,10 @@ main()
         echo "Tried to reach husky but it is unavailable, is the robot on?"
         return 1
     fi
-    create_terminal "ROS Driver" $HUSKY_DRIVER
-    create_terminal "ROS Exploration" $MOVE_IT_DRIVER
-    create_terminal "Open Terminal" $SSH_HUSKY
-    create_terminal "Custom Scripts" $SSH_HUSKY
+    create_terminal "ROS Exploration" "$SSH_HUSKY"
+    create_terminal "Open Terminal" "$SSH_HUSKY"
+    create_terminal "Custom Scripts" "$SSH_HUSKY"
+    create_terminal "ROS Driver" "$HUSKY_DRIVER"
     return 0
 }
 

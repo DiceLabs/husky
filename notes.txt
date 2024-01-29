@@ -1,7 +1,7 @@
 
 To move scripts from github to robot
 """  
-  scp -r dicelabs administrator@146.244.98.51:/home/administrator/catkin_ws/temp
+  scp -r . administrator@146.244.98.51:/home/administrator/catkin_ws/temp
 """
 
 Default installation folder 
