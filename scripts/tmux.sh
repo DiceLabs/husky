@@ -1,3 +1,8 @@
+#!/bin/bash
+
+# @Zix
+# Create Tmux Panes
+
 tmux new-session -d -s robot        # I named it robot because i felt like it
 
 tmux setw -g mouse on               # This is so you can click between panes
