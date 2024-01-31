@@ -1,3 +1,5 @@
+#!/bin/bash
+
 install_package()
 {
     if ! dpkg -l | grep -qw $1; then
@@ -49,4 +51,7 @@ main()
     return 0
 }
 
-main
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    main "$@"
+fi
+

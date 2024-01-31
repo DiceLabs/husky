@@ -8,5 +8,7 @@ destination_dir=$INSTALL_DIR
 # Use the find command to locate all Python files in the source directory and its subdirectories
 find . -type f -name "*.py" -exec cp {} "$destination_dir" \;
 find . -type f -name "*.sh" -exec cp {} "$destination_dir" \;
+find . -type f -name "*.json" -exec cp {} "$destination_dir" \;
 
-echo "Copied all python files to $destination_dir"
+sudo chmod +x $INSTALL_DIR/*
+echo "Copied all python/bash/json files to $destination_dir and gave permission"
