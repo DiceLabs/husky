@@ -33,9 +33,11 @@ def print_welcome():
     rospy.loginfo("########################################################################################")
     rospy.loginfo("Welcome to the base node! This node will give you control of the robot bases")
     rospy.loginfo("You can use the keyboard input to give common commands to the bases")
-    rospy.loginfo("'m': MOVE,")
-    rospy.loginfo("'s': STOP,")
-    rospy.loginfo("'t': TURN,")
+    rospy.loginfo("m: CLOCKWISE")
+    rospy.loginfo("n: COUNTERCLOCKISE")
+    rospy.loginfo("x: STOP")
+    rospy.loginfo("z: MOVE")
+    rospy.loginfo("r: REVERS")
     rospy.loginfo("########################################################################################")
 
 def init_node():

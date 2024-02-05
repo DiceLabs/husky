@@ -31,10 +31,10 @@ def print_welcome():
     rospy.loginfo("########################################################################################")
     rospy.loginfo("Welcome to the gripper node! This node will give you control of the robot grippers")
     rospy.loginfo("You can use the keyboard input to give common commands to the grippers")
-    rospy.loginfo("a. Open Left Gripper")
-    rospy.loginfo("s. Close Left Gripper")
-    rospy.loginfo("d. Open Right Gripper")
-    rospy.loginfo("f. Close Right Gripper")
+    rospy.loginfo("o. Open Left Gripper")
+    rospy.loginfo("c. Close Left Gripper")
+    rospy.loginfo("e. Open Right Gripper")
+    rospy.loginfo("n. Close Right Gripper")
     rospy.loginfo("########################################################################################")
 
 def init_node():
