@@ -37,7 +37,7 @@ def print_welcome():
     rospy.loginfo("n: COUNTERCLOCKISE")
     rospy.loginfo("x: STOP")
     rospy.loginfo("z: MOVE")
-    rospy.loginfo("r: REVERS")
+    rospy.loginfo("r: REVERSE")
     rospy.loginfo("########################################################################################")
 
 def init_node():

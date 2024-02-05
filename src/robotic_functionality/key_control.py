@@ -4,10 +4,10 @@ import subprocess
 from pynput import keyboard
 
 INVOKE_PY_INTERPRETER = "python3"
-L_ARM_SCRIPT = "key_arms.py -d l"
-R_ARM_SCRIPT = "key_arms.py -d r"
-BASE_SCRIPT = "key_base.py"
-GRIPPERS_SCRIPT = "key_grippers.py"
+L_ARM_SCRIPT = ["key_arms.py", "-d", "l"]
+R_ARM_SCRIPT = ["key_arms.py", "-d", "r"]
+BASE_SCRIPT = ["key_base.py"]
+GRIPPERS_SCRIPT = ["key_grippers.py"]
 EXIT_KEY = 'v'
 
 def key_valid(key):
@@ -23,8 +23,7 @@ def on_key_press(key, processes):
 def fork_processes(scripts: []):
     processes=[]
     for script in scripts:
-        cmd = [INVOKE_PY_INTERPRETER] + script.split()
-        process = subprocess.Popen(cmd)
+        process = subprocess.Popen(script)
         processes.append(process)
     return processes
 

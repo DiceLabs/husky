@@ -40,6 +40,7 @@ def on_key_press(key, ur5e_arm, actions):
 
     action_map = actions.get(ur5e_arm.dexterity, {})
     try:
+        action = None
         if hasattr(key, 'char') and key.char is not None:
             action = action_map.get(key.char)
         if action:
