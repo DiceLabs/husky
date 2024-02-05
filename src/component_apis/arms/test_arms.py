@@ -1,6 +1,7 @@
 import pytest
-from unittest.mock import patch, MagicMock
+import argparse
 import key_arms
+from unittest.mock import patch, MagicMock
 
 def test_parse_args():
     assert key_arms.parse_args("l") == key_arms.Dexterity.LEFT

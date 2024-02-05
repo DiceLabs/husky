@@ -14,7 +14,7 @@ from arms import UR5e_Arm, Dexterity
 """
 
 def print_welcome(arm_dexterity):
-    rospy.loginfo(f"ARM NODE TURNED ON WITH DEXTERITY {str(arm_dexterity).upper()}")
+    rospy.loginfo("ARM NODE TURNED ON WITH DEXTERITY %s" % str(arm_dexterity).upper())
     rospy.loginfo("########################################################################################")
     rospy.loginfo("########################################################################################")
     rospy.loginfo("########################################################################################")
@@ -34,7 +34,8 @@ def on_key_press(key, ur5e_arm, actions):
 
     action_map = actions.get(ur5e_arm.dexterity, {})
     try:
-        action = action_map.get(key.char)
+        if hasattr(key, 'char') and key.char is not None:
+            action = action_map.get(key.char)
         if action:
             action()
     except rospy.ROSInterruptException:
@@ -86,6 +87,7 @@ def define_actions(arm):
 
 def init_node():
     DEXTERITY = parse_args(get_args().dexterity)
+    rospy.init_node(str(DEXTERITY))
     print_welcome(DEXTERITY)
     ur_arm = UR5e_Arm(DEXTERITY)
     actions = define_actions(ur_arm)
