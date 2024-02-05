@@ -17,10 +17,10 @@ def on_key_press(key, processes):
     if key_valid(key):
         if key.char == EXIT_KEY:
             for pid in processes:
-                pid.terminate()
+                pid.kill()
             return False # Exit
 
-def fork_processes(scripts: []):
+def fork_processes(scripts):
     processes=[]
     for script in scripts:
         process = subprocess.Popen(script)
