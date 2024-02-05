@@ -13,10 +13,10 @@ from base import MOVE, REVERSE, CLOCKWISE, COUNTERCLOCKISE, STOP, BaseNode
 
 def on_key_press(key, base_node):
     key_actions = {
-        'k': CLOCKWISE ,
-        't': COUNTERCLOCKISE,
-        's': STOP,
-        'm': MOVE,
+        'm': CLOCKWISE ,
+        'n': COUNTERCLOCKISE,
+        'x': STOP,
+        'z': MOVE,
         'r': REVERSE
     }
     try:

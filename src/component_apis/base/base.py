@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import rospy
+from robot_types import AngularVelocity, LinearVelocity
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import Vector3
 from std_msgs.msg import Header
@@ -12,18 +13,6 @@ DEFAULT_SEQ_NUM = 0
 class BaseNode():
     def __init__(self):
         self.base_pub = rospy.Publisher(HUSKY_BASE_TOPIC, Twist, queue_size=10)
-
-class LinearVelocity():
-    def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
-
-class AngularVelocity():
-    def __init__(self, x, y, z):
-        self.x = x 
-        self.y = y
-        self.z = z
 
 def create_base_msg(lin_vel, ang_vel):
     msg = Twist()

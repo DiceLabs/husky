@@ -1,75 +1,105 @@
 #!/usr/bin/python3
 
+import sys
 import rospy
+from enum import Enum
 import moveit_commander
 from geometry_msgs.msg import Pose
-from tf.transformations import euler_from_quaternion
+from robot_types import Position, Orientation
 
-class robot_arm:
-    def __init__(self):
+NODE_NAME = 'moveit_arm_api'
+END_EFFECTOR_SUFFIX = "_ur_arm_wrist_3_link"
+MANIPULATOR_PREFIX = "manipulator_"
+
+VELOCITY_SCALING_CONSTANT = 0.1
+
+class Dexterity(Enum):
+    LEFT = 0,
+    RIGHT = 1
+    def __str__(self):
+        return self.name.lower()
+
+class UR5e_Arm:
+    """ 
+        Arm can be initialized as left or right. Connects to moveit client and can take advantage of various functions of moveit API,
+        notably the ability to set joint targets or a pose target, other functions have been included to ease the use of common movements 
+    """
+    def __init__(self, dexterity: Dexterity):
         self.robot = moveit_commander.RobotCommander()
         self.scene = moveit_commander.PlanningSceneInterface()
-        self.group_name = "manipulator_left"
-        self.move_group = moveit_commander.MoveGroupCommander(self.group_name)
-        self.current_pose = self.move_group.get_current_pose().pose
-        self.current_quaternion = [self.current_pose.orientation.x, self.current_pose.orientation.y,
-                                   self.current_pose.orientation.z, self.current_pose.orientation.w]
-        self.current_euler = euler_from_quaternion(self.current_quaternion)
-        self.current_position = [self.current_pose.position.x, self.current_pose.position.y,
-                                 self.current_pose.position.z]
-        self.target_pose = Pose()
-        self.object_center_x = None
-        self.object_center_y = None
-        self.delta_x = None
-        self.delta_x_old = None
-        self.delta_y = None
-        self.delta_y_old = None
-        self.delta_z = None
-        self.delta_z_old = None
+        self.group = moveit_commander.MoveGroupCommander(MANIPULATOR_PREFIX + str(dexterity))
+        self.dexterity = dexterity
+    def print_info(self):
+        print ("============ Reference frame: %s" % self.group.get_planning_frame())
+        print ("============ End effector: %s" % self.group.get_end_effector_link())
+        print ("============ Current State: %s" % self.group.get_current_state())
+        print ("============ Robot Groups:", self.robot.get_group_names())
+    def move_joint(self, joint_id: int, amount: float):
+        joint_goal = self.group.get_current_joint_values()
+        joint_goal[joint_id] += amount
+        self.group.go(joint_goal, wait=True)
+        self.group.stop()
+    def move_pose(self, orientation: Orientation, position: Position):
+        pose_goal = self.create_pose_goal(orientation, position) 
+        self.group.set_pose_target(pose_goal, str(self.dexterity) + END_EFFECTOR_SUFFIX)
+        self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
+        self.group.go(wait=True)
+        self.group.stop()
+    def create_pose_goal(self, orientation: Orientation, position: Position):
+        pose_goal = Pose()
+        current = self.group.get_current_pose().pose
+        pose_goal.orientation.w = current.orientation.w + orientation.w
+        pose_goal.orientation.x = current.orientation.x + orientation.x
+        pose_goal.orientation.y = current.orientation.y + orientation.y
+        pose_goal.orientation.z = current.orientation.z + orientation.z
+        pose_goal.position.x = current.position.x + position.x
+        pose_goal.position.y = current.position.y + position.y
+        pose_goal.position.z = current.position.z + position.z
+        return pose_goal
 
-    def set_initial_arm_params(self):
-        self.target_pose.position.x = 0.3553980405176474
-        self.target_pose.position.y = 0.2636410314410824
-        self.target_pose.position.z = 0.75
-        self.target_pose.orientation.x = 0.5
-        self.target_pose.orientation.y = 0.5
-        self.target_pose.orientation.z = 0.5
-        self.target_pose.orientation.w = 0.5
-        self.move_group.set_pose_target(self.target_pose)
-        self.move_group.set_max_velocity_scaling_factor(0.1)
-        plan = self.move_group.go(wait=True)
-        if plan:
-            rospy.loginfo("Initial Parameters: =====SUCCESSFUL=====")
-        else:
-            rospy.logerr("Initial Parameters: =====FAILED=====")
+    def move_vertical(self, amount: float):
+        position_delta = Position(z=amount)
+        orientation_delta = Orientation()
+        self.move_pose(orientation_delta, position_delta)
+    def move_horizontal(self, amount: float):
+        position_delta = Position(y=amount)
+        orientation_delta = Orientation()
+        self.move_pose(orientation_delta, position_delta)
+    def move_depth(self, amount: float):
+        position_delta = Position(x=amount)
+        orientation_delta = Orientation()
+        self.move_pose(orientation_delta, position_delta)
 
-    def get_current_pose(self):
-        self.target_pose = self.current_pose 
-        CURRENT_POSE_MESSAGE = f"Current Pose is: {self.target_pose}"
-        print(CURRENT_POSE_MESSAGE)  
+    def yaw(self, amount):
+        position_delta = Position()
+        orientation_delta = Orientation()
+        self.move_pose(orientation_delta, position_delta)
+    def pitch(self, amount):
+        position_delta = Position()
+        orientation_delta = Orientation()
+        self.move_pose(orientation_delta, position_delta)
+    def roll(self, amount):
+        position_delta = Position()
+        orientation_delta = Orientation()
+        self.move_pose(orientation_delta, position_delta)
 
     def move_up(self):
-        self.target_pose.position.z = (self.current_pose.position.z + 0.02)
-        print(self.target_pose.position.z)
-
+        self.move_vertical(0.1)
     def move_down(self):
-        self.target_pose.position.z = (self.current_pose.position.z - 0.02)
-        print(self.target_pose.position.z)
-
+        self.move_vertical(-0.1)
     def move_left(self):
-        self.target_pose.position.y = (self.current_pose.position.y - 0.02)
-        print(self.target_pose.position.y)
-
+        self.move_horizontal(0.1)
     def move_right(self):
-        self.target_pose.position.y = (self.current_pose.position.y + 0.02)
-        print(self.target_pose.position.y)
-
+        self.move_horizontal(-0.1)
     def move_forward(self):
-        self.target_pose.position.x = (self.current_pose.position.x + 0.02)
-        print(self.target_pose.position.x)
-
+        self.move_depth(0.1)
     def move_backward(self):
-        self.target_pose.position.x = (self.current_pose.position.x - 0.02)
-        print(self.target_pose.position.x)
+        self.move_depth(-0.1)
 
-
+if __name__ == "__main__" :
+    moveit_commander.roscpp_initialize(sys.argv)
+    rospy.init_node(NODE_NAME, anonymous=True)
+    left_arm = UR5e_Arm(Dexterity.LEFT)
+    right_arm = UR5e_Arm(Dexterity.RIGHT)
+    left_arm.print_info()
+    right_arm.print_info()

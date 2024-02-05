@@ -47,7 +47,7 @@ main()
     create_terminal "ROS Exploration" "$SSH_HUSKY"
     create_terminal "Open Terminal" "$SSH_HUSKY"
     create_terminal "Custom Scripts" "$SSH_HUSKY"
-    create_terminal "ROS Driver" "$HUSKY_DRIVER"
+    create_terminal "ROS Driver" "$SSH_HUSKY"
     return 0
 }
 

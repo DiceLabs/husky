@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+import sys
 import rospy
+import argparse
 from pynput import keyboard
-from arms import robot_arm
+from arms import UR5e_Arm, Dexterity
 
 """ 
     @Zix
@@ -11,25 +13,8 @@ from arms import robot_arm
     base action server in real time. 
 """
 
-def on_key_press(key, arm_node: robot_arm):
-    key_actions = {
-        'u': arm_node.move_up,
-        'd': arm_node.move_down,
-        'f': arm_node.move_forward,
-        'b': arm_node.move_backward,
-        'l': arm_node.move_left,
-        'r': arm_node.move_right,
-    }
-    try:
-        action = key_actions.get(key.char)
-        if action is not None:
-            action()
-    except rospy.ROSInterruptException:
-        pass
-
-
-def print_welcome():
-    rospy.loginfo("ARM NODE TURNED ON")
+def print_welcome(arm_dexterity):
+    rospy.loginfo(f"ARM NODE TURNED ON WITH DEXTERITY {str(arm_dexterity).upper()}")
     rospy.loginfo("########################################################################################")
     rospy.loginfo("########################################################################################")
     rospy.loginfo("########################################################################################")
@@ -43,13 +28,69 @@ def print_welcome():
     rospy.loginfo("'r': move_right,")
     rospy.loginfo("########################################################################################")
 
+
+def on_key_press(key, ur5e_arm, actions):
+    KEY_FAIL_MSG = "Key Press Failed, Continuing"
+
+    action_map = actions.get(ur5e_arm.dexterity, {})
+    try:
+        action = action_map.get(key.char)
+        if action:
+            action()
+    except rospy.ROSInterruptException:
+        print(KEY_FAIL_MSG)
+
+def get_args():
+    FLAG_ID = '-d'
+    FLAG_ATTR = '--dexterity'
+    FLAG_HELP = "indicate dexterity of ur5e_arm with d flag followed by l for left and r for right"
+    NO_FLAG_MSG = "No command line argument passed. Please provide an argument."
+    MIN_ARG_COUNT = 2
+
+    if len(sys.argv) < MIN_ARG_COUNT:
+        raise Exception(NO_FLAG_MSG)
+    parser = argparse.ArgumentParser(description=FLAG_HELP)
+    parser.add_argument(FLAG_ID, FLAG_ATTR)
+    return parser.parse_args()
+
+def parse_args(value): # Expected to be "l" or "r"
+    LEFT_FLAG = "l"
+    RIGHT_FLAG = "r"
+    INVALID_DEXT_ARG_MSG = "Invalid value for dexterity. Use 'l' for left or 'r' for right."
+    
+    flag_converter = {LEFT_FLAG: Dexterity.LEFT, RIGHT_FLAG: Dexterity.RIGHT}
+    if value.lower() in flag_converter:
+        return flag_converter[value.lower()]
+    else:
+        raise argparse.ArgumentTypeError(INVALID_DEXT_ARG_MSG)
+
+def define_actions(arm):
+    return {
+        Dexterity.LEFT: {
+            'q': arm.move_up,
+            'w': arm.move_down,
+            'a': arm.move_forward,
+            's': arm.move_backward,
+            'd': arm.move_left,
+            'f': arm.move_right,
+        },
+        Dexterity.RIGHT: {
+            'h': arm.move_up,
+            'j': arm.move_down,
+            'u': arm.move_forward,
+            'i': arm.move_backward,
+            'k': arm.move_left,
+            'l': arm.move_right,
+        }
+    }
+
 def init_node():
-    rospy.init_node('ArmNode')
-    arm_node = robot_arm()
-    arm_node.set_initial_arm_params()
-    print_welcome()
+    DEXTERITY = parse_args(get_args().dexterity)
+    print_welcome(DEXTERITY)
+    ur_arm = UR5e_Arm(DEXTERITY)
+    actions = define_actions(ur_arm)
     with keyboard.Listener(
-        on_press=lambda key: on_key_press(key, arm_node)
+        on_press=lambda key: on_key_press(key, ur_arm, actions)
     ) as listener:
         listener.join()
 
