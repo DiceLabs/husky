@@ -8,7 +8,7 @@ class Position():
         self.z = z
 
 @dataclass 
-class Orientation():
+class Quaternion():
     def __init__(self, w=0, x=0, y=0, z=0):
         self.w = w
         self.x = x
@@ -17,7 +17,7 @@ class Orientation():
 
 @dataclass 
 class Pose():
-    orientation: Orientation = Orientation()
+    quaternion: Quaternion = Quaternion()
     position: Position = Position()
 
 @dataclass 

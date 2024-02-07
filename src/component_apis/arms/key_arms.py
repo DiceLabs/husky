@@ -8,9 +8,9 @@ from arms import UR5e_Arm, Dexterity
 
 """ 
     @Zix
-    This node will listen for key presses which are matched with desired commands of the base.
-    Uses the ASDF keys for the desired movements by publishing the correct message to the 
-    base action server in real time. 
+    This node will listen for key presses which are matched with desired commands of the arm.
+    Uses the given keys for the desired movements by publishing the correct message to the 
+    arm action server in real time. 
 """
 
 def print_welcome(arm_dexterity):
@@ -18,8 +18,8 @@ def print_welcome(arm_dexterity):
     rospy.loginfo("########################################################################################")
     rospy.loginfo("########################################################################################")
     rospy.loginfo("########################################################################################")
-    rospy.loginfo("Welcome to the base node! This node will give you control of the robot bases")
-    rospy.loginfo("You can use the keyboard input to give common commands to the bases")
+    rospy.loginfo("Welcome to the arms node! This node will give you control of the robot arms")
+    rospy.loginfo("You can use the keyboard input to give common commands to the arms")
     rospy.loginfo("q: left_arm.move_up")
     rospy.loginfo("w: left_arm.move_down")
     rospy.loginfo("a: left_arm.move_forward")

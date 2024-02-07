@@ -19,7 +19,7 @@ def on_key_press(key, gripper_node):
             open_gripper(gripper_node.left_pub)
         elif key.char == 'e':
             close_gripper(gripper_node.right_pub)
-        elif key.char == 'n':
+        elif key.char == 'p':
             open_gripper(gripper_node.right_pub)
     except AttributeError:
         pass

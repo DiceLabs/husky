@@ -5,6 +5,7 @@ from robot_types import AngularVelocity, LinearVelocity
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import Vector3
 from std_msgs.msg import Header
+from speed_gen import generate_speed_profile, TIME_STEP
 
 HUSKY_BASE_TOPIC = '/cmd_vel'
 FRAME_ID = 'base_link'
@@ -75,3 +76,13 @@ def STOP(publisher):
     lin_vel = LinearVelocity(0, 0, 0)
     ang_vel = AngularVelocity(0, 0, 0)
     publish_base_message(publisher, lin_vel, ang_vel)
+
+def GO_FORWARD_DISTANCE(publisher, distance):
+    VELOCITY = .2
+    rate = rospy.Rate(1/TIME_STEP)
+    point_velocities = int(distance / VELOCITY / TIME_STEP)
+    for _ in range(1, point_velocities):
+        lin_vel = LinearVelocity(VELOCITY, 0, 0)
+        ang_vel = AngularVelocity(0, 0, 0)
+        publish_base_message(publisher, lin_vel, ang_vel)
+        rate.sleep()
