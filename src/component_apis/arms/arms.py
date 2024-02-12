@@ -125,3 +125,21 @@ if __name__ == "__main__" :
     right_arm = UR5e_Arm(Dexterity.RIGHT)
     left_arm.print_info()
     right_arm.print_info()
+
+
+""" 
+    BOX Sequence
+
+    left_arm.move_joint(2, 3*NPI/4) # Move Arm To vertical position
+    left_arm.move_joint(4, PI/2)    # Point gripper inwards
+    left_arm.move_joint(5, PI/2)    # Rotate gripper to have fingers move in vertical direction
+    left_arm.move_depth(.6)         # Move arm forward .6 meters
+    left_arm.move_vertical(.4)      # Move arm up .4 meters
+    
+
+    right_arm.move_joint(2,  3*PI/4)  # Move Arm To vertical position
+    right_arm.move_joint(4, -PI/2)    # Point gripper inwards
+    right_arm.move_joint(5, -PI/2)    # Rotate gripper to have fingers move in vertical direction
+    right_arm.move_depth(.6)
+    right_arm.move_vertical(.4)
+"""
