@@ -4,7 +4,8 @@ import sys
 import rospy
 import argparse
 from pynput import keyboard
-from arms import UR5e_Arm, Dexterity
+from arms import UR5e_Arm
+from dexterity import Dexterity
 
 """ 
     @Zix
@@ -94,7 +95,7 @@ def define_actions(arm):
 
 def init_node():
     DEXTERITY = parse_args(get_args().dexterity)
-    rospy.init_node(str(DEXTERITY))
+    rospy.init_node(str("key_" + str(DEXTERITY) + "_arm"))
     print_welcome(DEXTERITY)
     ur_arm = UR5e_Arm(DEXTERITY)
     actions = define_actions(ur_arm)

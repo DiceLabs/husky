@@ -10,6 +10,7 @@
 import rospy
 from robotiq_2f_gripper_msgs.msg import CommandRobotiqGripperActionGoal
 from std_msgs.msg import Header
+from dexterity import Dexterity
 
 #############################
 """
@@ -40,15 +41,27 @@ POS_MID = POS_RANGE / 2
 EMPTY_ID = ''
 DEFAULT_SEQ_NUM = 0
 ############################
-
+def choose_gripper_topic(dexterity):
+    INVALID_DEXTERITY_MSG = "Invalid Arm Dexterity was Passed"
+    if dexterity == Dexterity.LEFT:
+        return LEFT_GRIPPER_TOPIC
+    elif dexterity == Dexterity.RIGHT:
+        return RIGHT_GRIPPER_TOPIC
+    else:
+        exit(INVALID_DEXTERITY_MSG)
 ############################
 """
     The only data we need on instantiation of the Gripper node are the publishers linked to our topics from above
 """
 class GripperNode():
-    def __init__(self):
-        self.left_pub = rospy.Publisher(LEFT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
-        self.right_pub = rospy.Publisher(RIGHT_GRIPPER_TOPIC, CommandRobotiqGripperActionGoal, queue_size=10)
+    def __init__(self, dexterity):
+        self.pub = rospy.Publisher(choose_gripper_topic(dexterity), CommandRobotiqGripperActionGoal, queue_size=10)
+    def close_gripper(self):
+        publish_grip_message(self.pub, POS_MIN)
+    def open_gripper(self):
+        publish_grip_message(self.pub, POS_MAX)
+    def half_grab(self):
+        publish_grip_message(self.pub, POS_MID)
 ############################
         
 ############################
@@ -92,14 +105,4 @@ def publish_grip_message(publisher, position):
     msg = create_grip_msg(position)
     print(msg, publisher)
     publisher.publish(msg)
-
-def close_gripper(publisher):
-    publish_grip_message(publisher, POS_MIN)
-
-def open_gripper(publisher):
-    publish_grip_message(publisher, POS_MAX)
-
-def half_grab(publisher):
-    publish_grip_message(publisher,POS_MID)
-    
 ############################

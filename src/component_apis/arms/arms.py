@@ -2,8 +2,8 @@
 
 import sys
 import rospy
-from enum import Enum
 import moveit_commander
+from dexterity import Dexterity
 from geometry_msgs.msg import Pose
 from robot_types import Position, Quaternion
 from conversions import euler_to_quaternion, degrees_to_radians
@@ -14,12 +14,6 @@ MANIPULATOR_PREFIX = "manipulator_"
 
 VELOCITY_SCALING_CONSTANT = 0.1
 ZERO = 0
-
-class Dexterity(Enum):
-    LEFT = 0,
-    RIGHT = 1
-    def __str__(self):
-        return self.name.lower()
 
 class UR5e_Arm:
     """ 

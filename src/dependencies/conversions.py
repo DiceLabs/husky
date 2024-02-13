@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import math
 
 def quaternion_to_euler(w, x, y, z):
