@@ -56,9 +56,9 @@ def choose_gripper_topic(dexterity):
 class GripperNode():
     def __init__(self, dexterity):
         self.pub = rospy.Publisher(choose_gripper_topic(dexterity), CommandRobotiqGripperActionGoal, queue_size=10)
-    def close_gripper(self):
+    def close(self):
         publish_grip_message(self.pub, POS_MIN)
-    def open_gripper(self):
+    def open(self):
         publish_grip_message(self.pub, POS_MAX)
     def half_grab(self):
         publish_grip_message(self.pub, POS_MID)

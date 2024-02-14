@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 import rospy
 import argparse
@@ -70,10 +72,16 @@ def perform_setup_sequence(arm: UR5e_Arm, mirror: bool):
         lambda: arm.move_depth(0.6)                 # Move arm forward .6 meters
     )                                       
 
+def lift_up(arm: UR5e_Arm):
+    perform_with_delay(
+        lambda: arm.move_vertical(1)            
+    )
+
 if __name__ == "__main__":
     DEXTERITY = parse_args(get_args().dexterity)
     rospy.init_node(str("set_" + str(DEXTERITY) + "_arm"))
     ur_arm = UR5e_Arm(DEXTERITY)
     robotiq_gripper = GripperNode(DEXTERITY)
-    perform_setup_sequence(ur_arm) # Move arm out to allow space for box
+    # perform_setup_sequence(ur_arm)
     robotiq_gripper.close_gripper()
+    lift_up(ur_arm)
