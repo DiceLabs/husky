@@ -12,7 +12,7 @@ NODE_NAME = 'moveit_arm_api'
 END_EFFECTOR_SUFFIX = "_ur_arm_wrist_3_link"
 MANIPULATOR_PREFIX = "manipulator_"
 
-VELOCITY_SCALING_CONSTANT = 0.1
+VELOCITY_SCALING_CONSTANT = 0.3
 ZERO = 0
 
 class UR5e_Arm:
@@ -24,6 +24,7 @@ class UR5e_Arm:
         self.robot = moveit_commander.RobotCommander()
         self.scene = moveit_commander.PlanningSceneInterface()
         self.group = moveit_commander.MoveGroupCommander(MANIPULATOR_PREFIX + str(dexterity))
+        self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
         self.dexterity = dexterity
     def print_info(self):
         print ("============ Reference frame: %s" % self.group.get_planning_frame())
