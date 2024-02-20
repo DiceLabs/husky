@@ -12,7 +12,7 @@ NODE_NAME = 'moveit_arm_api'
 END_EFFECTOR_SUFFIX = "_ur_arm_wrist_3_link"
 MANIPULATOR_PREFIX = "manipulator_"
 
-VELOCITY_SCALING_CONSTANT = 0.3
+VELOCITY_SCALING_CONSTANT = 0.5
 ZERO = 0
 
 class UR5e_Arm:
@@ -34,13 +34,13 @@ class UR5e_Arm:
     def move_joint(self, joint_id: int, amount: float):
         joint_goal = self.group.get_current_joint_values()
         joint_goal[joint_id] += amount
-        self.group.go(joint_goal, wait=True)
+        self.group.go(joint_goal, wait=False)
         self.group.stop()
     def move_pose(self, orientation: Quaternion, position: Position):
         pose_goal = self.create_pose_goal(orientation, position) 
         self.group.set_pose_target(pose_goal, str(self.dexterity) + END_EFFECTOR_SUFFIX)
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
-        self.group.go(wait=True)
+        self.group.go(wait=False)
         self.group.stop()
     def create_pose_goal(self, orientation: Quaternion, position: Position):
         pose_goal = Pose()

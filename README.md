@@ -259,6 +259,8 @@ Because the UR arms may be ready for operation at a different time than the comp
 roslaunch husky_ur_bringup husky_dual_ur_bringup.launch
 ```
 
+This launch file contains drivers for the left and right arms on addresses 192.168.131.40 and 192.168.131.41.
+It also launches the nodes that will transmit the gripper topics to control opening/closing of the grippers.
 To know that the driver launched properly you must wait a few seconds, then the grippers of the robot will close and open and these for important lines of termianl printout will be returned:
 
 ```
@@ -267,15 +269,6 @@ To know that the driver launched properly you must wait a few seconds, then the 
 [INFO] [1691691184.385674]: Gripper on port /tmp/ttyLeftTool Activated
 [INFO] [1691691184.467960]: Robotiq server started
 ```
-
-For the arms, the ROS driver has to be run for each arm using these commands
-
-```
-roslaunch ur_robot_driver ur5e_bringup.launch robot_ip:=192.168.131.40
-roslaunch ur_robot_driver ur5e_bringup.launch robot_ip:=192.168.131.41
-```
-
-Here the .40 address is for the left arm and the .41 address is for the right arm.
 
 When you run the driver, it will set up some ROS action servers. These action servers will have callbacks registered when you send a message to the appropriate topic. For the callbacks to actually be authorized to give the appropriate command to the physical arms, the "External Control" program will also have to be running from the PolyScope. 
 
