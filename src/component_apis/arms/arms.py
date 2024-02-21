@@ -5,7 +5,7 @@ import rospy
 import moveit_commander
 from dexterity import Dexterity
 from geometry_msgs.msg import Pose
-from robot_types import Position, Quaternion
+from robot_types import Position, Quaternion, Euler
 from conversions import euler_to_quaternion, degrees_to_radians
 
 NODE_NAME = 'moveit_arm_api'
@@ -42,6 +42,9 @@ class UR5e_Arm:
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
         self.group.go(wait=False)
         self.group.stop()
+    def pose_goal(self, orientation: Euler, position: Position):
+        quaternion = euler_to_quaternion(orientation)
+        self.move_pose(quaternion, position)
     def create_pose_goal(self, orientation: Quaternion, position: Position):
         pose_goal = Pose()
         current = self.group.get_current_pose().pose
