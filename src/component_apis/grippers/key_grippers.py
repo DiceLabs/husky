@@ -2,7 +2,8 @@
 
 import rospy
 from pynput import keyboard
-from grippers import open_gripper, close_gripper, GripperNode
+from grippers import GripperNode
+from dexterity import Dexterity
 
 """ 
     @Zix
@@ -11,16 +12,16 @@ from grippers import open_gripper, close_gripper, GripperNode
     Gripper action server in real time. 
 """
 
-def on_key_press(key, gripper_node):
+def on_key_press(key, left_gripper, right_gripper):
     try:
         if key.char == 'c':
-            close_gripper(gripper_node.left_pub)
+            left_gripper.close()
         elif key.char == 'o':
-            open_gripper(gripper_node.left_pub)
+            left_gripper.open()
         elif key.char == 'e':
-            close_gripper(gripper_node.right_pub)
+            right_gripper.open()
         elif key.char == 'p':
-            open_gripper(gripper_node.right_pub)
+            right_gripper.close()
     except AttributeError:
         pass
 
@@ -39,10 +40,11 @@ def print_welcome():
 
 def init_node():
     rospy.init_node('GripperNode')
-    gripper_node = GripperNode()
+    left_gripper = GripperNode(dexterity=Dexterity.LEFT)
+    right_gripper = GripperNode(dexterity=Dexterity.RIGHT)
     print_welcome()
     with keyboard.Listener(
-        on_press=lambda key: on_key_press(key, gripper_node)
+        on_press=lambda key: on_key_press(key, left_gripper, right_gripper)
     ) as listener:
         listener.join()
 
