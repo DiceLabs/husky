@@ -6,7 +6,8 @@ import moveit_commander
 from dexterity import Dexterity
 from geometry_msgs.msg import Pose
 from robot_types import Position, Quaternion, Euler
-from conversions import euler_to_quaternion, degrees_to_radians
+from transformations import quaternion_multiply, quaternion_from_euler
+from conversions import degrees_to_radians
 
 NODE_NAME = 'moveit_arm_api'
 END_EFFECTOR_SUFFIX = "_ur_arm_wrist_3_link"
@@ -36,22 +37,24 @@ class UR5e_Arm:
         joint_goal[joint_id] += amount
         self.group.go(joint_goal, wait=False)
         self.group.stop()
-    def move_pose(self, orientation: Quaternion, position: Position):
-        pose_goal = self.create_pose_goal(orientation, position) 
+    def move_pose(self, orientation: Euler, position: Position):
+        yaw, pitch, roll = degrees_to_radians(yaw=orientation.yaw, pitch=orientation.pitch, roll=orientation.roll)
+        degree_orientation = Euler(yaw=yaw, pitch=pitch, roll=roll)
+        pose_goal = self.create_pose_goal(degree_orientation, position) 
         self.group.set_pose_target(pose_goal, str(self.dexterity) + END_EFFECTOR_SUFFIX)
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
         self.group.go(wait=False)
         self.group.stop()
-    def pose_goal(self, orientation: Euler, position: Position):
-        quaternion = euler_to_quaternion(orientation)
-        self.move_pose(quaternion, position)
-    def create_pose_goal(self, orientation: Quaternion, position: Position):
+    def create_pose_goal(self, orientation: Euler, position: Position):
         pose_goal = Pose()
         current = self.group.get_current_pose().pose
-        pose_goal.orientation.w = current.orientation.w + orientation.w
-        pose_goal.orientation.x = current.orientation.x + orientation.x
-        pose_goal.orientation.y = current.orientation.y + orientation.y
-        pose_goal.orientation.z = current.orientation.z + orientation.z
+        delta_orientation_quat = quaternion_from_euler(orientation.yaw, orientation.pitch, orientation.roll)
+        current_orientation_quat = [current.orientation.w, current.orientation.x, current.orientation.y, current.orientation.z]
+        new_orientation_quat = quaternion_multiply(current_orientation_quat, delta_orientation_quat)
+        pose_goal.orientation.w = new_orientation_quat[0]
+        pose_goal.orientation.x = new_orientation_quat[1]
+        pose_goal.orientation.y = new_orientation_quat[2]
+        pose_goal.orientation.z = new_orientation_quat[3]
         pose_goal.position.x = current.position.x + position.x
         pose_goal.position.y = current.position.y + position.y
         pose_goal.position.z = current.position.z + position.z
@@ -59,49 +62,48 @@ class UR5e_Arm:
 
     def move_vertical(self, amount: float):
         position_delta = Position(z=amount)
-        orientation_delta = Quaternion()
+        orientation_delta = Euler()
         self.move_pose(orientation_delta, position_delta)
     def move_horizontal(self, amount: float):
         position_delta = Position(y=amount)
-        orientation_delta = Quaternion()
+        orientation_delta = Euler()
         self.move_pose(orientation_delta, position_delta)
     def move_depth(self, amount: float):
         position_delta = Position(x=amount)
-        orientation_delta = Quaternion()
+        orientation_delta = Euler()
         self.move_pose(orientation_delta, position_delta)
 
     def yaw(self, amount):
         position_delta = Position()
         yaw, pitch, roll = degrees_to_radians(yaw=amount, pitch=ZERO, roll=ZERO)
-        w, x, y, z = euler_to_quaternion(yaw, pitch, roll)
-        orientation_delta = Quaternion(w, x, y, z)
+        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
         self.move_pose(orientation_delta, position_delta)
     def pitch(self, amount):
         position_delta = Position()
         yaw, pitch, roll = degrees_to_radians(yaw=ZERO, pitch=amount, roll=ZERO)
-        w, x, y, z = euler_to_quaternion(yaw, pitch, roll)
-        orientation_delta = Quaternion(w, x, y, z)
+        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
         self.move_pose(orientation_delta, position_delta)
     def roll(self, amount):
         position_delta = Position()
         yaw, pitch, roll = degrees_to_radians(yaw=ZERO, pitch=ZERO, roll=amount)
-        w, x, y, z = euler_to_quaternion(yaw, pitch, roll)
-        orientation_delta = Quaternion(w, x, y, z)
+        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
         self.move_pose(orientation_delta, position_delta)
     def roll_zero(self):
         DESIRED_ROLL = ZERO
         position_delta = Position()
         yaw, pitch, roll = degrees_to_radians(yaw=ZERO, pitch=ZERO, roll=DESIRED_ROLL)
-        w, x, y, z = euler_to_quaternion(yaw, pitch, roll)
-        orientation_delta = Quaternion(w, x, y, z)
+        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
         self.move_pose(orientation_delta, position_delta)
     def roll_ninety(self):
         DESIRED_ROLL = 90
         position_delta = Position()
         yaw, pitch, roll = degrees_to_radians(yaw=ZERO, pitch=ZERO, roll=DESIRED_ROLL)
-        w, x, y, z = euler_to_quaternion(yaw, pitch, roll)
-        orientation_delta = Quaternion(w, x, y, z)
+        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
         self.move_pose(orientation_delta, position_delta)
+
+    def go_back(self):
+        last_command = []
+        
 
     def move_up(self):
         self.move_vertical(0.1)
