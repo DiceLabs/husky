@@ -1,20 +1,23 @@
 #!/usr/bin/python3
 
-import sys
+""" 
+    @author Conner Sommerfield
+    @brief UR5e Arms API using ROS and Moveit.  
+"""
+
 import rospy
 import moveit_commander
 from dexterity import Dexterity
 from geometry_msgs.msg import Pose
-from robot_types import Position, Quaternion, Euler
+from robot_types import Position, Euler
 from transformations import quaternion_multiply, quaternion_from_euler
 from conversions import degrees_to_radians
 
 NODE_NAME = 'moveit_arm_api'
 END_EFFECTOR_SUFFIX = "_ur_arm_wrist_3_link"
 MANIPULATOR_PREFIX = "manipulator_"
-
-VELOCITY_SCALING_CONSTANT = 0.5
-ZERO = 0
+INCREMENTAL_DISTANCE = 0.1 # units in meters
+VELOCITY_SCALING_CONSTANT = 0.5 # reasonable speed for arms
 
 class UR5e_Arm:
     """ 
@@ -37,10 +40,13 @@ class UR5e_Arm:
         joint_goal[joint_id] += amount
         self.group.go(joint_goal, wait=False)
         self.group.stop()
-    def move_pose(self, orientation: Euler, position: Position):
+    def change_pose(self, orientation: Euler, position: Position):
+        """ 
+            Will Move End Affector by relative amount passed in
+            Uses 3-axis Position and Euler orientation with using units meters/radians
+        """
         yaw, pitch, roll = degrees_to_radians(yaw=orientation.yaw, pitch=orientation.pitch, roll=orientation.roll)
-        degree_orientation = Euler(yaw=yaw, pitch=pitch, roll=roll)
-        pose_goal = self.create_pose_goal(degree_orientation, position) 
+        pose_goal = self.create_pose_goal(Euler(yaw=yaw, pitch=pitch, roll=roll), position) 
         self.group.set_pose_target(pose_goal, str(self.dexterity) + END_EFFECTOR_SUFFIX)
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
         self.group.go(wait=False)
@@ -50,96 +56,46 @@ class UR5e_Arm:
         current = self.group.get_current_pose().pose
         delta_orientation_quat = quaternion_from_euler(orientation.yaw, orientation.pitch, orientation.roll)
         current_orientation_quat = [current.orientation.w, current.orientation.x, current.orientation.y, current.orientation.z]
-        new_orientation_quat = quaternion_multiply(current_orientation_quat, delta_orientation_quat)
-        pose_goal.orientation.w = new_orientation_quat[0]
-        pose_goal.orientation.x = new_orientation_quat[1]
-        pose_goal.orientation.y = new_orientation_quat[2]
-        pose_goal.orientation.z = new_orientation_quat[3]
+        goal_orientation_quat = quaternion_multiply(current_orientation_quat, delta_orientation_quat)
+        pose_goal.orientation.w = goal_orientation_quat[0]
+        pose_goal.orientation.x = goal_orientation_quat[1]
+        pose_goal.orientation.y = goal_orientation_quat[2]
+        pose_goal.orientation.z = goal_orientation_quat[3]
         pose_goal.position.x = current.position.x + position.x
         pose_goal.position.y = current.position.y + position.y
         pose_goal.position.z = current.position.z + position.z
         return pose_goal
 
     def move_vertical(self, amount: float):
-        position_delta = Position(z=amount)
-        orientation_delta = Euler()
-        self.move_pose(orientation_delta, position_delta)
+        self.change_pose(Euler(), Position(z=amount))
     def move_horizontal(self, amount: float):
-        position_delta = Position(y=amount)
-        orientation_delta = Euler()
-        self.move_pose(orientation_delta, position_delta)
+        self.change_pose(Euler(), Position(y=amount))
     def move_depth(self, amount: float):
-        position_delta = Position(x=amount)
-        orientation_delta = Euler()
-        self.move_pose(orientation_delta, position_delta)
+        self.change_pose(Euler(), Position(x=amount))
 
     def yaw(self, amount):
-        position_delta = Position()
-        yaw, pitch, roll = degrees_to_radians(yaw=amount, pitch=ZERO, roll=ZERO)
-        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
-        self.move_pose(orientation_delta, position_delta)
+        self.change_pose(Euler(yaw=amount), Position())
     def pitch(self, amount):
-        position_delta = Position()
-        yaw, pitch, roll = degrees_to_radians(yaw=ZERO, pitch=amount, roll=ZERO)
-        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
-        self.move_pose(orientation_delta, position_delta)
+        self.change_pose(Euler(pitch=amount), Position())
     def roll(self, amount):
-        position_delta = Position()
-        yaw, pitch, roll = degrees_to_radians(yaw=ZERO, pitch=ZERO, roll=amount)
-        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
-        self.move_pose(orientation_delta, position_delta)
-    def roll_zero(self):
-        DESIRED_ROLL = ZERO
-        position_delta = Position()
-        yaw, pitch, roll = degrees_to_radians(yaw=ZERO, pitch=ZERO, roll=DESIRED_ROLL)
-        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
-        self.move_pose(orientation_delta, position_delta)
-    def roll_ninety(self):
-        DESIRED_ROLL = 90
-        position_delta = Position()
-        yaw, pitch, roll = degrees_to_radians(yaw=ZERO, pitch=ZERO, roll=DESIRED_ROLL)
-        orientation_delta = Euler(yaw=yaw, pitch=pitch, roll=roll)
-        self.move_pose(orientation_delta, position_delta)
-
-    def go_back(self):
-        last_command = []
+        self.change_pose(Euler(roll=amount), Position())
         
-
     def move_up(self):
-        self.move_vertical(0.1)
+        self.move_vertical(INCREMENTAL_DISTANCE)
     def move_down(self):
-        self.move_vertical(-0.1)
+        self.move_vertical(-INCREMENTAL_DISTANCE)
     def move_left(self):
-        self.move_horizontal(0.1)
+        self.move_horizontal(INCREMENTAL_DISTANCE)
     def move_right(self):
-        self.move_horizontal(-0.1)
+        self.move_horizontal(-INCREMENTAL_DISTANCE)
     def move_forward(self):
-        self.move_depth(0.1)
+        self.move_depth(INCREMENTAL_DISTANCE)
     def move_backward(self):
-        self.move_depth(-0.1)
+        self.move_depth(-INCREMENTAL_DISTANCE)
 
 if __name__ == "__main__" :
-    moveit_commander.roscpp_initialize(sys.argv)
     rospy.init_node(NODE_NAME, anonymous=True)
     left_arm = UR5e_Arm(Dexterity.LEFT)
     right_arm = UR5e_Arm(Dexterity.RIGHT)
     left_arm.print_info()
     right_arm.print_info()
-
-
-""" 
-    BOX Sequence
-
-    left_arm.move_joint(2, 3*NPI/4) # Move Arm To vertical position
-    left_arm.move_joint(4, PI/2)    # Point gripper inwards
-    left_arm.move_joint(5, PI/2)    # Rotate gripper to have fingers move in vertical direction
-    left_arm.move_depth(.6)         # Move arm forward .6 meters
-    left_arm.move_vertical(.4)      # Move arm up .4 meters
-    
-
-    right_arm.move_joint(2,  3*PI/4)  # Move Arm To vertical position
-    right_arm.move_joint(4, -PI/2)    # Point gripper inwards
-    right_arm.move_joint(5, -PI/2)    # Rotate gripper to have fingers move in vertical direction
-    right_arm.move_depth(.6)
-    right_arm.move_vertical(.4)
-"""
