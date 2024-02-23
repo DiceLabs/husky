@@ -9,7 +9,7 @@ import rospy
 import moveit_commander
 from dexterity import Dexterity
 from geometry_msgs.msg import Pose
-from robot_types import Position, Euler
+from robot_types import Position, Euler, PoseM
 from transformations import quaternion_multiply, quaternion_from_euler
 from conversions import degrees_to_radians
 
@@ -30,6 +30,7 @@ class UR5e_Arm:
         self.group = moveit_commander.MoveGroupCommander(MANIPULATOR_PREFIX + str(dexterity))
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
         self.dexterity = dexterity
+        self.last_command = PoseM()
     def print_info(self):
         print ("============ Reference frame: %s" % self.group.get_planning_frame())
         print ("============ End effector: %s" % self.group.get_end_effector_link())
@@ -51,6 +52,7 @@ class UR5e_Arm:
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
         self.group.go(wait=False)
         self.group.stop()
+        self.last_command = PoseM(orientation=orientation, position=position)
     def create_pose_goal(self, orientation: Euler, position: Position):
         pose_goal = Pose()
         current = self.group.get_current_pose().pose
@@ -92,6 +94,14 @@ class UR5e_Arm:
         self.move_depth(INCREMENTAL_DISTANCE)
     def move_backward(self):
         self.move_depth(-INCREMENTAL_DISTANCE)
+        
+    def undo_last_command(self):
+        undo_command = self.last_command
+        for key in undo_command.position.__dict__:
+            setattr(self, key, getattr(self, key) * -1)
+        for key in undo_command.orientation.__dict__:
+            setattr(self, key, getattr(self, key) * -1)
+        self.change_pose(undo_command.orientation, undo_command.position)
 
 if __name__ == "__main__" :
     rospy.init_node(NODE_NAME, anonymous=True)
