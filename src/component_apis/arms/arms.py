@@ -8,8 +8,8 @@
 import rospy
 import moveit_commander
 from dexterity import Dexterity
-from geometry_msgs.msg import Pose
-from robot_types import Position, Euler, PoseM
+from geometry_msgs.msg import Pose, Quaternion
+from robot_types import Position, Euler, PoseM, Quaternion
 from transformations import quaternion_multiply, quaternion_from_euler
 from conversions import degrees_to_radians
 
@@ -40,6 +40,23 @@ class UR5e_Arm:
         joint_goal = self.group.get_current_joint_values()
         joint_goal[joint_id] += amount
         self.group.go(joint_goal, wait=False)
+        self.group.stop()
+    def change_pose_abs(self, orientation: Quaternion, position: Position):
+        """ 
+            Will Move End Affector by relative amount passed in
+            Uses 3-axis Position and Euler orientation with using units meters/radians
+        """
+        pose_goal = Pose()
+        pose_goal.orientation.w = orientation.w
+        pose_goal.orientation.x = orientation.x
+        pose_goal.orientation.y = orientation.y
+        pose_goal.orientation.z = orientation.z
+        pose_goal.position.x = position.x
+        pose_goal.position.y = position.y
+        pose_goal.position.z = position.z
+        self.group.set_pose_target(pose_goal, str(self.dexterity) + END_EFFECTOR_SUFFIX)
+        self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
+        self.group.go(wait=False)
         self.group.stop()
     def change_pose(self, orientation: Euler, position: Position):
         """ 
@@ -98,9 +115,9 @@ class UR5e_Arm:
     def undo_last_command(self):
         undo_command = self.last_command
         for key in undo_command.position.__dict__:
-            setattr(self, key, getattr(self, key) * -1)
+            setattr(self, key, getattr(undo_command.position, key) * -1)
         for key in undo_command.orientation.__dict__:
-            setattr(self, key, getattr(self, key) * -1)
+            setattr(self, key, getattr(undo_command.orientation, key) * -1)
         self.change_pose(undo_command.orientation, undo_command.position)
 
 if __name__ == "__main__" :

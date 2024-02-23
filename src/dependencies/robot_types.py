@@ -23,7 +23,7 @@ class Euler():
         self.roll :float = roll
 
 @dataclass 
-class Pose():
+class PoseM():
     def __init__(self, orientation:Euler=Euler(), position:Position=Position()):
         self.orientation = Euler(orientation.yaw, orientation.pitch, orientation.roll)
         self.position = Position(position.x, position.y, position.z)

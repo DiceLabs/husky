@@ -1,0 +1,52 @@
+desired left
+pose: 
+  position: 
+    x: 0.3
+    y: 0.6
+    z: 1.2
+  orientation: 
+    x: 0.500
+    y: 0.500
+    z: 0.500
+    w: 0.500
+
+desired right
+pose: 
+  position: 
+    x: 0.3
+    y: -0.6
+    z: 1.2
+  orientation: 
+    x: 0.500
+    y: 0.500
+    z: 0.500
+    w: 0.500
+
+
+default right
+pose: 
+  position: 
+    x:  0.355
+    y: -0.771
+    z: -0.175
+  orientation: 
+    x: 0.65
+    y: 0.27
+    z: 0.65
+    w: 0.27
+
+yaw is set up as pitch
+pitch is set up as yaw
+roll is set up as roll
+
+box_right
+pose: 
+  position: 
+    x: 0.783322224790462
+    y: -0.5337760635853241
+    z: 0.16457907515987313
+  orientation: 
+    x: -0.022742461978126648
+    y: 0.7093819267645198
+    z: 0.7044115291573531
+    w: 0.008028698103084188
