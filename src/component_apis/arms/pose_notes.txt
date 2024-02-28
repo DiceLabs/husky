@@ -53,8 +53,50 @@ pose:
 
 ur_arm.change_pose(orientation=Euler(pitch=90), position=Position(z=-0.85, x=0.4 ,y=0.35))
 ur_arm.change_pose_abs(orientation=Quaternion(w=.5, x=.5, y=.5, z=.5), position=Position(x=0.35, y=-.9, z=1))
-
-
+left_arm.change_pose_abs(orientation=Quaternion(w=.27, x=.65, y=.27, z=.65), position=Position(x=0.35, y=.9, z=1))
 
 left_arm.change_pose(orientation=Euler(pitch=0), position=Position(z=-0.85, x=0.3 ,y=-0.35))
 left_arm.change_pose(orientation=Euler(roll=-135,pitch=90), position=Position())
+
+
+
+
+
+
+
+
+
+
+rostopic pub /right_ur/right_ur_arm_pos_joint_traj_controller/follow_joint_trajectory/goal control_msgs/FollowJointTrajectoryActionGoal "{
+  header: {
+    seq: 0,
+    stamp: now,
+    frame_id: ''
+  },
+  goal_id: {
+    stamp: now,
+    id: ''
+  },
+  goal: {
+    trajectory: {
+      header: {
+        seq: 0,
+        stamp: now,
+        frame_id: ''
+      },
+      joint_names: ["shoulder_pan_joint", "shoulder_lift_joint", "elbow_joint", "wrist_1_joint", "wrist_2_joint", "wrist_3_joint",],
+      points: [
+        {
+          positions: [0.0, -1.57, 1.57, 0.0, 1.57, 0.0],
+          velocities: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1],
+          accelerations: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+          effort: [],
+          time_from_start: {secs: 1, nsecs: 0}
+        }
+      ]
+    },
+    path_tolerance: [],
+    goal_tolerance: [],
+    goal_time_tolerance: {secs: 2, nsecs: 0}
+  }
+}"

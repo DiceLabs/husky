@@ -39,7 +39,7 @@ class UR5e_Arm:
     def move_joint(self, joint_id: int, amount: float):
         joint_goal = self.group.get_current_joint_values()
         joint_goal[joint_id] += amount
-        self.group.go(joint_goal, wait=False)
+        self.group.go(joint_goal, wait=True)
         self.group.stop()
     def change_pose_abs(self, orientation: Quaternion, position: Position):
         """ 
@@ -56,7 +56,7 @@ class UR5e_Arm:
         pose_goal.position.z = position.z
         self.group.set_pose_target(pose_goal, str(self.dexterity) + END_EFFECTOR_SUFFIX)
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
-        self.group.go(wait=False)
+        self.group.go(wait=True)
         self.group.stop()
     def change_pose(self, orientation: Euler, position: Position):
         """ 
@@ -67,7 +67,7 @@ class UR5e_Arm:
         pose_goal = self.create_pose_goal(Euler(yaw=yaw, pitch=pitch, roll=roll), position) 
         self.group.set_pose_target(pose_goal, str(self.dexterity) + END_EFFECTOR_SUFFIX)
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
-        self.group.go(wait=False)
+        self.group.go(wait=True)
         self.group.stop()
         self.last_command = PoseM(orientation=orientation, position=position)
     def create_pose_goal(self, orientation: Euler, position: Position):
