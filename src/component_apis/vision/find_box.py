@@ -56,7 +56,7 @@ def get_frames(pipeline):
     depth_frame = frames.get_depth_frame()
     return frames, color_frame, depth_frame
 
-def align_frames(pipeline, frames):
+def align_frames(frames):
     align = rs.align(rs.stream.color)
     aligned_frames = align.process(frames)
     return aligned_frames.get_depth_frame(), aligned_frames.get_color_frame()
@@ -88,7 +88,7 @@ def camera_loop(event):
     frames, color_frame, depth_frames = get_frames(pipeline)
     if not color_frame:
         return
-    aligned_depth_frame, aligned_color_frame = align_frames(pipeline, frames)
+    aligned_depth_frame, aligned_color_frame = align_frames(frames)
     img = np.asanyarray(aligned_color_frame.get_data())
     results = detect_objects(model, img)
     
