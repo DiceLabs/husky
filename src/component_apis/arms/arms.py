@@ -5,6 +5,7 @@
     @brief UR5e Arms API using ROS and Moveit.  
 """
 
+import os
 import rospy
 import moveit_commander
 from dexterity import Dexterity
@@ -13,7 +14,8 @@ from robot_types import Position, Euler, PoseM, Quaternion
 from transformations import quaternion_multiply, quaternion_from_euler
 from conversions import degrees_to_radians
 
-NODE_NAME = 'moveit_arm_api'
+NAMESPACE_VAR = "ROS_NAMESPACE"
+NAMESPACE_SUFFIX = "_ur"
 END_EFFECTOR_SUFFIX = "_ur_arm_wrist_3_link"
 MANIPULATOR_PREFIX = "manipulator_"
 INCREMENTAL_DISTANCE = 0.1 # units in meters
@@ -30,6 +32,7 @@ class UR5e_Arm:
         self.group = moveit_commander.MoveGroupCommander(MANIPULATOR_PREFIX + str(dexterity))
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
         self.dexterity = dexterity
+        os.environ[NAMESPACE_VAR] = str(dexterity) + NAMESPACE_SUFFIX 
         self.last_command = PoseM()
     def print_info(self):
         print ("============ Reference frame: %s" % self.group.get_planning_frame())
@@ -120,6 +123,7 @@ class UR5e_Arm:
             setattr(self, key, getattr(undo_command.orientation, key) * -1)
         self.change_pose(undo_command.orientation, undo_command.position)
 
+NODE_NAME = 'moveit_arm_api'
 if __name__ == "__main__" :
     rospy.init_node(NODE_NAME, anonymous=True)
     left_arm = UR5e_Arm(Dexterity.LEFT)
