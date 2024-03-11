@@ -21,20 +21,20 @@ class BaseNode():
         self.fill_ang_vel(msg, ang_vel)
         return msg
 
-    def fill_header(self, msg):
+    def fill_header(self, msg: Twist):
         msg.target_pose.header = Header()
         msg.target_pose.header.seq = DEFAULT_SEQ_NUM
         msg.target_pose.header.stamp = rospy.Time(0)
         msg.target_pose.header.frame_id = FRAME_ID
 
-    def fill_lin_vel(self, msg, lin_vel):
+    def fill_lin_vel(self, msg: Twist, lin_vel):
         vector = Vector3()
         vector.x = lin_vel.x
         vector.y = lin_vel.y
         vector.z = lin_vel.z
         msg.linear = vector
 
-    def fill_ang_vel(self, msg, ang_vel):
+    def fill_ang_vel(self, msg: Twist, ang_vel):
         vector = Vector3()
         vector.x = ang_vel.x
         vector.y = ang_vel.y
@@ -43,8 +43,8 @@ class BaseNode():
 
     def publish_base_message(self, position, orientation):
         msg = self.create_base_msg(position, orientation)
-        print(msg, self.publisher)
-        self.publisher.publish(msg)
+        print(msg, self.base_pub)
+        self.base_pub.publish(msg)
 
     """ 
         From Clearpath Documentation 
