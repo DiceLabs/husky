@@ -3,7 +3,11 @@ import numpy as np
 import cv2
 from ultralytics import YOLO
 import rospy
-from geometry_msgs.msg import Point
+from connect import get_serial_devs
+from timer import Timer
+from multiprocessing import Process
+
+UPDATE_RATE = 45    # Hz
 
 class CameraNode():
     COLOR_DICT = {
@@ -17,16 +21,16 @@ class CameraNode():
         "Black": (0, 0, 0),
     }
 
-    def __init__(self, model_name='best.pt', topic_name='camera_info', node_name='camera'):
-        rospy.init_node(node_name, anonymous=True)
-        self.pipeline = self.camera_init()
+    def __init__(self, serial_number, model_name='best.pt'):
+        self.pipeline = self.camera_init(serial_number)
         self.model = YOLO(model_name)
-        self.point_publisher = rospy.Publisher(topic_name, Point, queue_size=10)
-        self.timer = rospy.Timer(rospy.Duration(.01), self.camera_loop)
+        # timer = Timer(UPDATE_RATE, lambda: self.camera_loop())
+        # timer.start()
 
-    def camera_init(self):
+    def camera_init(self, serial_number):
         pipeline = rs.pipeline()
         config = rs.config()
+        config.enable_device(serial_number)
         config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
         config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
         pipeline.start(config)
@@ -70,7 +74,33 @@ class CameraNode():
         depth_text = f"Depth: {depth:.2f}m"
         cv2.putText(img, depth_text, (mid_x, mid_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-    def camera_loop(self, event):
+    def get_camera_info(self, img, results, depth_frame):
+        img_width = img.shape[1]  
+        img_height = img.shape[0] 
+        profile = self.pipeline.get_active_profile()
+        depth_profile = rs.video_stream_profile(profile.get_stream(rs.stream.depth))
+        intrinsics = depth_profile.get_intrinsics()
+        fx = intrinsics.fx  
+        fy = intrinsics.fy  
+        for result in results:
+            boxes = result.boxes  
+            for box in boxes:
+                bbox_coords = box.xyxy.squeeze().cpu().numpy()  
+                x1, y1, x2, y2 = bbox_coords
+                x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+                image_center_x = img_width // 2
+                image_center_y = img_height // 2
+                mid_x = (x1 + x2) // 2
+                mid_y = (y1 + y2) // 2
+                depth = depth_frame.get_distance(mid_x, mid_y)
+                dx = mid_x - image_center_x
+                dy = mid_y - image_center_y
+                real_dx = (dx* 0.7 * depth) / fx
+                real_dy = (dy* 0.7 * depth) / fy
+                return depth, real_dx, real_dy
+
+
+    def camera_loop(self, visualmode=False):
         QUIT = 'q'
         WINDOW_NAME = 'RealSense Camera'
         frames, color_frame, depth_frame = self.get_frames()
@@ -80,15 +110,46 @@ class CameraNode():
         img = np.asanyarray(aligned_color_frame.get_data())
         results = self.model(img, stream=True)
 
+        try: 
+            depth, dx, dy = self.get_camera_info(img=img, results=results, depth_frame=depth_frame)
+            cameraInfo = f"depth: {depth}, x_dist: {dx}, y_dist: {dy}"
+            print(cameraInfo)
+        except TypeError: 
+            pass
+        
         for result in results:
             self.process_detection(result.boxes, img, aligned_depth_frame)
         
-        cv2.imshow(WINDOW_NAME, img)
+        if visualmode:
+            cv2.imshow(WINDOW_NAME, img)
+        USER_EXIT_MSG = 'User requested exit.'
         if cv2.waitKey(1) & 0xFF == ord(QUIT):
-            rospy.signal_shutdown('User requested exit.')
-            self.pipeline.stop()
+            self.pipeline.stop(USER_EXIT_MSG)
             cv2.destroyAllWindows()
 
+def camera_wrap(serial_number):
+    freq = 45
+    camera = CameraNode(serial_number)
+    timer = Timer(frequency=freq, callback=lambda: camera.camera_loop())
+    timer.start()
+
+def start_all_cameras():
+    serial_devices = get_serial_devs()
+    for device in serial_devices:
+        process = Process(target=lambda: camera_wrap(serial_number=device))
+        process.start()
+
 if __name__ == "__main__":
-    camera_node = CameraNode()
-    rospy.spin()
+    start_all_cameras()
+
+
+""" 
+    depth of center box
+    y dist from camera
+    x dist from camera
+
+
+    Locate box state
+    Go towards box state
+    Center on box state
+"""
