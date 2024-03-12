@@ -6,8 +6,15 @@ import rospy
 from connect import get_serial_devs
 from timer import Timer
 from multiprocessing import Process
+from dataclasses import dataclass
 
 UPDATE_RATE = 45    # Hz
+
+@dataclass
+class CameraInfo():
+    depth: float
+    distx: float
+    disty: float
 
 class CameraNode():
     COLOR_DICT = {
@@ -24,8 +31,6 @@ class CameraNode():
     def __init__(self, serial_number, model_name='best.pt'):
         self.pipeline = self.camera_init(serial_number)
         self.model = YOLO(model_name)
-        # timer = Timer(UPDATE_RATE, lambda: self.camera_loop())
-        # timer.start()
 
     def camera_init(self, serial_number):
         pipeline = rs.pipeline()
@@ -110,27 +115,22 @@ class CameraNode():
         img = np.asanyarray(aligned_color_frame.get_data())
         results = self.model(img, stream=True)
 
-        try: 
-            depth, dx, dy = self.get_camera_info(img=img, results=results, depth_frame=depth_frame)
-            cameraInfo = f"depth: {depth}, x_dist: {dx}, y_dist: {dy}"
-            print(cameraInfo)
-        except TypeError: 
-            pass
-        
-        for result in results:
-            self.process_detection(result.boxes, img, aligned_depth_frame)
-        
         if visualmode:
             cv2.imshow(WINDOW_NAME, img)
         USER_EXIT_MSG = 'User requested exit.'
         if cv2.waitKey(1) & 0xFF == ord(QUIT):
             self.pipeline.stop(USER_EXIT_MSG)
             cv2.destroyAllWindows()
-
+        
+        try: 
+            depth, dx, dy = self.get_camera_info(img=img, results=results, depth_frame=depth_frame)
+            return depth, dx, dy
+        except TypeError: pass
+        
 def camera_wrap(serial_number):
     freq = 45
     camera = CameraNode(serial_number)
-    timer = Timer(frequency=freq, callback=lambda: camera.camera_loop(visualmode=True))
+    timer = Timer(frequency=freq, callback=lambda: print(camera.camera_loop()))
     timer.start()
 
 def start_all_cameras():
@@ -141,15 +141,3 @@ def start_all_cameras():
 
 if __name__ == "__main__":
     start_all_cameras()
-
-
-""" 
-    depth of center box
-    y dist from camera
-    x dist from camera
-
-
-    Locate box state
-    Go towards box state
-    Center on box state
-"""
