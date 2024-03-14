@@ -1,5 +1,4 @@
 import pyrealsense2 as rs
-from multiprocessing import Process
 
 def get_serial_devs():
     serial_devs = []

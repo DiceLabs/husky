@@ -2,7 +2,6 @@ import pyrealsense2 as rs
 import numpy as np
 import cv2
 from ultralytics import YOLO
-import rospy
 from connect import get_serial_devs
 from timer import Timer
 from multiprocessing import Process
@@ -106,7 +105,6 @@ class CameraNode():
 
 
     def camera_loop(self, visualmode=False):
-        QUIT = 'q'
         WINDOW_NAME = 'RealSense Camera'
         frames, color_frame, depth_frame = self.get_frames()
         if not color_frame:
@@ -117,15 +115,16 @@ class CameraNode():
 
         if visualmode:
             cv2.imshow(WINDOW_NAME, img)
-        USER_EXIT_MSG = 'User requested exit.'
-        if cv2.waitKey(1) & 0xFF == ord(QUIT):
-            self.pipeline.stop(USER_EXIT_MSG)
-            cv2.destroyAllWindows()
         
         try: 
             depth, dx, dy = self.get_camera_info(img=img, results=results, depth_frame=depth_frame)
             return depth, dx, dy
         except TypeError: pass
+    
+    def cleanup(self):
+        USER_EXIT_MSG = 'User requested exit.'
+        self.pipeline.stop(USER_EXIT_MSG)
+        cv2.destroyAllWindows()
         
 def camera_wrap(serial_number):
     freq = 45
