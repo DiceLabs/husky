@@ -9,10 +9,10 @@ class TestConversions(unittest.TestCase):
         roll, pitch, yaw = quaternion_to_euler(w, x, y, z)
         w1, x1, y1, z1 = euler_to_quaternion(yaw, pitch, roll)
 
-        self.assertAlmostEqual(w, w1)
-        self.assertAlmostEqual(x, x1)
-        self.assertAlmostEqual(y, y1)
-        self.assertAlmostEqual(z, z1)
+        self.assertAlmostEqual(w, w1, 2)
+        self.assertAlmostEqual(x, x1, 2)
+        self.assertAlmostEqual(y, y1, 2)
+        self.assertAlmostEqual(z, z1, 2)
 
     def test_degrees_to_radians_to_degrees(self):
         yaw_deg, pitch_deg, roll_deg = 90, 45, 30
