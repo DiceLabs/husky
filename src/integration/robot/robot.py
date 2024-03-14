@@ -2,7 +2,7 @@
 
 from protocol import GenericComponent, RobotMessage
 from multiprocessing import Process, Queue
-from components import ComponentFactory
+from factory import ComponentFactory
 from camera import CameraNode
 from typing import List
 

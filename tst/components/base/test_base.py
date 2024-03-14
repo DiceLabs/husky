@@ -3,6 +3,7 @@
 from base import create_base_msg
 from geometry_msgs.msg import Vector3
 from geometry_msgs.msg import Twist
+import unittest
 
 def test_create_base_msg():
     lin_vel = Vector3(0, 0, 0)
@@ -15,3 +16,6 @@ def test_create_base_msg():
     expected_msg.angular = ang_vel
 
     assert expected_msg == msg
+
+if __name__ == '__main__':
+    unittest.main()

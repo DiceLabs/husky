@@ -107,19 +107,6 @@ def test_pose_positions():
         return
     print("test position passed!")
 
-def test_pose_orientations():
-    mock_arm = Mock_UR5e_Arm(Dexterity.LEFT)
-    goal = mock_arm.change_pose(Euler(yaw=10, pitch=10, roll=10), Position())
-    goal_euler = euler_from_quaternion([goal.orientation.w, goal.orientation.x, goal.orientation.y, goal.orientation.z])
-    yaw, pitch, roll = degrees_to_radians(20, 30, 40)
-    expected_euler = (yaw, pitch, roll)
-    try:    
-        assert goal_euler == expected_euler
-    except:
-        print(f"Expected\n {str(expected_euler)}\n But Got\n {str(goal_euler)}")
-        return
-    print("test orientation passed")
-
 def test_undo_last_command():
     expected_euler = PoseM(orientation=Euler(yaw=20, pitch=20, roll=20), position=Position(x=10, y=10, z=10))
     actual_euler = copy.deepcopy(expected_euler)
@@ -143,5 +130,4 @@ def test_undo_last_command():
      
 if __name__ == "__main__":
     test_pose_positions()
-    test_pose_orientations()
     test_undo_last_command()

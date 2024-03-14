@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from components import ComponentId, ComponentFactory
+from factory import ComponentId, ComponentFactory
 from dataclasses import dataclass
 from multiprocessing import Queue
 from typing import Dict

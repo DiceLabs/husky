@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INSTALL_DIR="$HOME/HUSKY_LIBRARY"
+INSTALL_DIR="$HOME/ROBOT_LIB"
 
 mkdir -p "$INSTALL_DIR"
 # Define the source directory and the destination directory

@@ -5,6 +5,8 @@ from geometry_msgs.msg import Quaternion
 from move_base_msgs.msg import MoveBaseGoal
 import rospy
 from std_msgs.msg import Header
+import unittest
+
 
 def test_create_base_msg():
     header = Header()
@@ -22,3 +24,6 @@ def test_create_base_msg():
     expected_msg.target_pose.pose.orientation = orientation
 
     assert expected_msg == msg
+
+if __name__ == '__main__':
+    unittest.main()
