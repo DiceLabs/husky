@@ -16,6 +16,3 @@ if __name__ == "__main__":
     right_gripper = GripperNode(Dexterity.RIGHT)
     husky_base = BaseNode()
 
-""" 
-    left_arm.move_joint(joint_id=0, amount=0) 
-"""
