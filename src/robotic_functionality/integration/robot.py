@@ -2,7 +2,8 @@
 
 from protocol import GenericComponent, RobotMessage
 from multiprocessing import Process, Queue
-from components import ComponentFactory, ComponentId
+from components import ComponentFactory
+from camera import CameraNode
 from typing import List
 
 """ 
@@ -12,6 +13,15 @@ from typing import List
     Each process can be sent message from parent
     That will encourage each system to perform appropriate action
 """
+
+class Sensors():
+    def __init__(self, l_camera_serial, r_camera_serial):
+        self.camera_l = CameraNode(l_camera_serial)
+        self.camera_r = CameraNode(r_camera_serial)
+    def kill(self):
+        self.camera_l.cleanup()
+        self.camera_r.cleanup()
+
 
 COMPONENT_ID_ARG   = "componentId"
 COMPONENT_ARG      = "component"

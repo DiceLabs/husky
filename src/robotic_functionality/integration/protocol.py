@@ -39,6 +39,4 @@ class GenericComponent():
     def listen(self):
         while True:
             message = self.command_queue.get()
-            # if message is None:
-            #     break
             self.handle_message(message)
