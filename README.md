@@ -3,7 +3,7 @@
 ## Turning on the robot
 In order for the button to be pressed and have the robot power on the robots key must be plugged in:
 
-<img src="Husky_images/key.jpg" width="200" height="200">
+<img src="img/key.jpg" width="200" height="200">
 
 ## Turning off the robot
 Ensure the robot is [E-stopped](https://github.com/DiceLabs/Husky/blob/Clearpath_husky_with_dual_arm_custom_packages/README.md#e-stop), then press & release the power button
@@ -183,7 +183,7 @@ Below the line that contatins 127.0.1.1 and other devices that are used in the l
 ### UI monitor
 The robots UI monitor on the back can only operate one arm at a time. To switch from one arm to the other you need to locate the panel under the UI monitor that looks like this and click the **select** button:
 
-<img src="Husky_images/ui_panel.jpg" width="300" height="300">
+<img src="img/ui_panel.jpg" width="300" height="300">
 
 Power buttons: Found on the right side of the panel labeled left and right press each to turn on both arms
 
@@ -215,27 +215,27 @@ Once the arms have powered on the UI on the back of the robot will be on and mos
 
 Then you will click the red button on the bottom left corner of the UI 
 
-<img src="Husky_images/ui_start.jpg" width="300" height="300">
+<img src="img/ui_start.jpg" width="300" height="300">
 
 The UI should now look like this
 
-<img src="Husky_images/ui_estopped.jpg" width="300" height="300">
+<img src="img/ui_estopped.jpg" width="300" height="300">
 
 The **ROBOT EMERGENCY STOP** in the red frame indicates that the robot is currently E-stopped. In order to activate and use the arms E-stop must be turned off. There are multiple methods the robot could be in an E-stopped state. The red button on the back panel of the robot could be pressed. To deactivate that button's E-stop, simply twist the button in a clockwise manner until it stops. This will turn off that buttons e-stop, however the robot may still be e-stopped. The robot could also be E-stopped via the controller. In order to release E-stop on the controller you need to press the buton on the controller labeld **GO** if the label has fallen off it is the top left black button. This will cancel out E-stop.
 
-<img src="Husky_images/Ebutton.jpg" width="300" height="300">
-<img src="Husky_images/controller.jpg" width="300" height="300">
+<img src="img/Ebutton.jpg" width="300" height="300">
+<img src="img/controller.jpg" width="300" height="300">
 
  
 Once the robot is no longer in an E-stopped state, the UI should look like this:
 
-<img src="Husky_images/ui_initarm.jpg" width="300" height="300">
+<img src="img/ui_initarm.jpg" width="300" height="300">
 
 **Click ON**
 
 Half way through the bootup process of the arm this will come up:
 
-<img src="Husky_images/verify_arm.jpg" width="300" height="300">
+<img src="img/verify_arm.jpg" width="300" height="300">
 
 Take a look at the robot arm and verify that it is in the correct orientation as depicted in the visual model, then proceed to check the box on the left had side stating **I confirm that this shows the real robot pose**
 
@@ -243,7 +243,7 @@ Then **press Robot Position Verified** found on the bottom right side of UI
 
 The UI should now look like this
 
-<img src="Husky_images/Start_arm.jpg" width="300" height="300">
+<img src="img/Start_arm.jpg" width="300" height="300">
 
 **Press Start**
 
@@ -274,7 +274,7 @@ When you run the driver, it will set up some ROS action servers. These action se
 
 To do this make sure you are on the UI tab labled **Run** on the robot and **for both arms** click the play button in the bottom right hand side of the screen and then press **Robot Program**
 
-<img src="Husky_images/play_button.jpg" width="300" height="300">
+<img src="img/play_button.jpg" width="300" height="300">
 
 After the play robot program has been started on both arms, the way to make the arms move is to publish any message to the ROS action servers mentioned above. This can be accomplished in a variety of ways. Of course it can be done purely in code, for example by following a format similar to the script provided by Universal Robots for testing movement [found here](https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/blob/master/ur_robot_driver/scripts/test_move). Some more user-friendly ways are using a ROS graphical interface through moveit and RVIZ. To do so launch the moveit driver that will allow you to control the arms' movements
 
