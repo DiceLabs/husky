@@ -87,7 +87,8 @@ class CameraNode():
         fx = intrinsics.fx  
         fy = intrinsics.fy  
         for result in results:
-            boxes = result.boxes  
+            boxes = result.boxes 
+            # You can use boxes.conf also to get the max with arg max and get ride of the other one, there proably would need to be a try except clause to handle nothing found 
             for box in boxes:
                 bbox_coords = box.xyxy.squeeze().cpu().numpy()  
                 x1, y1, x2, y2 = bbox_coords
@@ -111,8 +112,7 @@ class CameraNode():
             return
         aligned_depth_frame, aligned_color_frame = self.align_frames(frames)
         img = np.asanyarray(aligned_color_frame.get_data())
-        results = self.model(img, stream=True)
-
+        results = self.model(img, stream=True, conf=0.4)# you can change conf value, this gets rid of low prob predicitons, in a sterile environment this should be good enough
         if visualmode:
             cv2.imshow(WINDOW_NAME, img)
         

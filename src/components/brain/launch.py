@@ -2,7 +2,7 @@
 
 from robot import Robot, Sensors
 from brain import Brain
-from config import tasks
+from config import tasks, CAMERA_IDS
 
 def init_robot():
     robot = Robot()
@@ -10,8 +10,8 @@ def init_robot():
     return robot
 
 def init_sensors():
-    l_cam_serial = ''
-    r_cam_serial = ''
+    l_cam_serial = CAMERA_IDS.LEFT
+    r_cam_serial = CAMERA_IDS.RIGHT
     sensors = Sensors(l_cam_serial, r_cam_serial)
     return sensors
 
