@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from base import BaseNode
+from base import BaseNode, LinearVelocity, AngularVelocity
 from geometry_msgs.msg import Vector3
 from geometry_msgs.msg import Twist
 import unittest

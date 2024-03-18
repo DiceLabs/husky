@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
+
 import unittest
 from unittest.mock import patch, MagicMock
-from multiprocessing import Process, Queue
-from robot import Robot, start_generic_component
-from factory import ComponentId
+from multiprocessing import Process
+from robot import Robot
 
 class TestRobot(unittest.TestCase):
     @patch('robot.ComponentFactory')
