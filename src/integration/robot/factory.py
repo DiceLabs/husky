@@ -6,6 +6,12 @@ from base import BaseNode
 from arms import UR5e_Arm
 from dexterity import Dexterity
 
+class GenericComponentInit():
+    def __init__(self, name, component, args):
+        self.component = component
+        self.args = args
+        self.name = name
+
 class ComponentId(Enum):
     BASE            = 0
     LEFT_ARM        = 1
@@ -15,9 +21,9 @@ class ComponentId(Enum):
 
 def ComponentFactory():
     return  {
-                ComponentId.BASE          : BaseNode(),
-                ComponentId.LEFT_ARM      : UR5e_Arm(dexterity=Dexterity.LEFT),
-                ComponentId.RIGHT_ARM     : UR5e_Arm(dexterity=Dexterity.RIGHT),
-                ComponentId.LEFT_GRIPPER  : GripperNode(dexterity=Dexterity.LEFT),
-                ComponentId.RIGHT_GRIPPER : GripperNode(dexterity=Dexterity.RIGHT),
+                ComponentId.BASE          : GenericComponentInit("Base", BaseNode, {}),
+                # ComponentId.LEFT_ARM      : GenericComponentInit(UR5e_Arm, {"dexterity":Dexterity.LEFT}),
+                # ComponentId.RIGHT_ARM     : GenericComponentInit(UR5e_Arm, {"dexterity":Dexterity.RIGHT}),
+                ComponentId.LEFT_GRIPPER  : GenericComponentInit("Left_Gripper", GripperNode, {"dexterity":Dexterity.LEFT}),
+                ComponentId.RIGHT_GRIPPER : GenericComponentInit("Right_Gripper", GripperNode, {"dexterity":Dexterity.RIGHT}),
             }

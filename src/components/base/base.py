@@ -86,3 +86,5 @@ class BaseNode():
             ang_vel = AngularVelocity(0, 0, 0)
             self.publish_base_message(lin_vel, ang_vel)
             rate.sleep()
+
+# if __name__ == "__main__":

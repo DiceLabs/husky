@@ -27,12 +27,12 @@ class UR5e_Arm:
         notably the ability to set joint targets or a pose target, other functions have been included to ease the use of common movements 
     """
     def __init__(self, dexterity: Dexterity):
+        os.environ[NAMESPACE_VAR] = str(dexterity) + NAMESPACE_SUFFIX 
         self.robot = moveit_commander.RobotCommander()
         self.scene = moveit_commander.PlanningSceneInterface()
         self.group = moveit_commander.MoveGroupCommander(MANIPULATOR_PREFIX + str(dexterity))
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
         self.dexterity = dexterity
-        os.environ[NAMESPACE_VAR] = str(dexterity) + NAMESPACE_SUFFIX 
         self.last_command = PoseM()
     def print_info(self):
         print ("============ Reference frame: %s" % self.group.get_planning_frame())
