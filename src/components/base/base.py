@@ -44,7 +44,7 @@ class BaseNode():
     def publish_base_message(self, position, orientation):
         msg = self.create_base_msg(position, orientation)
         print(msg)
-        self.base_pub.publish()
+        self.base_pub.publish(msg)
 
     """ 
         From Clearpath Documentation 

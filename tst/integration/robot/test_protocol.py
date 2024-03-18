@@ -1,22 +1,67 @@
 #!/usr/bin/env python3
 
-import unittest
-from unittest.mock import patch, MagicMock
-from multiprocessing import Process, Queue
-from robot import Robot, start_generic_component
+from protocol import GenericComponent
 from factory import ComponentId
+from robot import RobotMessage
+from unittest.mock import patch, MagicMock
+from multiprocessing import Queue
+import unittest
 
-class TestRobot(unittest.TestCase):
-    @patch('robot.ComponentFactory')
-    def test_init_components(self, mock_component_factory):
-        mock_component_factory.return_value = {0 : MagicMock(), 1 : MagicMock(), 2 : MagicMock()}
+class TestGenericComponent(unittest.TestCase):
+    def setUp(self):
+        self.component_id = ComponentId.BASE
+        self.component = MagicMock()
+        self.message_queue = Queue()
+        self.listen_patch = patch.object(GenericComponent, 'listen')
+        self.mock_listen = self.listen_patch.start()
+        self.generic_component = GenericComponent(self.component_id, self.component, self.message_queue)
 
-        robot = Robot()
+    def test_handle_message_calls_callback(self):
+        message = RobotMessage(componentId=ComponentId.BASE, function="test_function", data={})
+        self.component.test_function = MagicMock()
 
-        self.assertEqual(len(robot.processes), 3)
-        self.assertEqual(len(robot.queues), 3)
-        for process in robot.processes:
-            self.assertTrue(isinstance(process, Process))
+        self.message_queue.put(message)
+        self.generic_component.handle_message(message)
 
-if __name__ == '__main__':
+        self.component.test_function.assert_called_once_with()
+
+    def test_nonexistent_function(self):
+        message = RobotMessage(componentId=ComponentId.BASE, function="misspelled_function", data={})
+        self.component.test_function = MagicMock()
+
+        self.message_queue.put(message)
+        self.generic_component.handle_message(message)
+
+        self.component.test_function.assert_not_called()
+
+    def test_not_intended_system(self):
+        message = RobotMessage(componentId=ComponentId.RIGHT_ARM, function="test_function", data={})
+        self.component.test_function = MagicMock()
+
+        self.message_queue.put(message)
+        self.generic_component.handle_message(message)
+
+        self.component.test_function.assert_not_called()
+
+    def test_handle_message_calls_with_args_callback(self):
+        message = RobotMessage(componentId=ComponentId.BASE, function="test_function", data={"arg":5})
+        self.component.test_function = MagicMock()
+
+        self.message_queue.put(message)
+        self.generic_component.handle_message(message)
+
+        self.component.test_function.assert_called_once_with(arg=5) 
+    
+    def test_listen(self):        
+        self.component.test_function = MagicMock()
+        test_message = RobotMessage(componentId=ComponentId.BASE, function="test_function", data={})
+        self.message_queue.put(test_message)
+        message = self.generic_component.command_queue.get()
+        self.assertEqual(message, test_message)
+
+    def tearDown(self) -> None:
+        self.listen_patch.stop()
+
+
+if __name__ == "__main__":
     unittest.main()
