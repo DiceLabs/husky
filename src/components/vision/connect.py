@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pyrealsense2 as rs
 
 def get_serial_devs():
@@ -13,3 +15,5 @@ def get_serial_devs():
         print("No Intel Device connected")
     return serial_devs
 
+if __name__ == "__main__":
+    get_serial_devs()
