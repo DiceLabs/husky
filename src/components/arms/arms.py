@@ -114,6 +114,9 @@ class UR5e_Arm:
         self.move_depth(INCREMENTAL_DISTANCE)
     def move_backward(self):
         self.move_depth(-INCREMENTAL_DISTANCE)
+    
+    def move_to_default(self):
+        self.change_pose_abs(orientation=Quaternion(w=.5, x=.5, y=.5, z=.5), position=Position(x=0.35, y=-.9, z=1))
         
     def undo_last_command(self):
         undo_command = self.last_command

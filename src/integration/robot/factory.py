@@ -8,9 +8,9 @@ from dexterity import Dexterity
 
 class GenericComponentInit():
     def __init__(self, name, component, args):
+        self.name = name
         self.component = component
         self.args = args
-        self.name = name
 
 class ComponentId(Enum):
     BASE            = 0
@@ -22,8 +22,8 @@ class ComponentId(Enum):
 def ComponentFactory():
     return  {
                 ComponentId.BASE          : GenericComponentInit("Base", BaseNode, {}),
-                # ComponentId.LEFT_ARM      : GenericComponentInit(UR5e_Arm, {"dexterity":Dexterity.LEFT}),
-                # ComponentId.RIGHT_ARM     : GenericComponentInit(UR5e_Arm, {"dexterity":Dexterity.RIGHT}),
+                ComponentId.LEFT_ARM      : GenericComponentInit("Left_Arm", UR5e_Arm, {"dexterity":Dexterity.LEFT}),
+                ComponentId.RIGHT_ARM     : GenericComponentInit("Right_Arm", UR5e_Arm, {"dexterity":Dexterity.RIGHT}),
                 ComponentId.LEFT_GRIPPER  : GenericComponentInit("Left_Gripper", GripperNode, {"dexterity":Dexterity.LEFT}),
                 ComponentId.RIGHT_GRIPPER : GenericComponentInit("Right_Gripper", GripperNode, {"dexterity":Dexterity.RIGHT}),
             }

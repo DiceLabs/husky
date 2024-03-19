@@ -15,8 +15,6 @@ from timer import Timer
     Generic component will have access to a queue
 """
 
-FREQUENCY = 20
-
 @dataclass
 class RobotMessage():
     componentId: ComponentId
@@ -25,10 +23,17 @@ class RobotMessage():
 
 class GenericComponent():
     def __init__(self, componentId: ComponentId, component: GenericComponentInit, messageQueue: 'Queue[RobotMessage]'):
-        rospy.init_node(component.name)
+        self.init_ros(component.name)
         self.componentId = componentId
         self.component = component.component(**component.args)
         self.command_queue = messageQueue
+        self.init_timer()
+    
+    def init_ros(self, node_name):
+        rospy.init_node(node_name)
+
+    def init_timer(self):
+        FREQUENCY = 20
         self.timer = Timer(FREQUENCY, lambda: self.listen())
         self.timer.start()
 
