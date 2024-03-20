@@ -131,7 +131,7 @@ class CameraNode():
 def camera_wrap(serial_number):
     freq = 45
     camera = CameraNode(serial_number)
-    timer = Timer(frequency=freq, callback=lambda: print(camera.camera_loop()))
+    timer = Timer(frequency=freq, callback=lambda: print(camera.camera_loop(True)))
     timer.start()
 
 def start_all_cameras():
