@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from factory import ComponentId, GenericComponentInit
+from factory import ComponentId, GenericComponentMetaData
 from dataclasses import dataclass
 from multiprocessing import Queue
 from typing import Dict
@@ -22,12 +22,13 @@ class RobotMessage():
     data: Dict
 
 class GenericComponent():
-    def __init__(self, componentId: ComponentId, component: GenericComponentInit, messageQueue: 'Queue[RobotMessage]'):
-        self.init_ros(component.name)
+    def __init__(self, componentId: ComponentId, component: GenericComponentMetaData, messageQueue: 'Queue[RobotMessage]', rosMessaging: bool):
         self.componentId = componentId
         self.component = component.component(**component.args)
         self.command_queue = messageQueue
-        self.init_timer()
+        if not rosMessaging:
+            self.init_ros(component.name)
+            self.init_timer()
     
     def init_ros(self, node_name):
         rospy.init_node(node_name)
