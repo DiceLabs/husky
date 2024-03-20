@@ -6,7 +6,6 @@
 """
 
 import os
-import rospy
 import moveit_commander
 from dexterity import Dexterity
 from geometry_msgs.msg import Pose, Quaternion
@@ -27,7 +26,7 @@ class UR5e_Arm:
         notably the ability to set joint targets or a pose target, other functions have been included to ease the use of common movements 
     """
     def __init__(self, dexterity: Dexterity):
-        os.environ[NAMESPACE_VAR] = str(dexterity) + NAMESPACE_SUFFIX 
+        os.environ[NAMESPACE_VAR] = str(dexterity) + NAMESPACE_SUFFIX
         self.robot = moveit_commander.RobotCommander()
         self.scene = moveit_commander.PlanningSceneInterface()
         self.group = moveit_commander.MoveGroupCommander(MANIPULATOR_PREFIX + str(dexterity))
@@ -126,10 +125,3 @@ class UR5e_Arm:
             setattr(self, key, getattr(undo_command.orientation, key) * -1)
         self.change_pose(undo_command.orientation, undo_command.position)
 
-NODE_NAME = 'moveit_arm_api'
-if __name__ == "__main__" :
-    rospy.init_node(NODE_NAME, anonymous=True)
-    left_arm = UR5e_Arm(Dexterity.LEFT)
-    right_arm = UR5e_Arm(Dexterity.RIGHT)
-    left_arm.print_info()
-    right_arm.print_info()
