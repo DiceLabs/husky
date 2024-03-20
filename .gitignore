@@ -2,3 +2,7 @@
 __pycache__
 .pytest_cache
 .vscode
+build
+devel
+include
+.catkin_workspace

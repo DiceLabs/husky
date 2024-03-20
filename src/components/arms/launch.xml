@@ -1,0 +1,9 @@
+<launch>
+    <group ns="left_ur">
+        <node name="left_arm_node" pkg="arms" type="arms.py" output="screen"/>
+    </group>
+
+    <group ns="right_ur">
+        <node name="right_arm_node" pkg="arms" type="arms.py" output="screen"/>
+    </group>
+</launch>
