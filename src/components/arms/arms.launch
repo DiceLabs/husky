@@ -1,13 +1,11 @@
 <launch>
     <group ns="left_ur">
-        <node name="left_arm_node" pkg="arms" type="arm_server.py" output="screen">
-            <param name="dexterity" value="l"/>
+        <node name="left_arm" pkg="arms" type="arm_server.py" args="l" output="screen">
         </node>
     </group>
 
     <group ns="right_ur">
-        <node name="right_arm_node" pkg="arms" type="arm_server.py" output="screen">
-            <param name="dexterity" value="r"/>
+        <node name="right_arm" pkg="arms" type="arm_server.py" args="r" output="screen">
         </node>
     </group>
 </launch>

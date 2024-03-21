@@ -3,7 +3,7 @@
 from enum import Enum
 from grippers import GripperNode
 from base import BaseNode
-from arms import UR5e_Arm
+from ur5e_arm import UR5e_Arm
 from dexterity import Dexterity
 
 class GenericComponentMetaData():
@@ -18,6 +18,11 @@ class ComponentId(Enum):
     RIGHT_ARM       = 2
     LEFT_GRIPPER    = 3
     RIGHT_GRIPPER   = 4
+
+def convert_int_to_id(key):
+    for e in ComponentId:
+        if e.value == key:
+            return e
 
 def ComponentFactory():
     return  {
