@@ -26,6 +26,7 @@ class Sensors():
 COMPONENT_ID_ARG   = "componentId"
 COMPONENT_ARG      = "component"
 MSG_QUEUE_ARG      = "messageQueue"
+IS_ROS_MESSAGE_ARG = "rosMessaging"
 
 """ Wrapper to instantiate class with kwargs in Process API """
 def start_generic_component(**config):
@@ -44,7 +45,8 @@ class Robot():
             componentArgs = {
                 COMPONENT_ID_ARG: componentId, 
                 COMPONENT_ARG   : component,
-                MSG_QUEUE_ARG   : componentQueue
+                MSG_QUEUE_ARG   : componentQueue,
+                IS_ROS_MESSAGE_ARG: False
             }
             component_process = Process(target=start_generic_component, kwargs=componentArgs)
             self.processes.append(component_process)

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import rospy
 from factory import ComponentId
 from generic_ros_client import call_generic_service
@@ -38,10 +40,11 @@ if __name__ == "__main__":
     ARGS = {}
     i = 0
 
-    while i < 5:
+    while i < 2:
         call_arm(Dexterity.LEFT, MOVE_DOWN, ARGS)
         call_arm(Dexterity.RIGHT, MOVE_DOWN, ARGS)
         sleep(2.2)
         call_arm(Dexterity.LEFT, MOVE_UP, ARGS)
         call_arm(Dexterity.RIGHT, MOVE_UP, ARGS)
         sleep(2.2)
+        i += 1

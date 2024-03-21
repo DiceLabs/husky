@@ -1,9 +1,14 @@
-# from robot import Robot
-# from protocol import RobotMessage
-# from factory import ComponentId
+#!/usr/bin/env python3
 
-# robot = Robot()
-# robot.start()
-# robot_msg = RobotMessage(componentId=ComponentId.LeftGripper, function="COUNTERCLOCKWISE", data={})
-# robot.send_message(robot_msg)
+from robot import Robot
+from protocol import RobotMessage
+from factory import ComponentId
 
+robot = Robot()
+robot.start()
+robot.send_message(RobotMessage(componentId=ComponentId.BASE, function="COUNTERCLOCKWISE", data={}))
+robot.send_message(RobotMessage(componentId=ComponentId.LEFT_GRIPPER, function="close", data={}))
+robot.send_message(RobotMessage(componentId=ComponentId.RIGHT_GRIPPER, function="close", data={}))
+robot.send_message(RobotMessage(componentId=ComponentId.LEFT_GRIPPER, function="open", data={}))
+robot.send_message(RobotMessage(componentId=ComponentId.RIGHT_GRIPPER, function="open", data={}))
+robot.kill()
