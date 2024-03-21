@@ -7,4 +7,3 @@
 # robot_msg = RobotMessage(componentId=ComponentId.LeftGripper, function="COUNTERCLOCKWISE", data={})
 # robot.send_message(robot_msg)
 
-import generic_ros_client

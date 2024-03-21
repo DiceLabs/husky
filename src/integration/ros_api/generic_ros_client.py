@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 import rospy
+from factory import ComponentId
 from robot_msgs.srv import GenericSrv, GenericSrvRequest
 from robot_msgs.msg import KeyValue
-from factory import ComponentId
 
 def create_generic_request(component_id: ComponentId, function_name: str, args: dict):
     """
