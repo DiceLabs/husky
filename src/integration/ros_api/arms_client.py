@@ -23,20 +23,21 @@ def create_generic_request(component_id, function_name, arguments):
     return request
 
 def call_generic_service(service_name, component_id, function_name, arguments):
-    rospy.wait_for_service(service_name)
+    # rospy.wait_for_service(service_name)
     try:
         arm_service = rospy.ServiceProxy(service_name, GenericSrv)
         request = create_generic_request(component_id, function_name, arguments)
+        print(request)
         response = arm_service(request)
         return response
     except rospy.ServiceException as e:
         print("Service call failed: %s" % e)
 
 NODE_NAME = 'arm_client'
-LEFT_ARM_SERVICE = 'left_arm'
-RIGHT_ARM_SERVICE = 'right_arm'
-LEFT_ARM_ID = ComponentId.LEFT_ARM
-RIGHT_ARM_ID = ComponentId.RIGHT_ARM
+LEFT_ARM_SERVICE = '/left_ur/left_arm'
+RIGHT_ARM_SERVICE = '/right_ur/right_arm'
+LEFT_ARM_ID = ComponentId.LEFT_ARM.value
+RIGHT_ARM_ID = ComponentId.RIGHT_ARM.value
 FUNCTION = "move_up"
 ARGS = {}
 
