@@ -6,7 +6,7 @@ from base import BaseNode
 from arms import UR5e_Arm
 from dexterity import Dexterity
 
-class GenericComponentInit():
+class GenericComponentMetaData():
     def __init__(self, name, component, args):
         self.name = name
         self.component = component
@@ -21,9 +21,9 @@ class ComponentId(Enum):
 
 def ComponentFactory():
     return  {
-                ComponentId.BASE          : GenericComponentInit("Base", BaseNode, {}),
-                # ComponentId.LEFT_ARM      : GenericComponentInit("Left_Arm", UR5e_Arm, {"dexterity":Dexterity.LEFT}),
-                # ComponentId.RIGHT_ARM     : GenericComponentInit("Right_Arm", UR5e_Arm, {"dexterity":Dexterity.RIGHT}),
-                ComponentId.LEFT_GRIPPER  : GenericComponentInit("Left_Gripper", GripperNode, {"dexterity":Dexterity.LEFT}),
-                ComponentId.RIGHT_GRIPPER : GenericComponentInit("Right_Gripper", GripperNode, {"dexterity":Dexterity.RIGHT}),
+                ComponentId.BASE          : GenericComponentMetaData("Base", BaseNode, {}),
+                # ComponentId.LEFT_ARM      : GenericComponentMetaData("Left_Arm", UR5e_Arm, {"dexterity":Dexterity.LEFT}),
+                # ComponentId.RIGHT_ARM     : GenericComponentMetaData("Right_Arm", UR5e_Arm, {"dexterity":Dexterity.RIGHT}),
+                ComponentId.LEFT_GRIPPER  : GenericComponentMetaData("Left_Gripper", GripperNode, {"dexterity":Dexterity.LEFT}),
+                ComponentId.RIGHT_GRIPPER : GenericComponentMetaData("Right_Gripper", GripperNode, {"dexterity":Dexterity.RIGHT}),
             }
