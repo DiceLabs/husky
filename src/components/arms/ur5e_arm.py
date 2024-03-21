@@ -102,10 +102,8 @@ class UR5e_Arm:
         self.change_pose(Euler(roll=amount), Position())
         
     def move_up(self):
-        print("I was called")
         self.move_vertical(INCREMENTAL_DISTANCE)
     def move_down(self):
-        print("I was called")
         self.move_vertical(-INCREMENTAL_DISTANCE)
     def move_left(self):
         self.move_horizontal(INCREMENTAL_DISTANCE)
