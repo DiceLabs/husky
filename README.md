@@ -11,7 +11,7 @@ This codebase is used to interact with a dual-arm UR5e Husky A200 configuration 
 - `tst/`: Unit test directory mirros source code for coverage
 
 ## Startup
-If you want to turn on the robot, please refer to the startup procedure that has been documented [here](docs/STARTUP.md)
+If you want to turn on the robot, please refer to the startup procedure that has been documented [here](STARTUP.md)
 
 ## Getting Started
 Clone the codebase for access to source code scripts
