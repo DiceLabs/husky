@@ -1,4 +1,4 @@
-# Project: Husky Robot
+# Husky Robot
 
 ## Description
 This codebase is used to interact with a dual-arm UR5e Husky A200 configuration at DiceLabs

@@ -26,27 +26,34 @@ class UR5e_Arm:
         notably the ability to set joint targets or a pose target, other functions have been included to ease the use of common movements 
     """
     def __init__(self, dexterity: Dexterity):
-        os.environ[NAMESPACE_VAR] = str(dexterity) + NAMESPACE_SUFFIX
         self.robot = moveit_commander.RobotCommander()
         self.scene = moveit_commander.PlanningSceneInterface()
         self.group = moveit_commander.MoveGroupCommander(MANIPULATOR_PREFIX + str(dexterity))
         self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
         self.dexterity = dexterity
         self.last_command = PoseM()
+
     def print_info(self):
         print ("============ Reference frame: %s" % self.group.get_planning_frame())
         print ("============ End effector: %s" % self.group.get_end_effector_link())
         print ("============ Current State: %s" % self.group.get_current_state())
         print ("============ Robot Groups:", self.robot.get_group_names())
-    def move_joint(self, joint_id: int, amount: float):
+
+    def move_joint(self, joint_id: int, amount: float, blocking: bool):
         joint_goal = self.group.get_current_joint_values()
         joint_goal[joint_id] += amount
-        self.group.go(joint_goal, wait=False)
+        self.group.go(joint_goal, wait=blocking)
         self.group.stop()
-    def change_pose_abs(self, orientation: Quaternion, position: Position):
+
+    def make_moveit_pose_request(self, pose_goal: Pose, blocking: bool):
+        end_effector_name = str(self.dexterity) + END_EFFECTOR_SUFFIX
+        self.group.set_pose_target(pose_goal, end_effector_name)
+        self.group.go(wait=blocking)
+        self.group.stop()
+
+    def construct_abs_pose_goal(self, orientation: Quaternion, position: Position,):
         """ 
-            Will Move End Affector by relative amount passed in
-            Uses 3-axis Position and Euler orientation with using units meters/radians
+            Basically a ROS type conversion
         """
         pose_goal = Pose()
         pose_goal.orientation.w = orientation.w
@@ -56,23 +63,16 @@ class UR5e_Arm:
         pose_goal.position.x = position.x
         pose_goal.position.y = position.y
         pose_goal.position.z = position.z
-        self.group.set_pose_target(pose_goal, str(self.dexterity) + END_EFFECTOR_SUFFIX)
-        self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
-        self.group.go(wait=False)
-        self.group.stop()
-    def change_pose(self, orientation: Euler, position: Position):
+        return pose_goal
+    def change_pose_abs(self, orientation: Quaternion, position: Position, blocking: bool):
         """ 
             Will Move End Affector by relative amount passed in
             Uses 3-axis Position and Euler orientation with using units meters/radians
         """
-        yaw, pitch, roll = degrees_to_radians(yaw=orientation.yaw, pitch=orientation.pitch, roll=orientation.roll)
-        pose_goal = self.create_pose_goal(Euler(yaw=yaw, pitch=pitch, roll=roll), position) 
-        self.group.set_pose_target(pose_goal, str(self.dexterity) + END_EFFECTOR_SUFFIX)
-        self.group.set_max_velocity_scaling_factor(VELOCITY_SCALING_CONSTANT)
-        self.group.go(wait=False)
-        self.group.stop()
-        self.last_command = PoseM(orientation=orientation, position=position)
-    def create_pose_goal(self, orientation: Euler, position: Position):
+        pose_goal = self.construct_abs_pose_goal(orientation=orientation, position=position)
+        self.make_moveit_pose_request(blocking=blocking, pose_goal=pose_goal)
+
+    def construct_rel_pose_goal(self, orientation: Euler, position: Position):
         pose_goal = Pose()
         current = self.group.get_current_pose().pose
         delta_orientation_quat = quaternion_from_euler(orientation.yaw, orientation.pitch, orientation.roll)
@@ -86,42 +86,48 @@ class UR5e_Arm:
         pose_goal.position.y = current.position.y + position.y
         pose_goal.position.z = current.position.z + position.z
         return pose_goal
+    def change_pose_rel(self, orientation: Euler, position: Position, blocking: bool):
+        """ 
+            Will Move End Affector by relative amount passed in
+            Uses 3-axis Position and Euler orientation with using units meters/radians
+        """
+        yaw, pitch, roll = degrees_to_radians(yaw=orientation.yaw, pitch=orientation.pitch, roll=orientation.roll)
+        pose_goal = self.construct_rel_pose_goal(Euler(yaw=yaw, pitch=pitch, roll=roll), position) 
+        self.make_moveit_pose_request(blocking=blocking, pose_goal=pose_goal)
+        self.last_command = PoseM(orientation=orientation, position=position)
 
-    def move_vertical(self, amount: float):
-        self.change_pose(Euler(), Position(z=amount))
-    def move_horizontal(self, amount: float):
-        self.change_pose(Euler(), Position(y=amount))
-    def move_depth(self, amount: float):
-        self.change_pose(Euler(), Position(x=amount))
+    def move_vertical(self, amount: float, blocking: bool):
+        self.change_pose_rel(Euler(), Position(z=amount), blocking)
+    def move_horizontal(self, amount: float, blocking: bool):
+        self.change_pose_rel(Euler(), Position(y=amount), blocking)
+    def move_depth(self, amount: float, blocking: bool):
+        self.change_pose_rel(Euler(), Position(x=amount), blocking)
 
-    def yaw(self, amount):
-        self.change_pose(Euler(yaw=amount), Position())
-    def pitch(self, amount):
-        self.change_pose(Euler(pitch=amount), Position())
-    def roll(self, amount):
-        self.change_pose(Euler(roll=amount), Position())
+    def yaw(self, amount, blocking: bool):
+        self.change_pose_rel(Euler(yaw=amount), Position(), blocking)
+    def pitch(self, amount, blocking: bool):
+        self.change_pose_rel(Euler(pitch=amount), Position(), blocking)
+    def roll(self, amount, blocking: bool):
+        self.change_pose_rel(Euler(roll=amount), Position(), blocking)
         
-    def move_up(self):
-        self.move_vertical(INCREMENTAL_DISTANCE)
-    def move_down(self):
-        self.move_vertical(-INCREMENTAL_DISTANCE)
-    def move_left(self):
-        self.move_horizontal(INCREMENTAL_DISTANCE)
-    def move_right(self):
-        self.move_horizontal(-INCREMENTAL_DISTANCE)
-    def move_forward(self):
-        self.move_depth(INCREMENTAL_DISTANCE)
-    def move_backward(self):
-        self.move_depth(-INCREMENTAL_DISTANCE)
-    
-    def move_to_default(self):
-        self.change_pose_abs(orientation=Quaternion(w=.5, x=.5, y=.5, z=.5), position=Position(x=0.35, y=-.9, z=1))
-        
+    def move_up(self, blocking: bool):
+        self.move_vertical(INCREMENTAL_DISTANCE, blocking)
+    def move_down(self, blocking: bool):
+        self.move_vertical(-INCREMENTAL_DISTANCE, blocking)
+    def move_left(self, blocking: bool):
+        self.move_horizontal(INCREMENTAL_DISTANCE, blocking)
+    def move_right(self, blocking: bool):
+        self.move_horizontal(-INCREMENTAL_DISTANCE, blocking)
+    def move_forward(self, blocking: bool):
+        self.move_depth(INCREMENTAL_DISTANCE, blocking)
+    def move_backward(self, blocking: bool):
+        self.move_depth(-INCREMENTAL_DISTANCE, blocking)
+            
     def undo_last_command(self):
         undo_command = self.last_command
         for key in undo_command.position.__dict__:
             setattr(self, key, getattr(undo_command.position, key) * -1)
         for key in undo_command.orientation.__dict__:
             setattr(self, key, getattr(undo_command.orientation, key) * -1)
-        self.change_pose(undo_command.orientation, undo_command.position)
+        self.change_pose_rel(undo_command.orientation, undo_command.position)
 
