@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# Script to compile UR_Client Code to interface with URCap C++ library. To run, a repo named husky must exist at home directory.
+
 move_to_cmake_dir()
 {
     cd $HOME
