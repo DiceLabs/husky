@@ -3,6 +3,7 @@
 setup_environment()
 {
     cd $HOME/husky
+    catkin_make
     source source.sh
     bash  install.sh
     bash  build_urclient.sh
@@ -24,10 +25,14 @@ fix_moveit_config()
     cp docs/no_namespace_dual_launch.xml $MOVEIT_TARGET_DIR
 }
 
-start_drivers()
+start_driver()
 {
-    fix_moveit_config
     bash roslaunch husky_ur_bringup husky_dual_ur_bringup.launch &
+}
+
+start_moveit()
+{
+    
     bash roslaunch sds04_husky_moveit_config husky_dual_ur_robotiq_2f_85_moveit_planning_execution.launch &
 }
 
@@ -36,11 +41,25 @@ start_arm_servers()
     bash start_arms.sh
 }
 
+release_brakes()
+{
+    ur_interface.py --action r
+}
+
+press_play()
+{
+    ur_interface.py --action p
+}
+
 setup_cb()
 {
     setup_environment
-    start_drivers
-    start_arm_servers
+    # start_driver
+    # release_brakes
+    # fix_moveit_config
+    # start_moveit
+    # press_play
+    # start_arm_servers
 }
 
 main()

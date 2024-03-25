@@ -8,6 +8,7 @@
 """
 
 import ctypes
+import argparse
 
 SYS_LIB_PATH            = "/usr/local/lib/"
 SO_FILE_NAME            = "liburclient.so"
@@ -23,4 +24,13 @@ def init_robot():
     UR_CLIENT.init_robot()
 
 if __name__ == "__main__":
-    release_brakes()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--action', type=str)
+    args = parser.parse_args()
+
+    if args.action == 'r':
+        release_brakes()
+    elif args.action == 'u':
+        unlock_protective_stop()
+    elif args.action == 'p':
+        play_button()
