@@ -4,5 +4,5 @@ __pycache__
 .vscode
 build
 devel
-include
+install
 .catkin_workspace

@@ -27,8 +27,6 @@ def convert_int_to_id(key):
 def ComponentFactory():
     return  {
                 ComponentId.BASE          : GenericComponentMetaData("Base", BaseNode, {}),
-                # ComponentId.LEFT_ARM      : GenericComponentMetaData("Left_Arm", UR5e_Arm, {"dexterity":Dexterity.LEFT}),
-                # ComponentId.RIGHT_ARM     : GenericComponentMetaData("Right_Arm", UR5e_Arm, {"dexterity":Dexterity.RIGHT}),
                 ComponentId.LEFT_GRIPPER  : GenericComponentMetaData("Left_Gripper", GripperNode, {"dexterity":Dexterity.LEFT}),
                 ComponentId.RIGHT_GRIPPER : GenericComponentMetaData("Right_Gripper", GripperNode, {"dexterity":Dexterity.RIGHT}),
             }
