@@ -2,17 +2,20 @@
 
 setup_environment()
 {
-    cd $HOME/husky
+    cd $HOME
+    git clone https://github.com/DiceLabs/Husky husky
+    cd husky
     catkin_make
     source source.sh
+    bash  clean_lib.sh
     bash  install.sh
-    bash  build_urclient.sh
+    bash  see_lib.sh
+    bash  build_ur.sh
 }
 
 setup_cb()
 {
     setup_environment
-    # start_arm_servers
 }
 
 main()
