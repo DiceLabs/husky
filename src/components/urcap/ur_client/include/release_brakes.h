@@ -1,6 +1,6 @@
 extern "C" 
 {
-    void release_brakes();
+    void releaseBrakes();
     void unlockProtectiveStop();
     void pressPlayButton();
 }
