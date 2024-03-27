@@ -30,7 +30,7 @@ std::unique_ptr<urcl::DashboardClient> connectClient(const std::string& robot_ip
   return std::move(dashboard);
 }
 
-void release_brakes()
+void releaseBrakes()
 {
     const auto left_dashboard = connectClient(LEFT_ROBOT_IP);
     const auto right_dashboard = connectClient(RIGHT_ROBOT_IP);
