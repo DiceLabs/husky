@@ -8,6 +8,7 @@ from connect import get_serial_devs
 from timer import Timer
 from multiprocessing import Process
 from dataclasses import dataclass
+from pathlib import Path
 
 UPDATE_RATE = 45    # Hz
 
@@ -29,7 +30,7 @@ class CameraNode():
         "Black": (0, 0, 0),
     }
 
-    def __init__(self, serial_number, model_name='best.pt'):
+    def __init__(self, serial_number, model_name=f'{Path.home()}/ROBOT_LIB/best.pt'):
         self.pipeline = self.camera_init(serial_number)
         self.model = YOLO(model_name)
 
