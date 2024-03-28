@@ -19,5 +19,5 @@ def start_camera(camera_id, service_name, service_port):
     process.join()
 
 if __name__ == "__main__":
-    start_camera(CAMERA_IDS.LEFT,  ServiceNames.LEFT_CAMERA,  ServicePorts[ServiceNames.LEFT_CAMERA])
+    # start_camera(CAMERA_IDS.LEFT,  ServiceNames.LEFT_CAMERA,  ServicePorts[ServiceNames.LEFT_CAMERA])
     start_camera(CAMERA_IDS.RIGHT, ServiceNames.RIGHT_CAMERA, ServicePorts[ServiceNames.RIGHT_CAMERA])
