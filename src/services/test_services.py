@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import subprocess
 
 BASE_CLIENT =    ["base_client.py"]
