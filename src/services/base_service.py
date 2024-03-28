@@ -22,4 +22,4 @@ def start_base(service_name, service_port):
     process.join()
 
 if __name__ == "__main__":
-    start_base(ServiceNames.BASE,  ServicePorts[ServiceNames.BASE])
+    start_base(ServiceNames.BASE, ServicePorts[ServiceNames.BASE])

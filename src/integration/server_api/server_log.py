@@ -10,5 +10,5 @@ class Logging():
         print(f"Connected by {addr}")
         
     @staticmethod
-    def log_data_rcv_message(data):
-        print(f"Received data: {data}")
+    def log_data_rcv_message(name):
+        print(f"Received Data From {name} Server")

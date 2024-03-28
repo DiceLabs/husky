@@ -5,13 +5,13 @@ from server_log import Logging
 from defaults import Defaults
 import pickle
 
-def loop(sock, callback):
+def loop(name, sock, callback):
     conn, addr = sock.accept()
     with conn:
         Logging.log_connection_message(addr)
         data = conn.recv(Defaults.BUFFER_SIZE)
         if data:
-            Logging.log_data_rcv_message(data)
+            Logging.log_data_rcv_message(name)
             request = pickle.loads(data)
             response = callback(request)
             conn.sendall(pickle.dumps(response))
@@ -27,7 +27,7 @@ def start_server(name=Defaults.DEFAULT_NAME,
         sock.listen()
         Logging.log_server_active_message(name, host, port)
         while True:
-            loop(sock, callback)
+            loop(name, sock, callback)
 
 if __name__ == "__main__":
     start_server()

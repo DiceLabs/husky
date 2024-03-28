@@ -8,8 +8,8 @@ from req_resp import GenericRequest
 from dexterity import Dexterity
 import rospy
 
-def generic_callback(request: GenericRequest, base: GripperNode):
-    function_call = getattr(base, request.function)
+def generic_callback(request: GenericRequest, gripper: GripperNode):
+    function_call = getattr(gripper, request.function)
     function_call(**request.args)
 
 def start_gripper_server(name, port, dexterity):
