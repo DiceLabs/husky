@@ -5,3 +5,4 @@ from services import ServiceNames, ServicePorts
 from req_resp import GenericRequest
 
 call_service(port=ServicePorts[ServiceNames.RIGHT_GRIPPER], request=GenericRequest(function="close", args={}))
+call_service(port=ServicePorts[ServiceNames.RIGHT_GRIPPER], request=GenericRequest(function="open", args={}))
