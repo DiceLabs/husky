@@ -1,11 +1,11 @@
 <launch>
     <group ns="left_ur">
-        <node name="left_arm" pkg="arms" type="arm_server_r.py" args="l" output="screen">
+        <node name="left_arm" pkg="arms_r" type="arm_server_r.py" args="l" output="screen">
         </node>
     </group>
 
     <group ns="right_ur">
-        <node name="right_arm" pkg="arms" type="arm_server_r.py" args="r" output="screen">
+        <node name="right_arm" pkg="arms_r" type="arm_server_r.py" args="r" output="screen">
         </node>
     </group>
 </launch>

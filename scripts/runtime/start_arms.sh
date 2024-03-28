@@ -1,3 +1,3 @@
 #!/bin/bash
 
-roslaunch arms arms.launch
+roslaunch arms_r arms_r.launch

@@ -28,7 +28,11 @@ class Context():
 def start_server(node_name: str):
     rospy.init_node(node_name, anonymous=True)
     arm = UR5e_Arm(DEXTERITY)
-    start_ros_server(name=ServiceNames.LEFT_ARM, port=ServicePorts[ServiceNames.LEFT_ARM], 
+    if DEXTERITY == Dexterity.LEFT:
+        start_ros_server(name=ServiceNames.LEFT_ARM, port=ServicePorts[ServiceNames.LEFT_ARM], 
+                     callback=lambda request: generic_callback(request, arm))
+    elif DEXTERITY == Dexterity.RIGHT:
+        start_ros_server(name=ServiceNames.RIGHT_ARM, port=ServicePorts[ServiceNames.RIGHT_ARM], 
                      callback=lambda request: generic_callback(request, arm))
 
 DEXT_LAUNCH_ARM  = '~dexterity'

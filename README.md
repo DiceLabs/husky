@@ -13,6 +13,7 @@ This codebase is used to interact with a dual-arm UR5e Husky A200 configuration 
 ## Startup
 If you want to turn on the robot, please refer to the startup procedure that has been documented [here](STARTUP.md)
 
+    - kill_ros_node.sh
     - setup_cb.sh
     - start_driver.sh
     - start_services.sh
