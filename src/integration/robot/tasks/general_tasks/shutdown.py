@@ -1,0 +1,2 @@
+MISSION_COMPLETE_MSG = "Mission Complete"
+print(MISSION_COMPLETE_MSG)

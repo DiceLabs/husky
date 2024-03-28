@@ -3,7 +3,7 @@
 """
 from dataclasses import dataclass
 from typing import List, Callable
-from brain import Brain
+from queue import Queue
 
 @dataclass
 class Transition():
@@ -14,5 +14,14 @@ class Transition():
 class Task():
     current_state   : int
     end_condition   : bool
-    state_actions   : List[ Callable[[Brain], None] ]
+    state_actions   : List[ Callable ]
     transitions     : List[Transition]
+
+def tasks() -> "Queue[Task]":
+    tasklist = Queue()
+    ##############################
+    """ User places Tasks here """
+    
+    """                        """
+    ##############################
+    return tasklist

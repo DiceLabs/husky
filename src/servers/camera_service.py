@@ -2,9 +2,12 @@
 
 from multiprocessing import Process
 from camera import CameraNode
-from config import CAMERA_IDS
 from services import ServiceNames, ServicePorts
 from server import start_server
+
+class CAMERA_IDS():
+    LEFT =  '207522071849'
+    RIGHT = '207222072702' 
 
 def start_camera_server(camera_id, name, port):
     camera = CameraNode(camera_id)
