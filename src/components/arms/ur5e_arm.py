@@ -95,6 +95,15 @@ class UR5e_Arm:
         pose_goal = self.construct_rel_pose_goal(Euler(yaw=yaw, pitch=pitch, roll=roll), position) 
         self.make_moveit_pose_request(blocking=blocking, pose_goal=pose_goal)
         self.last_command = PoseM(orientation=orientation, position=position)
+    
+    # def change_pose_ros(self, x, y, z, yaw, pitch, roll, blocking: bool):
+    #     """ 
+    #         Will Move End Affector by relative amount passed in
+    #         Uses 3-axis Position and Euler orientation with using units meters/radians
+    #     """
+    #     pose_goal = self.construct_rel_pose_goal(Euler(yaw=0, pitch=0, roll=0), Position(x=x, y=y, z=z)) 
+    #     self.make_moveit_pose_request(blocking=blocking, pose_goal=pose_goal)
+    #     self.last_command = PoseM(Euler(yaw=0, pitch=0, roll=0), Position(x=x, y=y, z=z))
 
     def move_vertical(self, amount: float, blocking: bool):
         self.change_pose_rel(Euler(), Position(z=amount), blocking)
@@ -129,5 +138,5 @@ class UR5e_Arm:
             setattr(self, key, getattr(undo_command.position, key) * -1)
         for key in undo_command.orientation.__dict__:
             setattr(self, key, getattr(undo_command.orientation, key) * -1)
-        self.change_pose_rel(undo_command.orientation, undo_command.position)
+        self.change_pose_rel(undo_command.orientation, undo_command.position, True)
 

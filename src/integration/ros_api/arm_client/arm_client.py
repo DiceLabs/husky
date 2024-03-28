@@ -37,14 +37,15 @@ if __name__ == "__main__":
     from time import sleep
     MOVE_DOWN = "move_down"
     MOVE_UP = "move_up"
-    ARGS = {}
+    BLOCKING = {"blocking": True}
+    NONBLOCKING = {"blocking": False}
     i = 0
 
     while i < 2:
-        call_arm(Dexterity.LEFT, MOVE_DOWN, ARGS)
-        call_arm(Dexterity.RIGHT, MOVE_DOWN, ARGS)
+        call_arm(Dexterity.LEFT, MOVE_DOWN, NONBLOCKING)
+        call_arm(Dexterity.RIGHT, MOVE_DOWN, BLOCKING)
         sleep(2.2)
-        call_arm(Dexterity.LEFT, MOVE_UP, ARGS)
-        call_arm(Dexterity.RIGHT, MOVE_UP, ARGS)
+        call_arm(Dexterity.LEFT, MOVE_UP, NONBLOCKING)
+        call_arm(Dexterity.RIGHT, MOVE_UP, BLOCKING)
         sleep(2.2)
         i += 1
