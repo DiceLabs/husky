@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>arms_r</name>
+  <name>arms</name>
   <version>0.0.1</version>
   <description>A ROS package for controlling robotic arms.</description>
 
