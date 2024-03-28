@@ -12,9 +12,8 @@ def call_service(host=Defaults.LOCALHOST, port=Defaults.PORT, request=Defaults.r
         raw_response = s.recv(Defaults.BUFFER_SIZE)
         if raw_response:
             response = pickle.loads(raw_response)
-            print(response)
             return response
-    return None
+        return None
 
 if __name__ == "__main__":
     call_service()

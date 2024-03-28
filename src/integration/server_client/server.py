@@ -6,11 +6,7 @@ from server_log import Logging
 from defaults import Defaults
 import pickle
 
-def start_loop(function: Callable):
-    while True:
-        function()
-
-def loop_callback(sock, callback):
+def loop(sock, callback):
     conn, addr = sock.accept()
     with conn:
         Logging.log_connection_message(addr)
@@ -31,7 +27,8 @@ def start_server(name=Defaults.DEFAULT_NAME,
         sock.bind((host, port))
         sock.listen()
         Logging.log_server_active_message(name, host, port)
-        start_loop(lambda: loop_callback(sock, callback))
+        while True:
+            loop(sock, callback)
             
 if __name__ == "__main__":
     start_server()
