@@ -1,8 +1,18 @@
 #!/bin/bash
 
+remove_redundant_repo()
+{
+    DIRECTORY="husky"
+    if [ -d "$DIRECTORY" ]; then
+        rm -rf "$DIRECTORY"
+        echo "$DIRECTORY dir removed"
+    fi
+}
+
 setup_environment()
 {
     cd $HOME
+    remove_redundant_repo
     git clone https://github.com/DiceLabs/Husky husky
     cd husky
     catkin_make
