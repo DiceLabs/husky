@@ -4,6 +4,7 @@ from defaults import Defaults
 import pickle
 
 FREQUENCY = 20
+PERIOD = 1/FREQUENCY
 
 def loop(sock, callback):
     conn, addr = sock.accept()
@@ -28,7 +29,7 @@ def start_ros_server(name=Defaults.DEFAULT_NAME,
         sock.listen()
         Logging.log_server_active_message(name, host, port)
         loop(sock, callback)
-        rospy.Timer(rospy.Duration(FREQUENCY), lambda event: loop(sock, callback))
+        rospy.Timer(rospy.Duration(PERIOD), lambda event: loop(sock, callback))
         rospy.spin()
 
 if __name__ == "__main__":

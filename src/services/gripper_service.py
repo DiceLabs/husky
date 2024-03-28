@@ -16,11 +16,10 @@ def start_gripper_server(name, port):
     gripper = GripperNode()
     start_ros_server(name=name, port=port, callback=lambda request: generic_callback(request, gripper))
 
-def start_gripper(service_name, service_port):
-    process = Process(target=start_gripper_server, args=(service_name, service_port))
-    process.start()
-    process.join()
-
 if __name__ == "__main__":
-    start_gripper(ServiceNames.LEFT_GRIPPER,  ServicePorts[ServiceNames.LEFT_GRIPPER])
-    start_gripper(ServiceNames.RIGHT_GRIPPER, ServicePorts[ServiceNames.RIGHT_GRIPPER])
+    left_process = Process(target=start_gripper_server, args=(ServiceNames.LEFT_GRIPPER, ServicePorts[ServiceNames.LEFT_GRIPPER]))
+    right_process = Process(target=start_gripper_server, args=(ServiceNames.RIGHT_GRIPPER, ServicePorts[ServiceNames.RIGHT_GRIPPER]))
+    left_process.start()
+    right_process.start()
+    left_process.join()
+    right_process.join()

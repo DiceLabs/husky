@@ -54,12 +54,12 @@ class BaseNode():
 
     def CLOCKWISE(self):
         lin_vel = LinearVelocity(0, 0, 0)
-        ang_vel = AngularVelocity(0, 0, 0.5)
+        ang_vel = AngularVelocity(0, 0, -0.5)
         self.publish_base_message(lin_vel, ang_vel)
 
-    def COUNTERCLOCKISE(self):
+    def COUNTERCLOCKWISE(self):
         lin_vel = LinearVelocity(0, 0, 0)
-        ang_vel = AngularVelocity(0, 0, -0.5)
+        ang_vel = AngularVelocity(0, 0, 0.5)
         self.publish_base_message(lin_vel, ang_vel)
 
     def MOVE(self):
