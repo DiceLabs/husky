@@ -13,10 +13,10 @@ This codebase is used to interact with a dual-arm UR5e Husky A200 configuration 
 ## Startup
 If you want to turn on the robot, please refer to the startup procedure that has been documented [here](STARTUP.md)
 
-    - kill_clearpath.sh
     - setup_cb.sh
+    - kill_clearpath.sh
     - start_driver.sh
-    - start_services.sh
+    - start_services.py
     - start_moveit.sh
     - start_arms.sh
 
