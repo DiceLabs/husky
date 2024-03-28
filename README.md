@@ -15,15 +15,15 @@ If you want to turn on the robot, please refer to the physical startup procedure
 
 From the software side of things, these scripts will have to be executed in this order
 
-    - setup_cb.sh
-    - kill_clearpath.sh
-    - start_brakes.sh
-    - start_brakes.sh
-    - start_driver.sh
-    - start_play.sh
-    - start_moveit.sh
-    - start_services.py
-    - start_arms.sh
+    setup_cb.sh
+    kill_clearpath.sh
+    start_brakes.sh
+    start_brakes.sh
+    start_driver.sh
+    start_play.sh
+    start_moveit.sh
+    start_services.py
+    start_arms.sh
 
 You can now use the generic API laid out in [this file](src/integration/server_api/server.py) to call the desired systems
 
