@@ -11,4 +11,5 @@ class Defaults():
     def default_callback(request: Object):
         return request.x + request.y + request.z
 
+    Trigger = 0
     request = Object(1,2,3)

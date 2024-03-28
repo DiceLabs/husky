@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
+
 import pyrealsense2 as rs
 import numpy as np
 import cv2
 import math
 from ultralytics import YOLO
-
+from pathlib import Path
 
 def find_closest_color(rgb_pixel, color_dict):
     min_distance = float('inf')
@@ -40,9 +42,7 @@ config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
 
 pipeline.start(config)
 
-
-
-model = YOLO('best.pt')
+model = YOLO(f"{Path.home()}/ROBOT_LIB/best.pt")
               
 
 try:

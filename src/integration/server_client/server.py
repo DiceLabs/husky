@@ -2,7 +2,7 @@
 
 import socket
 from typing import Callable
-from logging import Logging
+from server_log import Logging
 from defaults import Defaults
 import pickle
 

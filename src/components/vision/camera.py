@@ -108,7 +108,7 @@ class CameraNode():
                 return depth, real_dx, real_dy
 
 
-    def camera_loop(self, visualmode=False):
+    def camera_loop(self, trigger=0, visualmode=False):
         WINDOW_NAME = 'RealSense Camera'
         frames, color_frame, depth_frame = self.get_frames()
         if not color_frame:
