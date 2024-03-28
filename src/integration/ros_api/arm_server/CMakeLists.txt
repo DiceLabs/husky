@@ -13,7 +13,7 @@ include_directories(
 )
 
 catkin_install_python(PROGRAMS
-  arm_server_r.py
+  arm_server.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
