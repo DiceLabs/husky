@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
-
 import socket
 from server_log import Logging
 from defaults import Defaults
 import pickle
+
+FREQUENCY = 20
 
 def loop(sock, callback):
     conn, addr = sock.accept()
@@ -17,17 +17,19 @@ def loop(sock, callback):
             conn.sendall(pickle.dumps(response))
 
 """
-    Generic Server API to Spawn Server Process
+    Generic Server API to Spawn ROS Server Process
 """
-def start_server(name=Defaults.DEFAULT_NAME, 
+def start_ros_server(name=Defaults.DEFAULT_NAME, 
                 host=Defaults.LOCALHOST, port=Defaults.PORT, 
                 callback=Defaults.default_callback):
+    import rospy
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.bind((host, port))
         sock.listen()
         Logging.log_server_active_message(name, host, port)
-        while True:
-            loop(sock, callback)
+        loop(sock, callback)
+        rospy.Timer(rospy.Duration(FREQUENCY), lambda event: loop(sock, callback))
+        rospy.spin()
 
 if __name__ == "__main__":
-    start_server()
+    start_ros_server()
