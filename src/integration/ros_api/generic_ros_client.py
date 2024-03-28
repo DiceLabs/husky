@@ -21,7 +21,6 @@ def create_generic_request(component_id: ComponentId, function_name: str, args: 
     return request
 
 def call_generic_service(service_name :str, component_id: ComponentId, function_name: str, args: dict):
-    # rospy.wait_for_service(service_name)
     try:
         arm_service = rospy.ServiceProxy(service_name, GenericSrv)
         request = create_generic_request(component_id, function_name, args)

@@ -2,6 +2,6 @@
 
 from client import call_service
 from services import ServiceNames, ServicePorts
-from defaults import Defaults
+from req_resp import GenericRequest
 
-call_service(port=ServicePorts[ServiceNames.RIGHT_GRIPPER], request=Defaults.Trigger)
+call_service(port=ServicePorts[ServiceNames.RIGHT_GRIPPER], request=GenericRequest(function="close", args={}))
