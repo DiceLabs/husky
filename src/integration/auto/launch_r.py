@@ -18,12 +18,13 @@ def chase_box():
             function="change_pos_rel", 
             args={
                 "blocking":True,
-                "position": Position(depth, dx, dy),
+                "position": Position(depth-.2, dx, dy),
                 "euler": Euler()
             }))
-        exit()
+        rospy.signal_shutdown()
 
 NODE_NAME = 'launch'
 if __name__ == "__main__":
     rospy.init_node(NODE_NAME, anonymous=True)
+    chase_box()
 
