@@ -11,15 +11,21 @@ This codebase is used to interact with a dual-arm UR5e Husky A200 configuration 
 - `tst/`: Unit test directory mirros source code for coverage
 
 ## Startup
-If you want to turn on the robot, please refer to the startup procedure that has been documented [here](STARTUP.md)
+If you want to turn on the robot, please refer to the physical startup procedure that has been documented [here](STARTUP.md)
+
+From the software side of things, these scripts will have to be executed in this order
 
     - setup_cb.sh
     - kill_clearpath.sh
     - start_brakes.sh
+    - start_brakes.sh
     - start_driver.sh
-    - start_services.py
+    - start_play.sh
     - start_moveit.sh
+    - start_services.py
     - start_arms.sh
+
+You can now use the generic API laid out in [this file](src/integration/server_api/server.py) to call the desired systems
 
 ## Getting Started
 Clone the codebase for access to source code scripts
