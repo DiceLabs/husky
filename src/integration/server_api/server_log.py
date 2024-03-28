@@ -11,4 +11,4 @@ class Logging():
         
     @staticmethod
     def log_data_rcv_message(name):
-        print(f"Received Data From {name} Server")
+        print(f"Received Data From {name} Client")

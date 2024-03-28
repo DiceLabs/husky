@@ -13,7 +13,7 @@ def call_service(host=Defaults.LOCALHOST, port=Defaults.PORT, request=Defaults.r
         if raw_response:
             response = pickle.loads(raw_response)
             return response
-        return None
+        return None # Optional would be much preferred in a typed language, make sure to Null check
 
 if __name__ == "__main__":
     call_service()
