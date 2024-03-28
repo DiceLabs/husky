@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
 import rospy
-from dexterity import Dexterity
-from arm_client import call_arm
+
 from client import call_service
 from services import ServiceNames, ServicePorts
 from defaults import Defaults
