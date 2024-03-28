@@ -29,7 +29,7 @@ def start_ros_server(name=Defaults.DEFAULT_NAME,
         sock.listen()
         Logging.log_server_active_message(name, host, port)
         loop(name, sock, callback)
-        rospy.Timer(rospy.Duration(PERIOD), lambda event: loop(sock, callback))
+        rospy.Timer(rospy.Duration(PERIOD), lambda event: loop(name, sock, callback))
         rospy.spin()
 
 if __name__ == "__main__":

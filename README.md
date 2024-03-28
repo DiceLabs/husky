@@ -15,6 +15,7 @@ If you want to turn on the robot, please refer to the startup procedure that has
 
     - setup_cb.sh
     - kill_clearpath.sh
+    - start_brakes.sh
     - start_driver.sh
     - start_services.py
     - start_moveit.sh

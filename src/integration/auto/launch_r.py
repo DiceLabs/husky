@@ -26,4 +26,3 @@ NODE_NAME = 'launch'
 if __name__ == "__main__":
     rospy.init_node(NODE_NAME, anonymous=True)
     chase_box()
-
