@@ -34,10 +34,10 @@ class UR5e_Arm:
         self.last_command = PoseM()
 
     def print_info(self):
-        print ("============ Reference frame: %s" % self.group.get_planning_frame())
         print ("============ End effector: %s" % self.group.get_end_effector_link())
         print ("============ Current State: %s" % self.group.get_current_state())
         print ("============ Robot Groups:", self.robot.get_group_names())
+        print ("============ Robot Pose:", self.group.get_current_pose().pose)
 
     def move_joint(self, joint_id: int, amount: float, blocking: bool):
         joint_goal = self.group.get_current_joint_values()

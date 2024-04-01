@@ -20,17 +20,17 @@ def chase_box():
                 "euler": Euler()
             }))
         
-    l_response = call_service(port=ServicePorts[ServiceNames.LEFT_CAMERA], request=Defaults.Trigger)
-    print(l_response)
-    if not l_response == None and l_response != (0.0, 0.0, 0.0):
-        depth, dx, dy = l_response
-        call_service(port=ServicePorts[ServiceNames.LEFT_ARM], request=GenericRequest(
-            function="change_pos_rel", 
-            args={
-                "blocking":True,
-                "position": Position(depth-.2, dx, dy),
-                "euler": Euler()
-            }))
+    # l_response = call_service(port=ServicePorts[ServiceNames.LEFT_CAMERA], request=Defaults.Trigger)
+    # print(l_response)
+    # if not l_response == None and l_response != (0.0, 0.0, 0.0):
+    #     depth, dx, dy = l_response
+    #     call_service(port=ServicePorts[ServiceNames.LEFT_ARM], request=GenericRequest(
+    #         function="change_pos_rel", 
+    #         args={
+    #             "blocking":True,
+    #             "position": Position(depth-.2, dx, dy),
+    #             "euler": Euler()
+    #         }))
 
 def grab_box():
     call_service(port=ServicePorts[ServiceNames.LEFT_GRIPPER],  request=GenericRequest(function="close", args={}))
@@ -45,9 +45,23 @@ def absolute_move():
         "blocking": True
     }))
 
+def relative_move():
+    call_service(port=ServicePorts[ServiceNames.RIGHT_ARM], request=GenericRequest(
+        function="move_up", 
+        args={ 
+        "blocking": True
+    }))
+
+def get_info():
+    call_service(port=ServicePorts[ServiceNames.RIGHT_ARM], request=GenericRequest(
+        function="print_info", 
+        args={}
+    ))
+
 NODE_NAME = 'launch'
 if __name__ == "__main__":
     rospy.init_node(NODE_NAME, anonymous=True)
-    chase_box()
-    grab_box()
+    # chase_box()
+    get_info()
+    # grab_box()
     rospy.signal_shutdown()
