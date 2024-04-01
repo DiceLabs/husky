@@ -62,6 +62,7 @@ NODE_NAME = 'launch'
 if __name__ == "__main__":
     rospy.init_node(NODE_NAME, anonymous=True)
     # chase_box()
-    get_info()
+    # get_info()
     # grab_box()
-    rospy.signal_shutdown()
+    relative_move()
+    # rospy.signal_shutdown()
