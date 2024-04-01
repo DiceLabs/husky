@@ -14,7 +14,7 @@ ServicePorts = {
     ServiceNames.RIGHT_CAMERA:  6001,
     ServiceNames.LEFT_GRIPPER:  6002,
     ServiceNames.RIGHT_GRIPPER: 6003,
-    ServiceNames.LEFT_ARM:      6024,
-    ServiceNames.RIGHT_ARM:     6025,
+    ServiceNames.LEFT_ARM:      6004,
+    ServiceNames.RIGHT_ARM:     6005,
     ServiceNames.BASE:          6006
 }
