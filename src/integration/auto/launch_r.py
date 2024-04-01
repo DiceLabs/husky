@@ -6,6 +6,7 @@ from services import ServiceNames, ServicePorts
 from defaults import Defaults
 from req_resp import GenericRequest
 from robot_types import Position, Euler, Quaternion
+from conversions import euler_to_quaternion
 
 def chase_box():
     r_response = call_service(port=ServicePorts[ServiceNames.RIGHT_CAMERA], request=Defaults.Trigger)
@@ -32,17 +33,19 @@ def chase_box():
                 "orientation": Euler()
             }))
 
+
 def grab_box():
     call_service(port=ServicePorts[ServiceNames.LEFT_GRIPPER],  request=GenericRequest(function="close", args={}))
     call_service(port=ServicePorts[ServiceNames.RIGHT_GRIPPER], request=GenericRequest(function="close", args={}))
 
 
 def r_absolute_move():
+    w, x, y, z = euler_to_quaternion(yaw=0,pitch=0, roll=0)
     call_service(port=ServicePorts[ServiceNames.RIGHT_ARM], request=GenericRequest(
         function="change_pose_abs", 
         args={ 
         "position": Position(x=0.5,y=-0.6,z=.2), 
-        "orientation": Quaternion(x=-0.028026025935007363,y=-0.7639695300163926,z=-0.6437651947236414,w=0.03363737711615717),
+        "orientation": Quaternion(w=w,x=x,y=y,z=z),
         "blocking": True
     }))
 
@@ -96,28 +99,49 @@ def relative_move():
         "blocking": True
     }))
 
-def get_info():
+def r_get_info():
     call_service(port=ServicePorts[ServiceNames.RIGHT_ARM], request=GenericRequest(
         function="print_info", 
         args={}
     ))
 
-def left_get_info():
+def l_get_info():
     call_service(port=ServicePorts[ServiceNames.LEFT_ARM], request=GenericRequest(
         function="print_info", 
         args={}
     ))
 
+
+def lift_arms():
+    call_service(port=ServicePorts[ServiceNames.RIGHT_ARM], request=GenericRequest(
+        function="change_pose_rel", 
+        args={
+            "blocking":False,
+            "position": Position(z=1),
+            "orientation": Euler()
+        }))
+        
+    call_service(port=ServicePorts[ServiceNames.LEFT_ARM], request=GenericRequest(
+        function="change_pose_rel", 
+        args={
+            "blocking":True,
+            "position": Position(z=1),
+            "orientation": Euler()
+        }))
+
+
 NODE_NAME = 'launch'
 if __name__ == "__main__":
     rospy.init_node(NODE_NAME, anonymous=True)
+    grab_box()
+    # lift_arms()
+    
     # turn_grippers()
-    chase_box()
+    # chase_box()
     # get_info()
     # left_get_info()
     # l_absolute_move()
     # r_absolute_move()
-    # grab_box()
     # relative_move()
     # rospy.signal_shutdown()
 

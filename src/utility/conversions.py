@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import math
 
@@ -54,3 +54,20 @@ def degrees_to_radians(yaw, pitch, roll):
     """
     return math.radians(yaw), math.radians(pitch), math.radians(roll)
 
+def radians_to_degrees(yaw, pitch, roll):
+    """
+    Convert yaw, pitch, and roll angles from degrees to radians.
+    This function converts angles given in degrees to radians,
+    useful for transforming Euler angles to a format suitable
+    for mathematical computations and functions that require radians.
+    """
+    return math.degrees(yaw), math.degrees(pitch), math.degrees(roll)
+
+if __name__ == "__main__":
+    yaw, pitch, roll = quaternion_to_euler(x=-0.028026025935007363,y=-0.7639695300163926,z=-0.6437651947236414,w=0.03363737711615717)
+    yaw, pitch, roll = radians_to_degrees(yaw,pitch,roll)
+    print (yaw, pitch, roll)
+
+    yaw, pitch, roll = quaternion_to_euler(x=0.7686640998401458,y=0.019500606118823264,z=-0.008383110028113847,w=0.6393003608979063)
+    yaw, pitch, roll = radians_to_degrees(yaw,pitch,roll)
+    print (yaw, pitch, roll)
