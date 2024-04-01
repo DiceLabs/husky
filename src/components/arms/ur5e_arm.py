@@ -72,6 +72,28 @@ class UR5e_Arm:
         pose_goal = self.construct_abs_pose_goal(orientation=orientation, position=position)
         self.make_moveit_pose_request(blocking=blocking, pose_goal=pose_goal)
 
+    def construct_abs_pos_goal(self, position: Position,):
+        """ 
+            Basically a ROS type conversion
+        """
+        current_pose = self.group.get_current_pose().pose
+        pose_goal = Pose()
+        pose_goal.orientation.w = current_pose.orientation.w
+        pose_goal.orientation.x = current_pose.orientation.x
+        pose_goal.orientation.y = current_pose.orientation.y
+        pose_goal.orientation.z = current_pose.orientation.z
+        pose_goal.position.x = position.x
+        pose_goal.position.y = position.y
+        pose_goal.position.z = position.z
+        return pose_goal
+    def change_pos_abs(self, position: Position, blocking: bool):
+        """ 
+            Will Move End Affector by relative amount passed in
+            Uses 3-axis Position and Euler orientation with using units meters/radians
+        """
+        pose_goal = self.construct_abs_pos_goal(position=position)
+        self.make_moveit_pose_request(blocking=blocking, pose_goal=pose_goal)
+
     def construct_rel_pose_goal(self, orientation: Euler, position: Position):
         pose_goal = Pose()
         current = self.group.get_current_pose().pose
