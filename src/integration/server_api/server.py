@@ -26,8 +26,13 @@ def start_server(name=Defaults.DEFAULT_NAME,
         sock.bind((host, port))
         sock.listen()
         Logging.log_server_active_message(name, host, port)
-        while True:
-            loop(name, sock, callback)
+        try:
+            while True:
+                loop(name, sock, callback)
+        except KeyboardInterrupt:
+            print("Server is shutting down.")
+        finally:
+            sock.close()
 
 if __name__ == "__main__":
     start_server()

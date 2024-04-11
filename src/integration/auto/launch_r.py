@@ -133,9 +133,8 @@ def lift_arms():
 NODE_NAME = 'launch'
 if __name__ == "__main__":
     rospy.init_node(NODE_NAME, anonymous=True)
-    grab_box()
-    # lift_arms()
-    
+    # grab_box()
+    # lift_arms()    
     # turn_grippers()
     # chase_box()
     # get_info()
@@ -144,8 +143,6 @@ if __name__ == "__main__":
     # r_absolute_move()
     # relative_move()
     # rospy.signal_shutdown()
-
-
 
 """ 
     Good Side State Right

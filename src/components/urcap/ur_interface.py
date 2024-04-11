@@ -20,8 +20,6 @@ def release_brakes():
     UR_CLIENT.releaseBrakes()
 def unlock_protective_stop():
     UR_CLIENT.unlockProtectiveStop()
-# def init_robot():
-#     UR_CLIENT.init_robot()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
