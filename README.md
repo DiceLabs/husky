@@ -27,6 +27,18 @@ To do this, you can run this command in the root directory
 
     catkin_make
 
+There are a series of scripts that need to be run for running the robot's functionality
+
+    - term.sh (use this to get various SSH terminals, run the other scripts from there)
+    - setup_cb.sh
+    - kill_clearpath.sh
+    - start_brakes.sh (check actual robot for state of arms)start_driver.sh (then)
+    - start_play.sh
+    - start_driver.sh
+    - start_moveit.sh 
+    - start_arms.sh
+    - start_services.py
+
 ## Dependencies
 
     ROS Noetic, and in turn Ubuntu 20.04
